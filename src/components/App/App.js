@@ -9,9 +9,11 @@
 
 import React, { Component, PropTypes } from 'react';
 import emptyFunction from 'fbjs/lib/emptyFunction';
+import cx from 'classnames';
 import s from './App.scss';
 import Header from '../Header';
 import Footer from '../Footer';
+import Sidebar from '../Sidebar';
 import LoginPage from '../LoginPage';
 
 class App extends Component {
@@ -61,10 +63,17 @@ class App extends Component {
     return !this.props.error ? (
       <div className={s.root}>
         <Header />
-        {
-          this.props.context.isAuthed !== undefined && this.props.context.isAuthed() ? 
-          this.props.children : <LoginPage />
-        }
+        <div className={cx(s.container, 'container')}>
+          <div className="row">
+            <Sidebar className="col-md-3"/>
+            <div className={cx(s.page, 'col-md-9')}>
+              {
+                this.props.context.isAuthed !== undefined && this.props.context.isAuthed() ? 
+                this.props.children : <LoginPage />
+              }
+            </div>       
+          </div>        
+        </div>
         <Footer />
       </div>
     ) : this.props.children;

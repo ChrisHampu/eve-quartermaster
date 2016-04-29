@@ -14,6 +14,23 @@ $gray:                  color(black lightness(+33.5%)); /* #555 */
 $gray-light:            color(black lightness(+46.7%)); /* #777 */
 $gray-lighter:          color(black lightness(+93.5%)); /* #eee */
 
+$purple-base: #020E44; /* sidebar */
+#purple-base-darker: #010A33; /* header */
+$purple-base-lighter: #021151; /* body */
+
+$purple-highlight: #363277; /* lines/tables */
+
+$text-white: #ffffff;
+$text-grey: #999999;
+$text-light-purple: #514a97;
+
+$dark-cyan: #006d77;
+#dark-blue: #194dd2;
+#light-purple: #304ffe;
+#deep-orange: #ff5722;
+#light-red: #ff1744;
+
+
 /*
  * Typography
  * ========================================================================== */
