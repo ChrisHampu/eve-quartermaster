@@ -8,3 +8,32 @@
  */
 
 @import '../variables.scss';
+
+.root {
+	background-color: $purple-base-lighter;
+	height: 100%;
+	display: flex;
+    align-items: center;
+}
+
+.container {
+}
+
+.login_box {
+	display: block;
+}
+
+.login_title {
+	margin-bottom: 25px;
+	text-align: center;
+	font-size: 1.4rem;
+	font-weight: 500;
+}
+
+.login_button {
+	background: url('/images/EVE_SSO_Login_Buttons_Large_Black.png') no-repeat !important;
+	width: 270px;
+	height: 45px;
+	display: block;
+	margin: 0 auto;
+}

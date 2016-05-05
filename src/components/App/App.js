@@ -13,7 +13,6 @@ import cx from 'classnames';
 import s from './App.scss';
 import Header from '../Header';
 import Footer from '../Footer';
-import Sidebar from '../Sidebar';
 import LoginPage from '../LoginPage';
 
 class App extends Component {
@@ -35,7 +34,8 @@ class App extends Component {
     onSetTitle: PropTypes.func.isRequired,
     onSetMeta: PropTypes.func.isRequired,
     onPageNotFound: PropTypes.func.isRequired,
-    isAuthed: PropTypes.func.isRequired
+    isAuthed: PropTypes.func.isRequired,
+    getLocation: PropTypes.func.isRequired || emptyFunction,
   };
 
   getChildContext() {
@@ -46,6 +46,7 @@ class App extends Component {
       onSetMeta: context.onSetMeta || emptyFunction,
       onPageNotFound: context.onPageNotFound || emptyFunction,
       isAuthed: context.isAuthed || emptyFunction,
+      getLocation: context.getLocation || emptyFunction,
     };
   }
 
@@ -60,22 +61,20 @@ class App extends Component {
 
   render() {
 
-    return !this.props.error ? (
-      <div className={s.root}>
-        <Header />
-        <div className={cx(s.container, 'container')}>
-          <div className="row">
-            <Sidebar className="col-md-3"/>
-            <div className={cx(s.page, 'col-md-9')}>
-              {
-                this.props.context.isAuthed !== undefined && this.props.context.isAuthed() ? 
-                this.props.children : <LoginPage />
-              }
-            </div>       
-          </div>        
+    return !this.props.error ? ( 
+      this.props.context.isAuthed !== undefined && this.props.context.isAuthed() ? (
+        <div className={s.root}>
+          <Header path={this.props.context.getLocation()}/>
+          <div className={cx(s.container)}>
+            <div className="">
+              <div className={cx(s.page, 'col-md-12')}>
+                { this.props.children }
+              </div>       
+            </div>        
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
+      ) : <LoginPage />
     ) : this.props.children;
   }
 

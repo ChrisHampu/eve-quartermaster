@@ -9,6 +9,8 @@
 
 import React, { Component, PropTypes } from 'react';
 import Location from '../../core/Location';
+import classNames from 'classnames/bind'; 
+import s from './LInk.scss';
 
 function isLeftClickEvent(event) {
   return event.button === 0;
@@ -23,6 +25,8 @@ class Link extends Component { // eslint-disable-line react/prefer-stateless-fun
   static propTypes = {
     to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
     onClick: PropTypes.func,
+    path: PropTypes.string,
+    activeClass: PropTypes.string
   };
 
   handleClick = (event) => {
@@ -56,7 +60,16 @@ class Link extends Component { // eslint-disable-line react/prefer-stateless-fun
 
   render() {
     const { to, ...props } = this.props; // eslint-disable-line no-use-before-define
-    return <a href={Location.createHref(to)} {...props} onClick={this.handleClick} />;
+
+    var cx = classNames.bind({
+      active: this.props.activeClass
+    });
+
+    var linkClass = cx(this.props.className, {
+      active: to === this.props.path && this.props.activeClass
+    });
+
+    return <a href={Location.createHref(to)} {...props} className={linkClass} onClick={this.handleClick} />;
   }
 
 }

@@ -18,17 +18,27 @@
  * ========================================================================== */
 
 html {
-  color: #222;
   font-weight: 100;
   font-size: 1em; /* ~16px; */
-  font-family: $font-family-base;
   line-height: 1.375; /* ~22px */
+  height: 100%;
 }
 
 body {
-  min-width: 100%;
-  padding-top: 50px;
-  padding-bottom: 50px;
+  color: $text-white;
+  font-family: $font-family-base;
+  min-height: 100%;
+  height: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: $deep-orange;
+}
+
+a:hover {
+  color: color($deep-orange lightness(+10%));
+  text-decoration: none;
 }
 
 /*
@@ -111,12 +121,13 @@ textarea {
  * ========================================================================== */
 
 .root {
-  width: $max-content-width;
-  margin: 0 auto;
+  height: 100%;
 }
 
 .container {
-  
+  height: calc(100% - $header-height);
+  margin-left: $sidebar-width;
+  background-color: $purple-base-lighter;
 }
 
 .page {

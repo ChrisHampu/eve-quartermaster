@@ -11,10 +11,23 @@ import React from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './LoginPage.scss';
 import Link from '../Link';
+import cx from 'classnames';
 
 function LoginPage() {
   return (
-    <div>
+    <div className={s.root}>
+    	<div className={cx("container-fluid", s.container)}>
+    		<div className="row">
+    			<div className="col-md-6 col-sm-6">
+    				<div className={s.login_box}>
+    					<div className={s.login_title}>
+    						Eve Quartermaster
+    					</div>
+    					<a href="/auth" className={s.login_button}></a>
+    				</div>
+    			</div>
+    		</div>
+    	</div>
     </div>
   );
 }

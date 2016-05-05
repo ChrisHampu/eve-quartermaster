@@ -6,3 +6,31 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
+
+@import '../variables.scss';
+
+.nav_container {
+	display: inline-block;
+	vertical-align: bottom;
+	font-size: 1.4rem;
+}
+
+a.nav_link {
+	color: $text-grey;
+	padding: 0.82rem;
+	font-weight: 400;
+}
+
+a.nav_link:hover {
+	color: $text-grey-lighter;
+}
+
+a.nav_link_active {
+	border-bottom: 4px solid $purple-highlight;
+	color: $text-white;
+}
+
+a.nav_link_active:hover {
+	color: $text-white;
+}
+

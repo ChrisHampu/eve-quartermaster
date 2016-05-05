@@ -7,21 +7,28 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import cx from 'classnames';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Navigation.scss';
 import Link from '../Link';
 
-function Navigation({ className }) {
-  return (
-    <div role="navigation">
-    </div>
-  );
-}
+class Navigation extends Component {
 
-Navigation.propTypes = {
-  className: PropTypes.string,
-};
+	static propTypes = {
+	  className: PropTypes.string,
+	  path: PropTypes.string
+	};
+
+	render() {
+		return (
+			<nav role="navigation" className={cx(s.nav_container, 'nav', 'nav-inline')}>
+				<Link className={cx('nav-link', s.nav_link)} activeClass={s.nav_link_active} to="/" path={this.props.path}>View Contracts</Link>
+				<Link className={cx('nav-link', s.nav_link)} activeClass={s.nav_link_active} to="#" path={this.props.path}>Create New</Link>
+				<Link className={cx('nav-link', s.nav_link)} activeClass={s.nav_link_active} to="#" path={this.props.path}>More Options</Link>
+			</nav>
+		);
+	}
+}
 
 export default withStyles(Navigation, s);

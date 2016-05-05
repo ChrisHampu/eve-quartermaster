@@ -8,3 +8,33 @@
  */
 
 @import '../variables.scss';
+
+ .root {
+ 	background-color: $purple-base-darker;
+ 	height: $header-height;
+ 	width: 100%;
+ }
+
+.logo_container {
+	width: $sidebar-width;
+	float: left;
+	height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.logo_text {
+	color: $text-white;
+	font-size: 1.4rem;
+	margin: 0 auto;
+}
+
+.logout_button {
+    height: $header-height;
+    float: right;
+    line-height: $header-height;
+    margin-right: 15px;
+    font-weight: 400;
+    font-size: 1.0rem;
+    text-transform: uppercase;
+}
