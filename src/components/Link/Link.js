@@ -8,9 +8,10 @@
  */
 
 import React, { Component, PropTypes } from 'react';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Location from '../../core/Location';
 import classNames from 'classnames/bind'; 
-import s from './LInk.scss';
+import s from './Link.scss';
 
 function isLeftClickEvent(event) {
   return event.button === 0;
@@ -26,7 +27,8 @@ class Link extends Component { // eslint-disable-line react/prefer-stateless-fun
     to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
     onClick: PropTypes.func,
     path: PropTypes.string,
-    activeClass: PropTypes.string
+    activeClass: PropTypes.string,
+    useButtonStyle: PropTypes.bool
   };
 
   handleClick = (event) => {
@@ -62,11 +64,13 @@ class Link extends Component { // eslint-disable-line react/prefer-stateless-fun
     const { to, ...props } = this.props; // eslint-disable-line no-use-before-define
 
     var cx = classNames.bind({
-      active: this.props.activeClass
+      active: this.props.activeClass,
+      buttonStyle: s.button_style
     });
 
     var linkClass = cx(this.props.className, {
-      active: to === this.props.path && this.props.activeClass
+      active: to === this.props.path && this.props.activeClass,
+      buttonStyle: this.props.useButtonStyle || false
     });
 
     return <a href={Location.createHref(to)} {...props} className={linkClass} onClick={this.handleClick} />;
@@ -74,4 +78,4 @@ class Link extends Component { // eslint-disable-line react/prefer-stateless-fun
 
 }
 
-export default Link;
+export default withStyles(Link, s);

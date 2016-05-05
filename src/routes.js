@@ -16,7 +16,7 @@ import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
 
 const routes = [
-  require('./routes/home'),
+  require('./routes/ViewContracts'),
   require('./routes/contact'),
   require('./routes/login'),
   require('./routes/register'),

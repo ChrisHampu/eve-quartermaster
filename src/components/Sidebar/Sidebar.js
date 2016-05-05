@@ -18,58 +18,7 @@ class Sidebar extends Component {
 	  return (
 	    <div className={s.root}>
 	    	<div className={s.container}>
-		    	<div className={s.sidebar_header}>
-		    		Sorting
-		    	</div>
-		        <ul role="navigation" className={cx(s.nav_container, 'nav')}>
-		        	<li className="nav-item">
-		        		<div className="checkbox">
-						    <label>
-						      <input type="checkbox" className={s.nav_checkbox}/><Link className={cx('nav-link', s.nav_link)} to="/">ISK (Low)</Link>
-						    </label>
-						</div>
-		    		</li>
-		    		<li className="nav-item">
-		        		<div className="checkbox">
-						    <label>
-						      <input type="checkbox" className={s.nav_checkbox}/><Link className={cx('nav-link', s.nav_link)} to="/">ISK (High)</Link>
-						    </label>
-						</div>
-		    		</li>
-		    		<li className="nav-item">
-		        		<div className="checkbox">
-						    <label>
-						      <input type="checkbox" className={s.nav_checkbox}/><Link className={cx('nav-link', s.nav_link)} to="/">Checkbox</Link>
-						    </label>
-						</div>
-		    		</li>
-		    	</ul>
-		    	<div className={s.sidebar_header}>
-		    		Other
-		    	</div>
-		        <ul role="navigation" className={cx(s.nav_container, 'nav')}>
-		        	<li className="nav-item">
-		        		<div className="checkbox">
-						    <label>
-						      <input type="checkbox" className={s.nav_checkbox}/><Link className={cx('nav-link', s.nav_link)} to="/">ISK (Low)</Link>
-						    </label>
-						</div>
-		    		</li>
-		    		<li className="nav-item">
-		        		<div className="checkbox">
-						    <label>
-						      <input type="checkbox" className={s.nav_checkbox}/><Link className={cx('nav-link', s.nav_link)} to="/">ISK (High)</Link>
-						    </label>
-						</div>
-		    		</li>
-		    		<li className="nav-item">
-		        		<div className="checkbox">
-						    <label>
-						      <input type="checkbox" className={s.nav_checkbox}/><Link className={cx('nav-link', s.nav_link)} to="/">Checkbox</Link>
-						    </label>
-						</div>
-		    		</li>
-		    	</ul>
+	    		{ this.props.children }
 	    	</div>
 	    </div>
 	  );

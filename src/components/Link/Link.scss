@@ -1,4 +1,12 @@
+@import '../variables.scss';
 
-.nav_active {
+.button_style {
+	border: 2px solid $deep-orange;
+    border-radius: 7px;
+    padding: 0.4rem;
+}
 
+.button_style:hover {
+	background-color: $deep-orange;
+	color: $text-white;
 }

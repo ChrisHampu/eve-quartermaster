@@ -30,11 +30,10 @@
 }
 
 .logout_button {
-    height: $header-height;
     float: right;
-    line-height: $header-height;
-    margin-right: 15px;
+    margin-right: 1rem;
     font-weight: 400;
     font-size: 1.0rem;
     text-transform: uppercase;
+    margin-top: 0.55rem;
 }

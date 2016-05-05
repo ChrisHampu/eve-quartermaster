@@ -10,29 +10,30 @@
 @import '../../components/variables.scss';
 
 .root {
-  padding-left: 20px;
-  padding-right: 20px;
+
 }
 
-.container {
-  margin: 0 auto;
-  padding: 0 0 40px;
-  max-width: $max-content-width;
+.sidebar_header {
+  padding: 15px 0;
+  font-weight: 600;
+  font-size: 1.2em;
+  text-transform: uppercase;
 }
 
-.news {
-  padding: 0;
+.nav_container {
+
 }
 
-.newsItem {
-  list-style-type: none;
-  padding-bottom: 6px;
+.nav_link {
+  vertical-align: middle;
 }
 
-.newsTitle {
-  font-size: 1.125em;
+a.nav_link {
+  color: $text-white;
 }
 
-.newsTitle, .newsDesc {
-  display: block;
+input[type="checkbox"].nav_checkbox {
+  position: inherit;
+  margin: 0 0.25rem 0 0;
+  vertical-align: middle;
 }

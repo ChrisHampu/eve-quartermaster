@@ -28,9 +28,11 @@ class Header extends Component {
 					</div>
 				</div>
 				<Navigation path={this.props.path}/>
-				<a href="/logout" className={s.logout_button}>
+				<Link to="/logout" className={s.logout_button} useButtonStyle={true}>
 					Logout
-				</a>
+				</Link>
+
+				
 			</div>
 		);
 	}

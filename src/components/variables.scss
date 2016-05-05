@@ -31,6 +31,8 @@ $light-purple: #304ffe;
 $deep-orange: #ff5722;
 $light-red: #ff1744;
 
+$deep-orange-darker: color($deep-orange lightness(-15%));
+
 
 /*
  * Typography
