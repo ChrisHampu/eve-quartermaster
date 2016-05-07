@@ -122,17 +122,24 @@ textarea {
 
 .root {
   height: 100%;
+  overflow: hidden;
+  background: #021151;
 }
 
 .container {
-  height: calc(100% - $header-height);
   margin-left: $sidebar-width;
   background-color: $purple-base-lighter;
   padding: 1rem 0;
+  margin-top: $header-height;
+  height: 100%;
+  overflow: hidden;
 }
 
 .page {
-  
+  height: 100%;
+  overflow: scroll;
+  position: relative;
+  padding-bottom: 1rem;
 }
 
 /*

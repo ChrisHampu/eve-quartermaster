@@ -19,16 +19,10 @@ let parseXml = Promise.promisify(parseString);
 export const path = '/';
 export const action = async (state) => {
 
-	//const xml = await new fetchXML('https://api.eveonline.com/account/APIKeyInfo.xml.aspx', { keyID: '5197942', vCode: 'WvBjs4uiUkWfKuLPK9QV9xbJ8Fnso9bSwBRnbmoARUN1fzE3PfPc1k83PHAERRm1'}).getXML();
+	const response = await fetch(`/graphql?query={contracts{contractList{id,issuerID,issuerCorpID,assigneeID,startStationID,endStationID,type,status,
+								 title,forCorp,public,dateIssued,dateExpired,dateAccepted,numDays,dateCompleted,price,reward,collateral,buyout,volume}}}`);
+	const { data } = await response.json();
 
-	//xml.then(xml => {
-	//	console.log(xml.eveapi.result[0].key[0].rowset);
-	//});
-	
-
-	
-	//const response = await fetch('/graphql?query={news{title,link,contentSnippet}}');
-	//const { data } = await response.json();
 	state.context.onSetTitle('57th Eve Contracts');
-	return <ViewContracts/>;
+	return <ViewContracts contracts={data.contracts.contractList}/>;
 };

@@ -35,6 +35,7 @@ const context = {
       .getElementsByTagName('head')[0]
       .appendChild(meta);
   },
+  getLocation: () => window.location.pathname
 };
 
 // Google Analytics tracking. Don't send 'pageview' event after the first
@@ -44,6 +45,7 @@ let trackPageview = () => (trackPageview = () => window.ga('send', 'pageview'));
 function render(state) {
   Router.dispatch(state, (newState, component) => {
     ReactDOM.render(component, appContainer, () => {
+
       // Restore the scroll position if it was saved into the state
       if (state.scrollY !== undefined) {
         window.scrollTo(state.scrollX, state.scrollY);

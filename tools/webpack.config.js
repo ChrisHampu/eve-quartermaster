@@ -81,17 +81,17 @@ const config = {
           'postcss-loader?parser=postcss-scss',
         ],
         exclude: [
-          path.resolve('src', 'core/bootstrap/scss'),
-          path.resolve('src', 'core/fontawesome'),
-          path.resolve('src', 'core')
+          path.resolve(__dirname, '../src/core/bootstrap/scss'),
+          path.resolve(__dirname, '../src/core/fontawesome'),
+          path.resolve(__dirname, '../src/core')
         ]
       }, {
         test: /\.scss$/,
         loaders: ['isomorphic-style-loader', 'css', 'sass'],
         include: [
-          path.resolve('src', 'core/bootstrap/scss'),
-          path.resolve('src', 'core/fontawesome'),
-          path.resolve('src', 'core')
+          path.resolve(__dirname, '../src/core/bootstrap/scss'),
+          path.resolve(__dirname, '../src/core/fontawesome'),
+          path.resolve(__dirname, '../src/core')
         ]
       },{
         test: /\.json$/,

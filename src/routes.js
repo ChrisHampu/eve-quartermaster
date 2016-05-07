@@ -14,6 +14,7 @@ import App from './components/App';
 import ContentPage from './components/ContentPage';
 import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
+import LoginPage from './components/LoginPage';
 
 const routes = [
   require('./routes/ViewContracts'),
@@ -22,6 +23,11 @@ const routes = [
 ];
 
 const router = new Router(on => {
+
+  on('/unauthorized', async (state, next) => 
+    <App context={state.context} error="unauthorized"><LoginPage /></App>
+  );
+
   on('*', async (state, next) => {
 
     const component = await next();

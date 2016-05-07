@@ -16,19 +16,78 @@ import cx from 'classnames';
 
 class ViewContracts extends Component {
 
+  static propTypes = {
+
+    contracts: PropTypes.array.isRequired
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.toggleShowStatus = this.toggleShowStatus.bind(this);
+
+    this.state = {
+      contracts: this.props.contracts,
+      showStatus: {
+        Outstanding: true,
+        Deleted: false,
+        Completed: false,
+        Failed: false,
+        CompletedByIssuer: false,
+        CompletedByContractor: false,
+        Cancelled: false,
+        Rejected: false,
+        Reversed: false,
+        InProgress: false,
+      },
+      showType: {
+        ItemExchange: true,
+        Courier: false,
+        Loan: false,
+        Auction: false
+      },
+      sortBy: {
+        price: true,
+        dateIssued: false,
+        title: false
+      }
+    }
+  }
+
+  componentWillMount() {
+
+  }
+
+  componendDidMount() {
+
+  }
+
+  toggleShowStatus(status) {
+
+  }
+
+  updateContracts() {
+
+    let contracts = this.props.contracts.filter( contract => this.state.showStatus[contract.status] === true && 
+      this.state.showType[contract.type] === true );
+
+    this.setState({ contracts: contracts });
+  }
+
   render () {
+
     return (
       <div className={s.root}>
         <Sidebar>
           <div className={s.sidebar_header}>
-            Sort By
+            Status
           </div>
           <ul role="navigation" className={cx(s.nav_container, 'nav')}>
             <li className="nav-item">
               <div className="checkbox">
-                <label className={s.nav_label}>
+                <label className={s.nav_label} >
                   <input type="checkbox" className={s.nav_checkbox}/>
-                  ISK (Low)
+                  Outstanding
                 </label>
               </div>
             </li>
@@ -36,14 +95,34 @@ class ViewContracts extends Component {
               <div className="checkbox">
                 <label className={s.nav_label}>
                   <input type="checkbox" className={s.nav_checkbox}/>
-                  ISK (High)
+                  In Progress
+                </label>
+              </div>
+            </li>
+            <li className="nav-item">
+              <div className="checkbox">
+                <label className={s.nav_label}>
+                  <input type="checkbox" className={s.nav_checkbox}/>
+                  Completed
+                </label>
+              </div>
+            </li>
+            <li className="nav-item">
+              <div className="checkbox">
+                <label className={s.nav_label}>
+                  <input type="checkbox" className={s.nav_checkbox}/>
+                  Deleted
                 </label>
               </div>
             </li>
           </ul>
         </Sidebar>
         <div className={s.container}>
-          
+          <ul>
+          { this.state.contracts.map((contract) => {
+            return <li key={contract.id}>{contract.title}</li>
+          })}
+          </ul>
         </div>
       </div>
     );

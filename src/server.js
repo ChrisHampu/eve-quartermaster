@@ -23,9 +23,6 @@ import schema from './data/schema';
 import Router from './routes';
 import assets from './assets';
 import { port, auth, analytics } from './config';
-import bs from './core/bootstrap/scss/bootstrap.scss';
-import fa from './core/fontawesome/font-awesome.scss';
-import app from './core/app.scss';
 
 const server = global.server = express();
 
@@ -157,13 +154,12 @@ server.get('*', async (req, res, next) => {
         data.trackingId = analytics.google.trackingId;
       }
 
-      const css = [bs._getCss(), fa._getCss(), app._getCss()];
+      const css = [];
       const context = {
         insertCss: styles => css.push(styles._getCss()),
         onSetTitle: value => (data.title = value),
         onSetMeta: (key, value) => (data[key] = value),
         onPageNotFound: () => (statusCode = 404),
-        isAuthed: () => req.isAuthenticated(),
         getLocation: () => req.path
       };
 

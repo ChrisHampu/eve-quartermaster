@@ -13,7 +13,10 @@ import cx from 'classnames';
 import s from './App.scss';
 import Header from '../Header';
 import Footer from '../Footer';
-import LoginPage from '../LoginPage';
+
+import bs from '../../core/bootstrap/scss/bootstrap.scss';
+import fa from '../../core/fontawesome/font-awesome.scss';
+import app from '../../core/app.scss';
 
 class App extends Component {
 
@@ -34,7 +37,6 @@ class App extends Component {
     onSetTitle: PropTypes.func.isRequired,
     onSetMeta: PropTypes.func.isRequired,
     onPageNotFound: PropTypes.func.isRequired,
-    isAuthed: PropTypes.func.isRequired,
     getLocation: PropTypes.func.isRequired || emptyFunction,
   };
 
@@ -45,14 +47,14 @@ class App extends Component {
       onSetTitle: context.onSetTitle || emptyFunction,
       onSetMeta: context.onSetMeta || emptyFunction,
       onPageNotFound: context.onPageNotFound || emptyFunction,
-      isAuthed: context.isAuthed || emptyFunction,
       getLocation: context.getLocation || emptyFunction,
     };
   }
 
   componentWillMount() {
     const { insertCss } = this.props.context;
-    this.removeCss = insertCss(s);
+
+    this.removeCss = [insertCss(bs), insertCss(fa), insertCss(app), insertCss(s)];
   }
 
   componentWillUnmount() {
@@ -62,19 +64,15 @@ class App extends Component {
   render() {
 
     return !this.props.error ? ( 
-      this.props.context.isAuthed !== undefined && this.props.context.isAuthed() ? (
-        <div className={s.root}>
-          <Header path={this.props.context.getLocation()}/>
-          <div className={cx(s.container)}>
-            <div className="">
-              <div className={cx(s.page, 'col-md-12')}>
-                { this.props.children }
-              </div>       
-            </div>        
-          </div>
-          <Footer />
+      <div className={s.root}>
+        <Header path={this.props.context.getLocation()}/>
+        <div className={cx(s.container)}>
+            <div className={cx(s.page, 'col-md-12')}>
+              { this.props.children }
+            </div>      
         </div>
-      ) : <LoginPage />
+        <Footer />
+      </div>
     ) : this.props.children;
   }
 
