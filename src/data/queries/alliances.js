@@ -20,34 +20,48 @@ let lastFetchTime = new Date(1970, 0, 1);
 const alliances = {
   type: AllianceListType,
   resolve() {
+
     if (lastFetchTask) {
       return lastFetchTask;
     }
 
     if ((new Date() - lastFetchTime) > 1000 * 3 /* 10 mins */) {
-      lastFetchTime = new Date();
-      lastFetchTask = fetchXML(url)
-        .then(xml => {
-          if (data.responseStatus === 200) {
-            //allianceList = data.responseData.feed.entries;
 
-            console.log(xml);
+      lastFetchTime = new Date();
+
+      lastFetchTask = new fetchXML(url)
+      .getXML()
+      .then( ({ xml }) => {
+
+        allianceList = [];
+
+        for(var alliance of xml.eveapi.result[0].rowset[0].row) {
+          //console.log(alliance.rowset[0].row[0]);
+
+          var corps = [];
+
+          for(var corp of alliance.rowset[0].row) {
+            corps.push({ id: corp.$.corporationID, name: ''});
           }
 
-          return allianceList;
-        })
-        .finally(() => {
-          lastFetchTask = null;
-        });
+          allianceList.push( { id: alliance.$.allianceID, name: alliance.$.name, corps: corps });
+        }
+
+        //console.log(xml.eveapi.result[0].rowset[0].row[0].$);
+
+        lastFetchTask = null;
+
+        return { alliances: allianceList };
+      });
 
       if (allianceList.length) {
-        return allianceList;
+        return { alliances: allianceList };
       }
 
       return lastFetchTask;
     }
 
-    return allianceList;
+    return { alliances: allianceList };
   },
 };
 

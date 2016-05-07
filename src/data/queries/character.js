@@ -13,9 +13,7 @@ import CharacterType from '../types/CharacterType';
 
 const url = 'https://api.eveonline.com/eve/CharacterInfo.xml.aspx';
 
-//let allianceList = [];
-//let lastFetchTask;
-//let lastFetchTime = new Date(1970, 0, 1);
+let characterCache = new Map();
 
 const character = {
   type: CharacterType,
@@ -24,9 +22,16 @@ const character = {
   },
   resolve(session, { id }) {
 
-    //console.log(session);
+    let result = characterCache.get(id);
 
-    var result = new fetchXML(url, { characterID: id })
+    if(result) {
+
+      if(result.expires && Date.now() < result.expires) {
+        return result.data;
+      }
+    }
+
+    result = new fetchXML(url, { characterID: id })
     .getXML()
     .then( ( { xml } ) => {
 
@@ -34,15 +39,14 @@ const character = {
         return null;
       }
 
-      var res = xml.eveapi.result[0];
+      let res = xml.eveapi.result[0];
+      let data = { id: res.characterID, name: res.characterName, corporation: { id: res.corporationID, name: res.corporation }, alliance: res.allianceID };
 
-      //if (data.responseStatus === 200) {
-      //  //allianceList = data.responseData.feed.entries;
+      let cache = { expires: Date.parse(xml.eveapi.cachedUntil[0] + " UTC"), data: data };
 
-       //console.log(xml.eveapi.result[0]);
-      //}
+      characterCache.set(id, cache);
 
-      return { id: res.characterID, name: res.characterName, corporation: { id: res.corporationID, name: res.corporation }, alliance: res.allianceID };
+      return data;
     });
 
     return result;

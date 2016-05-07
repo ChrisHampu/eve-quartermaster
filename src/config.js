@@ -16,9 +16,27 @@ export const host = process.env.WEBSITE_HOSTNAME || `localhost:${port}`;
 export const eve = {
   corp_key: process.env.CORPORATION_KEY || '5278627',
   corp_vcode: process.env.CORPORATION_VCODE || 'Te7P9YRA597tVsa1k8G57mwTRIcGVz4duBpWhd12duWpab6k51xaCSUivwD6Rtfm',
-  corp_access: '8388608',
+  corp_access: 8388608,
   corp_id: 98388312,
-  alliance_id: 1
+  alliance_id: 99005397,
+  contractType: {
+    "ItemExchange": 0,
+    "Courier": 1,
+    "Loan": 2,
+    "Auction": 3
+  },
+  contractStatus: {
+    "Outstanding": 0,
+    "Deleted": 1,
+    "Completed": 2,
+    "Failed": 3,
+    "CompletedByIssuer": 4,
+    "CompletedByContractor": 5,
+    "Cancelled": 6,
+    "Rejected": 7,
+    "Reversed": 8,
+    "InProgress": 9,
+  }
 };
 
 export const databaseUrl = process.env.DATABASE_URL || 'value';

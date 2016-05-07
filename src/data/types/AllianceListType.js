@@ -16,14 +16,12 @@ import {
   GraphQLList as List
 } from 'graphql';
 
-import CorporationType from './CorporationType';
+import AllianceType from './AllianceType';
 
 const AllianceListType = new ObjectType({
   name: 'AllianceList',
   fields: {
-    id: { type: new NonNull(IntType) },
-    name: { type: new NonNull(StringType) },
-    corps: { type: new NonNull(new List(CorporationType))}
+    alliances: { type: new List(AllianceType)}
   },
 });
 

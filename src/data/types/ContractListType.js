@@ -9,18 +9,20 @@
 
 import {
   GraphQLObjectType as ObjectType,
+  GraphQLID as ID,
+  GraphQLInt as IntType,
   GraphQLString as StringType,
   GraphQLNonNull as NonNull,
+  GraphQLList as List
 } from 'graphql';
 
-const ContentType = new ObjectType({
-  name: 'Content',
+import ContractType from './ContractType';
+
+const ContractListType = new ObjectType({
+  name: 'ContractList',
   fields: {
-    path: { type: new NonNull(StringType) },
-    title: { type: new NonNull(StringType) },
-    content: { type: new NonNull(StringType) },
-    component: { type: new NonNull(StringType) },
+    contractList: { type: new List(ContractType)}
   },
 });
 
-export default ContentType;
+export default ContractListType;

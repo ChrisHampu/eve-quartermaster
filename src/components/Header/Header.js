@@ -24,7 +24,7 @@ class Header extends Component {
 			<div className={s.root}>
 				<div className={s.logo_container}>
 					<div className={s.logo_text}>
-						Eve Quartermaster
+						EVE Quartermaster
 					</div>
 				</div>
 				<Navigation path={this.props.path}/>

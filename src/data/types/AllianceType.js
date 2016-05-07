@@ -9,19 +9,22 @@
 
 import {
   GraphQLObjectType as ObjectType,
+  GraphQLID as ID,
+  GraphQLInt as IntType,
   GraphQLString as StringType,
   GraphQLNonNull as NonNull,
+  GraphQLList as List
 } from 'graphql';
 
-const NewsItemType = new ObjectType({
-  name: 'NewsItem',
+import CorporationType from './CorporationType';
+
+const AllianceType = new ObjectType({
+  name: 'Alliance',
   fields: {
-    title: { type: new NonNull(StringType) },
-    link: { type: new NonNull(StringType) },
-    author: { type: StringType },
-    publishedDate: { type: new NonNull(StringType) },
-    contentSnippet: { type: StringType },
+    id: { type: new NonNull(IntType) },
+    name: { type: new NonNull(StringType) },
+    corps: { type: new NonNull(new List(CorporationType))}
   },
 });
 
-export default NewsItemType;
+export default AllianceType;
