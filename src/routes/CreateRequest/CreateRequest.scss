@@ -57,11 +57,11 @@ input[type="checkbox"].nav_checkbox {
   }
 
   &:checked::after {
-    content: '✓';
-    font-size: 1.2rem;
+    //content: '✓';
+    font-size: 1.4rem;
     line-height: 1rem;
     text-align: center;
-    color: $text-white;
+    color: $purple-highlight-lighter;
     background-color: $purple-highlight-lighter;
   }
 }

@@ -8,12 +8,13 @@
  */
 
 import React from 'react';
-import Login from './Login';
+import ViewRequests from './ViewRequests';
+import fetch from '../../core/fetch';
 
-export const path = '/login';
+export const path = '/requests';
 export const action = async (state) => {
-  const title = 'Log In';
-  state.context.onSetTitle(title);
-
-  return <Login title={title} />;
+  //const response = await fetch('/graphql?query={news{title,link,contentSnippet}}');
+  //const { data } = await response.json();
+  state.context.onSetTitle('57th Eve Contracts');
+  return <ViewRequests/>;
 };

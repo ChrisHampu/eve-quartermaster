@@ -11,10 +11,10 @@ import React, { Component, PropTypes } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Sidebar from '../../components/Sidebar';
 import Link from '../../components/Link';
-import s from './ViewContracts.scss';
+import s from './CreateRequest.scss';
 import cx from 'classnames';
 
-class ViewContracts extends Component {
+class CreateRequest extends Component {
 
   render () {
     return (
@@ -50,4 +50,4 @@ class ViewContracts extends Component {
   }
 }
 
-export default withStyles(ViewContracts, s);
+export default withStyles(CreateRequest, s);

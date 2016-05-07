@@ -17,9 +17,8 @@ import ErrorPage from './components/ErrorPage';
 
 const routes = [
   require('./routes/ViewContracts'),
-  require('./routes/contact'),
-  require('./routes/login'),
-  require('./routes/register'),
+  require('./routes/ViewRequests'),
+  require('./routes/CreateRequest'),
 ];
 
 const router = new Router(on => {

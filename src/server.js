@@ -62,16 +62,61 @@ server.use(passport.session());
 server.get('/auth', 
   passport.authenticate('eveonline', {
     successRedirect: '/',
-    failureRedirect: '/'
+    failureRedirect: '/unauthorized'
   })
 );
 
-server.get('/callback',
-  passport.authenticate('eveonline', {
-    successRedirect: '/',
-    failureRedirect: '/'
-  })
-);
+server.get('/callback', (req, res, next) => {
+  passport.authenticate('eveonline', (err, user, info) => {
+
+    if(err) {
+      return next(err);
+    }
+
+    if(!user) {
+
+      const template = require('./views/unauthorized.jade');
+
+      res.status(200);
+
+      res.send(template({
+        message: info.message
+      }));
+
+    }
+    else {
+
+      req.login(user, (err) => {
+
+        if(err) {
+          const template = require('./views/unauthorized.jade');
+
+          res.status(200);
+
+          res.send(template({
+            message: info.message
+          }));
+        }
+
+        res.redirect('/');
+
+      });
+    }
+
+  })(req, res, next);
+});
+
+server.get('/unauthorized', (req, res, next) => {
+
+  const template = require('./views/unauthorized.jade');
+
+  res.status(200);
+
+  res.send(template({
+    message: 'Your corporation or alliance does not have access to this page'
+  }));
+
+});
 
 server.get('/logout', (req, res, next) => {
 
@@ -100,6 +145,7 @@ server.get('*', async (req, res, next) => {
     let statusCode = 200;
 
     if(!req.isAuthenticated() && req.path !== '/') {
+
       res.redirect('/');
     }
     else
