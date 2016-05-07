@@ -17,7 +17,8 @@ export const eve = {
   corp_key: process.env.CORPORATION_KEY || '5278627',
   corp_vcode: process.env.CORPORATION_VCODE || 'Te7P9YRA597tVsa1k8G57mwTRIcGVz4duBpWhd12duWpab6k51xaCSUivwD6Rtfm',
   corp_access: '8388608',
-  corp_id: 98388312
+  corp_id: 98388312,
+  alliance_id: 1
 };
 
 export const databaseUrl = process.env.DATABASE_URL || 'value';
