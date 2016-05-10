@@ -16,6 +16,7 @@ import { addEventListener, removeEventListener } from './core/DOMUtils';
 
 let cssContainer = document.getElementById('css');
 const appContainer = document.getElementById('app');
+let user = null;
 const context = {
   insertCss: styles => styles._insertCss(),
   onSetTitle: value => (document.title = value),
@@ -35,15 +36,18 @@ const context = {
       .getElementsByTagName('head')[0]
       .appendChild(meta);
   },
-  getLocation: () => window.location.pathname
+  getLocation: () => window.location.pathname,
+  getUser: () => user
 };
 
 // Google Analytics tracking. Don't send 'pageview' event after the first
 // rendering, as it was already sent by the Html component.
 let trackPageview = () => (trackPageview = () => window.ga('send', 'pageview'));
 
-function render(state) {
+async function render(state) {
+
   Router.dispatch(state, (newState, component) => {
+
     ReactDOM.render(component, appContainer, () => {
 
       // Restore the scroll position if it was saved into the state
@@ -73,7 +77,7 @@ function run() {
   FastClick.attach(document.body);
 
   // Re-render the app when window.location changes
-  const unlisten = Location.listen(location => {
+  const unlisten = Location.listen(async (location) => {
     currentLocation = location;
     currentState = Object.assign({}, location.state, {
       path: location.pathname,
@@ -81,6 +85,21 @@ function run() {
       state: location.state,
       context,
     });
+
+    if(user === null) {
+
+      const query = `/graphql?query={user{authenticated,id,name,corp_id,corp_name,alliance}}`;
+      const response = await fetch(query, {credentials: 'same-origin'});
+      const { data } = await response.json();
+
+      if(!data.user.authenticated) {
+        //currentState.path = '/unauthorized';
+      }
+      else {
+        user = data.user;
+      }
+    }
+
     render(currentState);
   });
 

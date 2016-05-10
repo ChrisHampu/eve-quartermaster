@@ -15,6 +15,38 @@ const url = 'https://api.eveonline.com/eve/CharacterInfo.xml.aspx';
 
 let characterCache = new Map();
 
+export function fetchCharacter(id) {
+
+  let result = characterCache.get(id);
+
+  if(result) {
+
+    if(result.expires && Date.now() < result.expires) {
+      return result.data;
+    }
+  }
+
+  result = new fetchXML(url, { characterID: id })
+  .getXML()
+  .then( ( { xml } ) => {
+
+    if(xml.eveapi.error !== undefined) {
+      return null; 
+    }
+
+    let res = xml.eveapi.result[0];
+    let data = { id: res.characterID, name: res.characterName, corporation: { id: res.corporationID, name: res.corporation }, alliance: res.allianceID };
+
+    let cache = { expires: Date.parse(xml.eveapi.cachedUntil[0] + " UTC"), data: data };
+
+    characterCache.set(id, cache);
+
+    return data;
+  });
+
+  return result;
+};
+
 const character = {
   type: CharacterType,
   args: {
@@ -22,34 +54,7 @@ const character = {
   },
   resolve(session, { id }) {
 
-    let result = characterCache.get(id);
-
-    if(result) {
-
-      if(result.expires && Date.now() < result.expires) {
-        return result.data;
-      }
-    }
-
-    result = new fetchXML(url, { characterID: id })
-    .getXML()
-    .then( ( { xml } ) => {
-
-      if(xml.eveapi.error !== undefined) {
-        return null;
-      }
-
-      let res = xml.eveapi.result[0];
-      let data = { id: res.characterID, name: res.characterName, corporation: { id: res.corporationID, name: res.corporation }, alliance: res.allianceID };
-
-      let cache = { expires: Date.parse(xml.eveapi.cachedUntil[0] + " UTC"), data: data };
-
-      characterCache.set(id, cache);
-
-      return data;
-    });
-
-    return result;
+    return fetchCharacter(id);    
   },
 };
 

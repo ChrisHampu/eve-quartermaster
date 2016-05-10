@@ -24,9 +24,16 @@ const routes = [
 
 const router = new Router(on => {
 
-  on('/unauthorized', async (state, next) => 
-    <App context={state.context} error="unauthorized"><LoginPage /></App>
-  );
+  on('/unauthorized', async (state, next) => {
+    return <App context={state.context} error={"unauthorized"}><LoginPage /></App>
+  });
+
+  on('/logout', async (state, next) => {
+
+    await fetch('/logout', {credentials: 'same-origin'});
+
+    return <App context={state.context} error={"logged out"}><LoginPage /></App>;
+  });
 
   on('*', async (state, next) => {
 
@@ -36,13 +43,6 @@ const router = new Router(on => {
 
   routes.forEach(route => {
     on(route.path, route.action);
-  });
-
-  on('*', async (state) => {
-    const query = `/graphql?query={content(path:"${state.path}"){path,title,content,component}}`;
-    const response = await fetch(query);
-    const { data } = await response.json();
-    return data && data.content && <ContentPage {...data.content} />;
   });
 
   on('error', (state, error) => state.statusCode === 404 ?

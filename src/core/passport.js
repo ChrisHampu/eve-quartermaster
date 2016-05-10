@@ -61,6 +61,8 @@ passport.deserializeUser(async function(obj, done) {
     user.name = data.character.name;
     user.expires = obj.expires;
 
+    console.log("deserialized");
+
     done(null, user);
 
   }).catch(done);
@@ -136,7 +138,7 @@ passport.use(new EveOnlineStrategy({
 
       await query(`
           INSERT INTO login (character_id, character_name, corp_id, corp_name, alliance_id, token_expire) VALUES ($1,
-            $2, $3, $4) RETURNING(id, character_id)`,
+            $2, $3, $4, $5, $6) RETURNING(id, character_id)`,
           charInfo.CharacterID, charInfo.CharacterName, data.character.corporation.id, data.character.corporation.name,
             data.character.alliance, charInfo.ExpiresOn);
 

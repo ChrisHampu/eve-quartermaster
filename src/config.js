@@ -39,7 +39,7 @@ export const eve = {
   }
 };
 
-export const databaseUrl = process.env.DATABASE_URL || 'value';
+export const databaseUrl = process.env.DATABASE_URL || 'postgresql://postgres:Chris231@127.0.0.1:5432/postgres?ssl=false';
 
 export const analytics = {
 
@@ -73,7 +73,7 @@ export const auth = {
   eve: {
     id: process.env.EVE_CLIENT_ID || 'value',
     secret: process.env.EVE_SECRET_KEY || 'value',
-    callback: 'http://localhost:3000/callback'
+    callback: 'http://localhost:3001/callback'
   }
 
 };

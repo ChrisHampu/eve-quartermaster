@@ -15,6 +15,7 @@ import {
 import alliances from './queries/alliances';
 import character from './queries/character';
 import contracts from './queries/contracts';
+import user from './queries/user';
 
 const schema = new Schema({
   query: new ObjectType({
@@ -22,7 +23,8 @@ const schema = new Schema({
     fields: {
       alliances,
       character,
-      contracts
+      contracts,
+      user
     },
   }),
 });

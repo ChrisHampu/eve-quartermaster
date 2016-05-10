@@ -45,13 +45,6 @@ server.use(bodyParser.json());
 //
 // Authentication
 // -----------------------------------------------------------------------------
-server.use(expressJwt({
-  secret: auth.jwt.secret,
-  credentialsRequired: false,
-  /* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
-  getToken: req => req.cookies.id_token,
-  /* jscs:enable requireCamelCaseOrUpperCaseIdentifiers */
-}));
 
 server.use(passport.initialize());
 server.use(passport.session());
@@ -95,8 +88,9 @@ server.get('/callback', (req, res, next) => {
           }));
         }
 
-        res.redirect('/');
+        req.session.jwt = jwt.sign(user, auth.jwt.secret);
 
+        res.redirect('/');
       });
     }
 
@@ -140,7 +134,7 @@ server.get('*', async (req, res, next) => {
   try {
 
     let statusCode = 200;
-    
+
     const template = require('./views/index.jade');
     const data = { title: '', description: '', css: '', body: '', entry: assets.main.js };
 
@@ -154,10 +148,14 @@ server.get('*', async (req, res, next) => {
       onSetTitle: value => (data.title = value),
       onSetMeta: (key, value) => (data[key] = value),
       onPageNotFound: () => (statusCode = 404),
-      getLocation: () => req.path
+      getLocation: () => req.path,
+      getUser: () => req.user || null
     };
 
-    await Router.dispatch({ path: req.isAuthenticated() ? req.path : '/unauthorized', query: req.query, context }, (state, component) => {
+    //let path = req.isAuthenticated() ? req.path : '/unauthorized';
+    let path = req.path;
+
+    await Router.dispatch({ path: path,  query: req.query, context }, (state, component) => {
 
       data.body = ReactDOM.renderToString(component);
       data.css = css.join('');
@@ -165,8 +163,7 @@ server.get('*', async (req, res, next) => {
 
     res.status(statusCode);
     res.send(template(data));
-    
-
+ 
   } catch (err) {
     next(err);
   }

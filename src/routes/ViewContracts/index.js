@@ -23,6 +23,11 @@ export const action = async (state) => {
 								 title,forCorp,public,dateIssued,dateExpired,dateAccepted,numDays,dateCompleted,price,reward,collateral,buyout,volume}}}`);
 	const { data } = await response.json();
 
+	let contractList = [];
+
+	if(data.contracts)
+		contractList = data.contracts.contractList || [];
+
 	state.context.onSetTitle('57th Eve Contracts');
-	return <ViewContracts contracts={data.contracts.contractList}/>;
+	return <ViewContracts contracts={contractList}/>;
 };
