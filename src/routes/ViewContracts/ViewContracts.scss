@@ -14,7 +14,8 @@
 }
 
 .container {
-  
+  padding: 0.4rem;
+  padding-bottom: 2rem;
 }
 
 .sidebar_header {
@@ -72,4 +73,50 @@ input[type="checkbox"].nav_checkbox {
 
 .nav_label {
   user-select: none;
+}
+
+.contract_header {
+  border-left: 1px solid $purple-highlight-lighter;
+  border-right: 1px solid $purple-highlight-lighter;
+  border-top:  1px solid $purple-highlight-lighter;
+
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+
+  > div:not(:last-child) {
+    border-right: 1px solid $purple-highlight-lighter;
+  }
+
+  div {
+    padding: 0.4rem 0.5rem;
+    font-weight: 500;
+  }
+}
+
+.contract_list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    border-left: 1px solid $purple-highlight-lighter;
+    border-right: 1px solid $purple-highlight-lighter;
+    border-top:  1px solid $purple-highlight-lighter;
+
+    padding: 0 0rem;
+
+    > div:not(:last-child) {
+      border-right: 1px solid $purple-highlight-lighter;
+    }
+
+    div {
+      padding: 0.4rem 0.5rem;
+    }
+  }
+
+  li:last-child {
+    border-bottom: 1px solid $purple-highlight-lighter;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+  }
 }

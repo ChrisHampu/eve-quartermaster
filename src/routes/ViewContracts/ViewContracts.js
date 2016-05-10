@@ -55,7 +55,12 @@ class ViewContracts extends Component {
   }
 
   componentWillMount() {
+    if(this.state.contracts.length === 0) {
+      let contracts = [];
 
+      for(var i = 0; i < 10; i++)
+        contracts.push({title: "Test", price: 1000000, dateIssued: "test2", status: "Outstanding"});
+    }
   }
 
   componendDidMount() {
@@ -64,6 +69,12 @@ class ViewContracts extends Component {
 
   toggleShowStatus(status) {
 
+    let show = this.state.showStatus;
+    show[status] = !this.state.showStatus[status];
+
+    this.setState({ showStatus: show });
+
+    this.updateContracts();
   }
 
   updateContracts() {
@@ -86,7 +97,7 @@ class ViewContracts extends Component {
             <li className="nav-item">
               <div className="checkbox">
                 <label className={s.nav_label} >
-                  <input type="checkbox" className={s.nav_checkbox}/>
+                  <input type="checkbox" className={s.nav_checkbox} onClick={()=>{ this.toggleShowStatus("Outstanding"); }}/>
                   Outstanding
                 </label>
               </div>
@@ -94,7 +105,7 @@ class ViewContracts extends Component {
             <li className="nav-item">
               <div className="checkbox">
                 <label className={s.nav_label}>
-                  <input type="checkbox" className={s.nav_checkbox}/>
+                  <input type="checkbox" className={s.nav_checkbox} onClick={()=>{ this.toggleShowStatus("InProgress"); }}/>
                   In Progress
                 </label>
               </div>
@@ -102,7 +113,7 @@ class ViewContracts extends Component {
             <li className="nav-item">
               <div className="checkbox">
                 <label className={s.nav_label}>
-                  <input type="checkbox" className={s.nav_checkbox}/>
+                  <input type="checkbox" className={s.nav_checkbox} onClick={()=>{ this.toggleShowStatus("Completed"); }}/>
                   Completed
                 </label>
               </div>
@@ -110,7 +121,7 @@ class ViewContracts extends Component {
             <li className="nav-item">
               <div className="checkbox">
                 <label className={s.nav_label}>
-                  <input type="checkbox" className={s.nav_checkbox}/>
+                  <input type="checkbox" className={s.nav_checkbox} onClick={()=>{ this.toggleShowStatus("Deleted"); }}/>
                   Deleted
                 </label>
               </div>
@@ -118,9 +129,19 @@ class ViewContracts extends Component {
           </ul>
         </Sidebar>
         <div className={s.container}>
-          <ul>
+          <h4>Contracts</h4>
+          <div className={cx("row", s.contract_header)}>
+            <div className="col-md-6">Title</div>
+            <div className="col-md-6">Price</div>
+          </div>
+          <ul className={cx(s.contract_list)}>
           { this.state.contracts.map((contract) => {
-            return <li key={contract.id}>{contract.title}</li>
+            return(
+              <li key={contract.id} className="row">
+                <div className="col-md-6">{contract.title || "[Multiple Items]"}</div>
+                <div className="col-md-6">{contract.price} ISK</div>
+              </li>
+            )
           })}
           </ul>
         </div>
