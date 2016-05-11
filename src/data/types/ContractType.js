@@ -96,6 +96,7 @@ const ContractType = new ObjectType({
     issuerCorpID: { type: new NonNull(IntType) },
     assigneeID: { type: new NonNull(IntType) },
     acceptorID: { type: new NonNull(IntType) },
+    stationName: { type: new NonNull(StringType) },
     startStationID: { type: new NonNull(IntType) },
     endStationID: { type: new NonNull(IntType) },
     type: { type: new NonNull(typeEnum) },

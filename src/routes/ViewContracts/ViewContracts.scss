@@ -16,6 +16,10 @@
 .container {
   padding: 0.4rem;
   padding-bottom: 2rem;
+
+  h4 {
+    padding-bottom: 0.75rem;
+  }
 }
 
 .sidebar_header {
@@ -76,12 +80,13 @@ input[type="checkbox"].nav_checkbox {
 }
 
 .contract_header {
-  border-left: 1px solid $purple-highlight-lighter;
-  border-right: 1px solid $purple-highlight-lighter;
-  border-top:  1px solid $purple-highlight-lighter;
+  border: 1px solid $purple-highlight-lighter;
 
   border-top-left-radius: 0.5rem;
   border-top-right-radius: 0.5rem;
+
+  background-color: #292577;
+  color: $gray-lighter;
 
   > div:not(:last-child) {
     border-right: 1px solid $purple-highlight-lighter;
@@ -101,7 +106,7 @@ input[type="checkbox"].nav_checkbox {
   li {
     border-left: 1px solid $purple-highlight-lighter;
     border-right: 1px solid $purple-highlight-lighter;
-    border-top:  1px solid $purple-highlight-lighter;
+    
 
     padding: 0 0rem;
 
@@ -112,11 +117,15 @@ input[type="checkbox"].nav_checkbox {
     div {
       padding: 0.4rem 0.5rem;
     }
-  }
 
-  li:last-child {
-    border-bottom: 1px solid $purple-highlight-lighter;
-    border-bottom-left-radius: 0.5rem;
-    border-bottom-right-radius: 0.5rem;
+    &:last-child {
+      border-bottom: 1px solid $purple-highlight-lighter;
+      border-bottom-left-radius: 0.5rem;
+      border-bottom-right-radius: 0.5rem;
+    }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid $purple-highlight-lighter;
+    }
   }
 }

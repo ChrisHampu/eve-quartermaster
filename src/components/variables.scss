@@ -19,7 +19,8 @@ $purple-base-darker: #010A33; /* header */
 $purple-base-lighter: #021151; /* body */
 
 $purple-highlight: #363277; /* lines/tables */
-$purple-highlight-lighter: color($purple-highlight lightness(+20%));;
+$purple-highlight-lighter: color($purple-highlight lightness(+20%));
+$purple-highlight-darker: color($purple-highlight lightness(-5%));
 
 $text-white: #ffffff;
 $text-grey: #999999;

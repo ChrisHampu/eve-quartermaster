@@ -19,7 +19,7 @@ let parseXml = Promise.promisify(parseString);
 export const path = '/';
 export const action = async (state) => {
 
-	const response = await fetch(`/graphql?query={contracts{contractList{id,issuerID,issuerCorpID,assigneeID,startStationID,endStationID,type,status,
+	const response = await fetch(`/graphql?query={contracts{contractList{id,issuerID,issuerCorpID,assigneeID,stationName,startStationID,endStationID,type,status,
 								 title,forCorp,public,dateIssued,dateExpired,dateAccepted,numDays,dateCompleted,price,reward,collateral,buyout,volume}}}`);
 	const { data } = await response.json();
 

@@ -11,6 +11,7 @@ import { GraphQLList as List } from 'graphql';
 import fetchXML from '../../core/fetchXML';
 import ContractListType from '../types/ContractListType';
 import { eve } from '../../config.js';
+import { stationNames } from '../../constants/stationNames';
 
 const url = `https://api.eveonline.com/corp/Contracts.xml.aspx?keyID=${eve.corp_key}&vCode=${eve.corp_vcode}`;
 
@@ -18,10 +19,15 @@ let contractList = [];
 let lastFetchTask;
 let nextFetch = new Date(Date.now());
 
+function filterCorporation(contracts, session) {
+
+  return contracts;
+};
+
 const contracts = {
 
   type: ContractListType,
-  resolve() {
+  resolve(_, __, session) {
 
     if (lastFetchTask) {
       return lastFetchTask;
@@ -47,6 +53,7 @@ const contracts = {
               issuerCorpID: c.issuerCorpID,
               assigneeID: c.assigneeID,
               acceptorID: c.acceptorID,
+              stationName: stationNames[c.startStationID],
               startStationID: c.startStationID,
               endStationID: c.endStationID,
               type: eve.contractType[c.type],

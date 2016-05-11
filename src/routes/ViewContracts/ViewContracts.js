@@ -55,12 +55,8 @@ class ViewContracts extends Component {
   }
 
   componentWillMount() {
-    if(this.state.contracts.length === 0) {
-      let contracts = [];
 
-      for(var i = 0; i < 10; i++)
-        contracts.push({title: "Test", price: 1000000, dateIssued: "test2", status: "Outstanding"});
-    }
+      this.updateContracts();
   }
 
   componendDidMount() {
@@ -79,10 +75,50 @@ class ViewContracts extends Component {
 
   updateContracts() {
 
-    let contracts = this.props.contracts.filter( contract => this.state.showStatus[contract.status] === true && 
+    let contracts = this.props.contracts.filter( contract => contract !== null && this.state.showStatus[contract.status] === true && 
       this.state.showType[contract.type] === true );
 
     this.setState({ contracts: contracts });
+  }
+
+  prettyExpireTime(contract) {
+
+    let issued = Date.parse(contract.dateIssued + " UTC");
+    let expiry = Date.parse(contract.dateExpired + " UTC");
+
+    if (new Date(Date.now()) > expiry) {
+      return "Expired";
+    }
+
+    let ms = expiry - Date.now();
+
+    /*
+    const millisecondsPerDay = 1000 * 60 * 60 * 24;
+    const millisecondsPerHour = 1000 * 60 * 60;
+    let millisBetween = diff;
+    let days = millisBetween / millisecondsPerDay;
+    let hours =  millisBetween / millisecondsPerHour;
+    */
+
+    var d, h, m, s;
+    s = Math.floor(ms / 1000);
+    m = Math.floor(s / 60);
+    s = s % 60;
+    h = Math.floor(m / 60);
+    m = m % 60;
+    d = Math.floor(h / 24);
+    h = h % 24;
+
+    return (d > 0 ? d + " days " : "") + (h > 0 ? h + " hours " : "") + "left";
+  }
+
+  prettyContractType(contract) {
+
+    switch(contract.type) {
+      case "ItemExchange": return "Item Exchange";
+    }
+
+    return contract.type;
   }
 
   render () {
@@ -97,7 +133,7 @@ class ViewContracts extends Component {
             <li className="nav-item">
               <div className="checkbox">
                 <label className={s.nav_label} >
-                  <input type="checkbox" className={s.nav_checkbox} onClick={()=>{ this.toggleShowStatus("Outstanding"); }}/>
+                  <input type="checkbox" className={s.nav_checkbox} readOnly="true" checked={this.state.showStatus.Outstanding} onClick={()=>{ this.toggleShowStatus("Outstanding"); }}/>
                   Outstanding
                 </label>
               </div>
@@ -105,7 +141,7 @@ class ViewContracts extends Component {
             <li className="nav-item">
               <div className="checkbox">
                 <label className={s.nav_label}>
-                  <input type="checkbox" className={s.nav_checkbox} onClick={()=>{ this.toggleShowStatus("InProgress"); }}/>
+                  <input type="checkbox" className={s.nav_checkbox} readOnly="true" checked={this.state.showStatus.InProgress} onClick={()=>{ this.toggleShowStatus("InProgress"); }}/>
                   In Progress
                 </label>
               </div>
@@ -113,7 +149,7 @@ class ViewContracts extends Component {
             <li className="nav-item">
               <div className="checkbox">
                 <label className={s.nav_label}>
-                  <input type="checkbox" className={s.nav_checkbox} onClick={()=>{ this.toggleShowStatus("Completed"); }}/>
+                  <input type="checkbox" className={s.nav_checkbox} readOnly="true" checked={this.state.showStatus.Completed} onClick={()=>{ this.toggleShowStatus("Completed"); }}/>
                   Completed
                 </label>
               </div>
@@ -121,7 +157,7 @@ class ViewContracts extends Component {
             <li className="nav-item">
               <div className="checkbox">
                 <label className={s.nav_label}>
-                  <input type="checkbox" className={s.nav_checkbox} onClick={()=>{ this.toggleShowStatus("Deleted"); }}/>
+                  <input type="checkbox" className={s.nav_checkbox} readOnly="true" checked={this.state.showStatus.Deleted} onClick={()=>{ this.toggleShowStatus("Deleted"); }}/>
                   Deleted
                 </label>
               </div>
@@ -131,15 +167,21 @@ class ViewContracts extends Component {
         <div className={s.container}>
           <h4>Contracts</h4>
           <div className={cx("row", s.contract_header)}>
-            <div className="col-md-6">Title</div>
-            <div className="col-md-6">Price</div>
+            <div className="col-md-3">Title</div>
+            <div className="col-md-2">Type</div>
+            <div className="col-md-3">Price</div>
+            <div className="col-md-2">Location</div>
+            <div className="col-md-2">Expires</div>
           </div>
           <ul className={cx(s.contract_list)}>
           { this.state.contracts.map((contract) => {
             return(
               <li key={contract.id} className="row">
-                <div className="col-md-6">{contract.title || "[Multiple Items]"}</div>
-                <div className="col-md-6">{contract.price} ISK</div>
+                <div className="col-md-3">{contract.title || "[Multiple Items]"}</div>
+                <div className="col-md-2">{this.prettyContractType(contract)}</div>
+                <div className="col-md-3">{contract.price.toLocaleString()} ISK</div>
+                <div className="col-md-2">{contract.stationName}</div>
+                <div className="col-md-2">{this.prettyExpireTime(contract)}</div>
               </li>
             )
           })}

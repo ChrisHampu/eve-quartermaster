@@ -39,7 +39,7 @@ export const eve = {
   }
 };
 
-export const databaseUrl = process.env.DATABASE_URL || 'postgresql://postgres:Chris231@127.0.0.1:5432/postgres?ssl=false';
+export const databaseUrl = process.env.DATABASE_URL || 'value';
 
 export const analytics = {
 
