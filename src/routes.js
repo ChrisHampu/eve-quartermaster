@@ -25,7 +25,7 @@ const routes = [
 const router = new Router(on => {
 
   on('/unauthorized', async (state, next) => {
-    return <App context={state.context} error={"unauthorized"}><LoginPage /></App>
+    return <App context={state.context} error={"unauthorized"}><LoginPage /></App>;
   });
 
   on('/logout', async (state, next) => {

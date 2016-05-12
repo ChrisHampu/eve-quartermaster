@@ -12,6 +12,7 @@ import fetchXML from '../../core/fetchXML';
 import ContractListType from '../types/ContractListType';
 import { eve } from '../../config.js';
 import { stationNames } from '../../constants/stationNames';
+import verifySession from '../../core/verifySession';
 
 const url = `https://api.eveonline.com/corp/Contracts.xml.aspx?keyID=${eve.corp_key}&vCode=${eve.corp_vcode}`;
 
@@ -27,7 +28,13 @@ function filterCorporation(contracts, session) {
 const contracts = {
 
   type: ContractListType,
-  resolve(_, __, session) {
+  async resolve(_, __, session) {
+
+    let auth = await verifySession(session);
+
+    if(!auth.authenticated) {
+      return { contractList: [] };
+    }
 
     if (lastFetchTask) {
       return lastFetchTask;

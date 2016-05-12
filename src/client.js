@@ -37,7 +37,8 @@ const context = {
       .appendChild(meta);
   },
   getLocation: () => window.location.pathname,
-  getUser: () => user
+  getUser: () => user,
+  getSession: () => null
 };
 
 // Google Analytics tracking. Don't send 'pageview' event after the first
@@ -93,7 +94,7 @@ function run() {
       const { data } = await response.json();
 
       if(!data.user.authenticated) {
-        //currentState.path = '/unauthorized';
+        currentState.path = '/unauthorized';
       }
       else {
         user = data.user;

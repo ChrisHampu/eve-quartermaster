@@ -13,12 +13,12 @@ import Sidebar from '../../components/Sidebar';
 import Link from '../../components/Link';
 import s from './ViewContracts.scss';
 import cx from 'classnames';
+import fetch from '../../core/fetch';
 
 class ViewContracts extends Component {
 
   static propTypes = {
-
-    contracts: PropTypes.array.isRequired
+    contracts: PropTypes.array.isRequired 
   };
 
   constructor(props) {
@@ -56,11 +56,10 @@ class ViewContracts extends Component {
 
   componentWillMount() {
 
-      this.updateContracts();
+    this.updateContracts();
   }
 
   componendDidMount() {
-
   }
 
   toggleShowStatus(status) {
@@ -75,7 +74,7 @@ class ViewContracts extends Component {
 
   updateContracts() {
 
-    let contracts = this.props.contracts.filter( contract => contract !== null && this.state.showStatus[contract.status] === true && 
+    let contracts = this.props.contracts.filter( contract => contract !== null && this.state.showStatus[contract.status] === true &&
       this.state.showType[contract.type] === true );
 
     this.setState({ contracts: contracts });
@@ -91,14 +90,6 @@ class ViewContracts extends Component {
     }
 
     let ms = expiry - Date.now();
-
-    /*
-    const millisecondsPerDay = 1000 * 60 * 60 * 24;
-    const millisecondsPerHour = 1000 * 60 * 60;
-    let millisBetween = diff;
-    let days = millisBetween / millisecondsPerDay;
-    let hours =  millisBetween / millisecondsPerHour;
-    */
 
     var d, h, m, s;
     s = Math.floor(ms / 1000);
@@ -165,27 +156,30 @@ class ViewContracts extends Component {
           </ul>
         </Sidebar>
         <div className={s.container}>
-          <h4>Contracts</h4>
-          <div className={cx("row", s.contract_header)}>
-            <div className="col-md-3">Title</div>
-            <div className="col-md-2">Type</div>
-            <div className="col-md-3">Price</div>
-            <div className="col-md-2">Location</div>
-            <div className="col-md-2">Expires</div>
-          </div>
-          <ul className={cx(s.contract_list)}>
-          { this.state.contracts.map((contract) => {
-            return(
-              <li key={contract.id} className="row">
-                <div className="col-md-3">{contract.title || "[Multiple Items]"}</div>
-                <div className="col-md-2">{this.prettyContractType(contract)}</div>
-                <div className="col-md-3">{contract.price.toLocaleString()} ISK</div>
-                <div className="col-md-2">{contract.stationName}</div>
-                <div className="col-md-2">{this.prettyExpireTime(contract)}</div>
-              </li>
-            )
-          })}
-          </ul>
+          { this.state.contracts.length > 0 ?
+            <div>
+            <h4>Contracts</h4>
+            <div className={cx("row", s.contract_header)}>
+              <div className="col-md-3">Title</div>
+              <div className="col-md-2">Type</div>
+              <div className="col-md-3">Price</div>
+              <div className="col-md-2">Location</div>
+              <div className="col-md-2">Expires</div>
+            </div>
+            <ul className={cx(s.contract_list)}>
+            { this.state.contracts.map((contract) => {
+              return(
+                <li key={contract.id} className="row">
+                  <div className="col-md-3">{contract.title || "[Multiple Items]"}</div>
+                  <div className="col-md-2">{this.prettyContractType(contract)}</div>
+                  <div className="col-md-3">{contract.price.toLocaleString()} ISK</div>
+                  <div className="col-md-2">{contract.stationName}</div>
+                  <div className="col-md-2">{this.prettyExpireTime(contract)}</div>
+                </li>
+              )
+            })}</ul></div>
+            : <h4>No contracts match criteria</h4>
+          }
         </div>
       </div>
     );

@@ -10,22 +10,33 @@
 import Promise from 'bluebird';
 import React from 'react';
 import ViewContracts from './ViewContracts';
-import fetch from '../../core/fetch';
-import { parseString } from 'xml2js';
-import fetchXML from '../../core/fetchXML';
-
-let parseXml = Promise.promisify(parseString);
+import fetch, { fetchLocal } from '../../core/fetch';
 
 export const path = '/';
 export const action = async (state) => {
 
-	const response = await fetch(`/graphql?query={contracts{contractList{id,issuerID,issuerCorpID,assigneeID,stationName,startStationID,endStationID,type,status,
-								 title,forCorp,public,dateIssued,dateExpired,dateAccepted,numDays,dateCompleted,price,reward,collateral,buyout,volume}}}`);
-	const { data } = await response.json();
+	let data = null;
+
+	if(fetchLocal === undefined) {
+		let response = await fetch(`/graphql?query={contracts{contractList{id,issuerID,issuerCorpID,assigneeID,stationName,startStationID,endStationID,type,status,
+								 title,forCorp,public,dateIssued,dateExpired,dateAccepted,numDays,dateCompleted,price,reward,collateral,buyout,volume}}}`,
+								 {credentials: 'same-origin'});
+
+		let json = await response.json();
+
+		data = json.data;
+
+	} else {
+		let json = await fetchLocal(`/graphql?query={contracts{contractList{id,issuerID,issuerCorpID,assigneeID,stationName,startStationID,endStationID,type,status,
+								 title,forCorp,public,dateIssued,dateExpired,dateAccepted,numDays,dateCompleted,price,reward,collateral,buyout,volume}}}`,
+								 { cookies: [state.context.getSession()] });
+
+		data = json.data;
+	}
 
 	let contractList = [];
 
-	if(data.contracts)
+	if(data && data.contracts)
 		contractList = data.contracts.contractList || [];
 
 	state.context.onSetTitle('57th Eve Contracts');

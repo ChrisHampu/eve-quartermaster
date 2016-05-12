@@ -16,9 +16,9 @@ export const host = process.env.WEBSITE_HOSTNAME || `localhost:${port}`;
 export const eve = {
   corp_key: process.env.CORPORATION_KEY || '5278627',
   corp_vcode: process.env.CORPORATION_VCODE || 'Te7P9YRA597tVsa1k8G57mwTRIcGVz4duBpWhd12duWpab6k51xaCSUivwD6Rtfm',
-  corp_access: 8388608,
-  corp_id: 98388312,
-  alliance_id: 99005397,
+  corp_access: 8388608, // The api key access mask
+  corp_id: '98388312',
+  alliance_id: '99005338',//99005397,
   contractType: {
     "ItemExchange": 0,
     "Courier": 1,

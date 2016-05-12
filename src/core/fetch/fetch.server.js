@@ -9,6 +9,7 @@
 
 import Promise from 'bluebird';
 import fetch, { Request, Headers, Response } from 'node-fetch';
+import fetchCookie from 'fetch';
 import { host } from '../../config';
 
 fetch.Promise = Promise;
@@ -30,4 +31,16 @@ function localFetch(url, options) {
   return fetch(localUrl(url), options);
 }
 
-export { localFetch as default, Request, Headers, Response };
+function fetchLocal(url, options) {
+
+	if(options === undefined)
+		options = {};
+
+	return new Promise((resolve, reject) => {
+		fetchCookie.fetchUrl(localUrl(url), options, (err, meta, body) => {
+			return resolve(JSON.parse(body.toString()));
+		});
+	});
+};
+
+export { localFetch as default, Request, Headers, Response, fetchLocal };

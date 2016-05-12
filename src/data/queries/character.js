@@ -15,14 +15,15 @@ const url = 'https://api.eveonline.com/eve/CharacterInfo.xml.aspx';
 
 let characterCache = new Map();
 
-export function fetchCharacter(id) {
+export async function fetchCharacter(id) {
 
   let result = characterCache.get(id);
 
   if(result) {
 
     if(result.expires && Date.now() < result.expires) {
-      return result.data;
+
+      return new Promise((resolve, reject) => { return resolve(result.data) });
     }
   }
 
@@ -35,7 +36,8 @@ export function fetchCharacter(id) {
     }
 
     let res = xml.eveapi.result[0];
-    let data = { id: res.characterID, name: res.characterName, corporation: { id: res.corporationID, name: res.corporation }, alliance: res.allianceID };
+
+    let data = { id: res.characterID[0], name: res.characterName[0], corporation: { id: res.corporationID[0], name: res.corporation[0] }, alliance: res.allianceID[0] };
 
     let cache = { expires: Date.parse(xml.eveapi.cachedUntil[0] + " UTC"), data: data };
 
@@ -52,7 +54,7 @@ const character = {
   args: {
     id: { type: IntType }
   },
-  resolve(session, { id }) {
+  resolve(_, { id }, session) {
 
     return fetchCharacter(id);    
   },

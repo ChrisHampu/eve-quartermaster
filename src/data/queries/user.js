@@ -13,11 +13,9 @@ import verifySession from '../../core/verifySession';
 
 const user = {
   type: UserType,
-  async resolve(_, __, session) {
+  resolve(_, __, session) {
 
-    console.log(session);
-
-    return verifySession(session);   
+    return verifySession(session);
   }
 };
 

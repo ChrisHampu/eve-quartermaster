@@ -47,7 +47,7 @@ passport.deserializeUser(async function(obj, done) {
         data.character.corporation.id, data.character.corporation.name, data.character.alliance, charInfo.ExpiresOn, data.character.id);
     }
 
-    if(data.character.corporation.id !== eve.corp_id) {
+    if(data.character.alliance.toString() !== eve.alliance_id) {
         done(null, false, { message: 'Your corporation or alliance does not have access to this page' });
         return;
     }
@@ -60,8 +60,6 @@ passport.deserializeUser(async function(obj, done) {
     user.alliance = data.character.alliance;
     user.name = data.character.name;
     user.expires = obj.expires;
-
-    console.log("deserialized");
 
     done(null, user);
 
@@ -97,7 +95,7 @@ passport.use(new EveOnlineStrategy({
           data.character.corporation.id, data.character.corporation.name, data.character.alliance, charInfo.ExpiresOn, data.character.id);
       }
 
-      if(data.character.corporation.id !== eve.corp_id) {
+      if(data.character.alliance.toString() !== eve.alliance_id) {
         done(null, false, { message: 'Your corporation or alliance does not have access to this page' });
         return;
       }
@@ -122,7 +120,7 @@ passport.use(new EveOnlineStrategy({
         return;
       }
 
-      if(data.character.corporation.id !== eve.corp_id) {
+      if(data.character.alliance.toString() !== eve.alliance_id) {
         done(null, false, { message: 'Your corporation or alliance does not have access to this page' });
         return;
       }

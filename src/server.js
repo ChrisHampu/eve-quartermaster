@@ -23,6 +23,7 @@ import schema from './data/schema';
 import Router from './routes';
 import assets from './assets';
 import { port, auth, analytics } from './config';
+import verifySession from './core/verifySession';
 
 const server = global.server = express();
 
@@ -116,16 +117,17 @@ server.get('/logout', (req, res, next) => {
   res.redirect('/');
 });
 
-//
-// Register API middleware
-// -----------------------------------------------------------------------------
-server.use('/graphql', expressGraphQL(req => ({
-  schema,
-  graphiql: true,
-  rootValue: { request: req },
-  pretty: process.env.NODE_ENV !== 'production',
-  context: req.session
-})));
+server.use('/graphql', (req, res, next) => {
+
+  expressGraphQL(req => ({
+    schema,
+    graphiql: true,
+    rootValue: { request: req },
+    pretty: process.env.NODE_ENV !== 'production',
+    context: req.session
+  }))(req, res, next);
+});
+
 
 //
 // Register server-side rendering middleware
@@ -149,11 +151,22 @@ server.get('*', async (req, res, next) => {
       onSetMeta: (key, value) => (data[key] = value),
       onPageNotFound: () => (statusCode = 404),
       getLocation: () => req.path,
-      getUser: () => req.user || null
+      getUser: () => req.user || null,
+      getSession: () => req.headers.cookie || null
     };
 
-    //let path = req.isAuthenticated() ? req.path : '/unauthorized';
     let path = req.path;
+    
+    if(!req.isAuthenticated()) {
+      path = '/unauthorized';
+    } else {
+
+      let auth = await verifySession(req.session);
+
+      if(!auth.authenticated) {
+        path = '/unauthorized';
+      }
+    }
 
     await Router.dispatch({ path: path,  query: req.query, context }, (state, component) => {
 
