@@ -25,6 +25,7 @@ class ViewContracts extends Component {
     super(props);
 
     this.toggleShowStatus = this.toggleShowStatus.bind(this);
+    this.toggleSetSortBy = this.toggleSetSortBy.bind(this);
 
     this.state = {
       contracts: this.props.contracts,
@@ -46,10 +47,33 @@ class ViewContracts extends Component {
         Loan: false,
         Auction: false
       },
-      sortBy: {
-        price: true,
-        dateIssued: false,
-        title: false
+      sortBy: 'title',
+      sortByParams: {
+        title: {
+          ascending: true,
+          variable: 'title',
+          type: 'string'
+        },
+        price: {
+          ascending: true,
+          variable: 'price',
+          type: 'number'
+        },
+        expires: {
+          ascending: true,
+          variable: 'dateExpired',
+          type: 'string'
+        },
+        location: {
+          ascending: true,
+          variable: 'stationName',
+          type: 'string'
+        },
+        type: {
+          ascending: true,
+          variable: 'type',
+          type: 'string'
+        }
       }
     }
   }
@@ -67,15 +91,69 @@ class ViewContracts extends Component {
     let show = this.state.showStatus;
     show[status] = !this.state.showStatus[status];
 
-    this.setState({ showStatus: show });
+    this.setState({ showStatus: show }, () => {
 
-    this.updateContracts();
+      this.updateContracts();
+    });
+  }
+
+  toggleSetSortBy(sort) {
+
+    if(this.state.sortBy === sort)
+      return;
+
+    this.setState({ sortBy: sort }, () => {
+
+      this.updateContracts();
+    });
+  }
+
+  // Functor used to iterate and filter out contracts based on current state
+  filterPredicate(contract) {
+
+    if(contract === null)
+      return false;
+
+    return this.state.showStatus[contract.status] === true &&
+      this.state.showType[contract.type] === true;
+  }
+
+  sortPredicateString(a, b) {
+
+    let one = a[this.state.sortByParams[this.state.sortBy].variable].toLowerCase();
+    let two = b[this.state.sortByParams[this.state.sortBy].variable].toLowerCase();
+
+    if(one > two)
+      return this.state.sortByParams[this.state.sortBy].ascending === true ? 1 : -1;
+    else if(one < two)
+      return this.state.sortByParams[this.state.sortBy].ascending === true? -1 : 1;
+    return 0;
+  }
+
+  sortPredicateNumber(a, b) {
+
+    let one = a[this.state.sortByParams[this.state.sortBy].variable];
+    let two = b[this.state.sortByParams[this.state.sortBy].variable];
+
+    if(one > two)
+      return this.state.sortByParams[this.state.sortBy].ascending === true ? 1 : -1;
+    else if(one < two)
+      return this.state.sortByParams[this.state.sortBy].ascending === true? -1 : 1;
+    return 0;
   }
 
   updateContracts() {
 
-    let contracts = this.props.contracts.filter( contract => contract !== null && this.state.showStatus[contract.status] === true &&
-      this.state.showType[contract.type] === true );
+    let contracts = this.props.contracts.filter((contract) => this.filterPredicate(contract));
+
+    if(contracts.length > 0) {
+
+      if(this.state.sortByParams[this.state.sortBy].type === 'number') {
+        contracts = contracts.sort((a, b) => this.sortPredicateNumber(a, b));
+      } else {
+        contracts = contracts.sort((a, b) => this.sortPredicateString(a, b));
+      }
+    }
 
     this.setState({ contracts: contracts });
   }
@@ -160,11 +238,11 @@ class ViewContracts extends Component {
             <div>
             <h4>Contracts</h4>
             <div className={cx("row", s.contract_header)}>
-              <div className="col-md-3">Title</div>
-              <div className="col-md-2">Type</div>
-              <div className="col-md-3">Price</div>
-              <div className="col-md-2">Location</div>
-              <div className="col-md-2">Expires</div>
+              <div className="col-md-3" onClick={()=> this.toggleSetSortBy('title')}>Title</div>
+              <div className="col-md-2" onClick={()=> this.toggleSetSortBy('type')}>Type</div>
+              <div className="col-md-3" onClick={()=> this.toggleSetSortBy('price')}>Price</div>
+              <div className="col-md-2" onClick={()=> this.toggleSetSortBy('location')}>Location</div>
+              <div className="col-md-2" onClick={()=> this.toggleSetSortBy('expires')}>Expires</div>
             </div>
             <ul className={cx(s.contract_list)}>
             { this.state.contracts.map((contract) => {

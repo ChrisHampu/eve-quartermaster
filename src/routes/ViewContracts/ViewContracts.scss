@@ -92,9 +92,10 @@ input[type="checkbox"].nav_checkbox {
     border-right: 1px solid $purple-highlight-lighter;
   }
 
-  div {
+  > div {
     padding: 0.4rem 0.5rem;
     font-weight: 500;
+    cursor: pointer;
   }
 }
 
