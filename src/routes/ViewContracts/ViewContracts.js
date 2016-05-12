@@ -99,11 +99,25 @@ class ViewContracts extends Component {
 
   toggleSetSortBy(sort) {
 
-    if(this.state.sortBy === sort)
+    if(this.state.sortBy === sort) {
+      
+      this.toggleSortDirection(sort);
       return;
+    }
 
     this.setState({ sortBy: sort }, () => {
 
+      this.updateContracts();
+    });
+  }
+
+  toggleSortDirection(sort) {
+
+    this.state.sortByParams[this.state.sortBy].ascending = !this.state.sortByParams[this.state.sortBy].ascending;
+
+    this.setState({
+      sortByParams: this.state.sortByParams
+    }, () => {
       this.updateContracts();
     });
   }
@@ -238,11 +252,26 @@ class ViewContracts extends Component {
             <div>
             <h4>Contracts</h4>
             <div className={cx("row", s.contract_header)}>
-              <div className="col-md-3" onClick={()=> this.toggleSetSortBy('title')}>Title</div>
-              <div className="col-md-2" onClick={()=> this.toggleSetSortBy('type')}>Type</div>
-              <div className="col-md-3" onClick={()=> this.toggleSetSortBy('price')}>Price</div>
-              <div className="col-md-2" onClick={()=> this.toggleSetSortBy('location')}>Location</div>
-              <div className="col-md-2" onClick={()=> this.toggleSetSortBy('expires')}>Expires</div>
+              <div className="col-md-3" onClick={()=> this.toggleSetSortBy('title')}>
+                Title
+                <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.title.ascending && this.state.sortBy === 'title', "fa-sort-desc": !this.state.sortByParams.title.ascending && this.state.sortBy === 'title' })}></i>
+              </div>
+              <div className="col-md-2" onClick={()=> this.toggleSetSortBy('type')}>
+                Type
+                <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.type.ascending && this.state.sortBy === 'type', "fa-sort-desc": !this.state.sortByParams.type.ascending && this.state.sortBy === 'type' })}></i>
+              </div>
+              <div className="col-md-3" onClick={()=> this.toggleSetSortBy('price')}>
+                Price
+                <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.price.ascending && this.state.sortBy === 'price', "fa-sort-desc": !this.state.sortByParams.price.ascending && this.state.sortBy === 'price' })}></i>
+              </div>
+              <div className="col-md-2" onClick={()=> this.toggleSetSortBy('location')}>
+                Location
+                <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.location.ascending && this.state.sortBy === 'location', "fa-sort-desc": !this.state.sortByParams.location.ascending && this.state.sortBy === 'location'})}></i>
+              </div>
+              <div className="col-md-2" onClick={()=> this.toggleSetSortBy('expires')}>
+                Expires 
+                <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.expires.ascending && this.state.sortBy === 'expires', "fa-sort-desc": !this.state.sortByParams.expires.ascending && this.state.sortBy === 'expires'})}></i>
+              </div>
             </div>
             <ul className={cx(s.contract_list)}>
             { this.state.contracts.map((contract) => {

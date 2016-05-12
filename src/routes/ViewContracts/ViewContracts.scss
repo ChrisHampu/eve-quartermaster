@@ -96,6 +96,11 @@ input[type="checkbox"].nav_checkbox {
     padding: 0.4rem 0.5rem;
     font-weight: 500;
     cursor: pointer;
+
+    > i {
+      margin-left: 0.5rem;
+      font-size: 1.1rem;
+    }
   }
 }
 
