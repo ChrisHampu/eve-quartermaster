@@ -40,7 +40,8 @@
     "passport-eveonline": "0.1.1",
     "xml2js": "^0.4.16",
     "react-cookie": "^0.4.5",
-    "fetch": "^1.0.1"
+    "fetch": "^1.0.1",
+    "fuzzy": "^0.1.1"
   },
   "devDependencies": {
     "assets-webpack-plugin": "^3.3.0",

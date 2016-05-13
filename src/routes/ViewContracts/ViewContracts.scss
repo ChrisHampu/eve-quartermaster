@@ -18,7 +18,32 @@
   padding-bottom: 2rem;
 
   h4 {
+    
+  }
+
+  .contract_count {
     padding-bottom: 0.75rem;
+  }
+
+  .contract_search {
+    float: right;
+    max-width: 250px;
+    font-size: 1.5rem;
+
+    input[type="search"] {
+
+      color: $text-white;
+      background-color: $purple-base-lighter;
+      border: 1px solid $purple-highlight-lighter;
+    }
+
+    i {
+      color: $purple-highlight-lighter;
+      font-size: 1.2rem;
+      position: absolute;
+      top: 0.6rem;
+      right: 0.4rem;
+    }
   }
 }
 
