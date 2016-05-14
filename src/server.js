@@ -38,7 +38,7 @@ global.navigator.userAgent = global.navigator.userAgent || 'all';
 // -----------------------------------------------------------------------------
 server.use(express.static(path.join(__dirname, 'public')));
 server.use(cookieParser());
-server.use(session({ secret: 'EveContracts', name: 'EVEContractsSess' }));
+server.use(session({ secret: auth.session.secret, name: 'EVEContractsSess' }));
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
 

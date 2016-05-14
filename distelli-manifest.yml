@@ -10,4 +10,5 @@ champu/EveContracts:
     - npm install --production
   Exec:
     - echo "Starting server."
+    - cd build
     - exec npm start
