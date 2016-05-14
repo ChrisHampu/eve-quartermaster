@@ -4,12 +4,10 @@ champu/EveContracts:
     - echo "Bundling production release."
   PkgInclude:
     - 'build/*/'
-  PreInstall:
-    - echo "Running npm install for production."
+  PostInstall:
+    - echo "Preparing build contents."
     - cd build
     - npm install --production
-  PostInstall:
-    - echo "Finishing install."
   Exec:
     - echo "Starting server."
     - exec npm start
