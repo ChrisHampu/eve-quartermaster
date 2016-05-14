@@ -1,0 +1,20 @@
+champu/EveContracts:
+
+  PkgInclude:
+    - build/*
+  Build:
+    - echo "Building release."
+    - npm install
+    - npm run build -- --release
+    - npm test
+    - echo "Tests passed. Preparing production environment."
+    - cd build
+    - npm install --production
+  PreInstall:
+    - echo "PreInstall Starting."
+  PostInstall:
+    - echo "PostInstall Starting."
+  Exec:
+    - echo "Starting server."
+    - cd build
+    - exec npm start
