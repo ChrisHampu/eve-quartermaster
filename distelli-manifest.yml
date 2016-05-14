@@ -1,19 +1,14 @@
 champu/EveContracts:
 
+  Build:
+    - echo "Bundling production release."
   PkgInclude:
     - build/*
-  Build:
-    - echo "Building release."
-    - npm install
-    - npm run build -- --release
-    - npm test
-    - echo "Tests passed. Preparing production environment."
-    - cd build
-    - npm install --production
   PreInstall:
-    - echo "PreInstall Starting."
+    - echo "Running npm install for production."
+    - npm install --production
   PostInstall:
-    - echo "PostInstall Starting."
+    - echo "Finishing install."
   Exec:
     - echo "Starting server."
     - cd build
