@@ -27,7 +27,7 @@ class ViewRequests extends Component {
             <li className="nav-item">
               <div className="checkbox">
                 <label className={s.nav_label}>
-                  <input type="checkbox" className={s.nav_checkbox}/>
+                  <input type="checkbox"/>
                   ISK (Low)
                 </label>
               </div>
@@ -35,7 +35,7 @@ class ViewRequests extends Component {
             <li className="nav-item">
               <div className="checkbox">
                 <label className={s.nav_label}>
-                  <input type="checkbox" className={s.nav_checkbox}/>
+                  <input type="checkbox"/>
                   ISK (High)
                 </label>
               </div>

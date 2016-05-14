@@ -7,7 +7,7 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-@import '../../components/variables.scss';
+@import '../../components/global.scss';
 
 .root {
 
@@ -45,6 +45,60 @@
       right: 0.4rem;
     }
   }
+
+  .contract_container {
+    display: inline-block;
+  }
+
+  .contract_item_container {
+
+    .contract_item_list {
+
+      .contract_item_header {
+
+        text-align: center;
+        font-size: 1rem;
+        font-weight:400;
+      }
+
+      h5 {
+        text-align: center;
+      }
+
+      > div {
+        padding: 0 0.5rem;
+        font-size: 0.9rem;
+      }
+
+      > div > div {
+        border-bottom: 1px solid $purple-highlight-lighter;
+        margin: 0;
+        padding: 0.5rem 0;
+        position: relative;
+        //padding:-0.25rem;
+      }
+
+      > div:not(.contract_item_header) > div:last-child {
+        border-bottom: none;
+      }
+
+      > div > div > div {
+        padding: 0.25rem 0.5rem;
+        vertical-align: middle;
+        display: table-cell;
+      }
+
+      > div > div > div:first-child {
+        text-align: center;
+        display: flex;
+        align-items: center;
+      }
+
+      > div > div > div:first-child span {
+        margin: 0 auto;
+      }
+    }
+  }
 }
 
 .sidebar_header {
@@ -67,6 +121,7 @@ a.nav_link {
   color: $text-white;
 }
 
+/*
 .nav_checkbox {
   background: #fcfff4;
 
@@ -99,7 +154,7 @@ input[type="checkbox"].nav_checkbox {
     background-color: $purple-highlight-lighter;
   }
 }
-
+*/
 .nav_label {
   user-select: none;
 }
@@ -133,6 +188,10 @@ input[type="checkbox"].nav_checkbox {
   list-style-type: none;
   margin: 0;
   padding: 0;
+
+  .contract_list_active {
+    background: $purple-highlight-lighter;
+  }
 
   li {
     border-left: 1px solid $purple-highlight-lighter;

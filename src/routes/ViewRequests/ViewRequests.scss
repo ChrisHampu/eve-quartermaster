@@ -7,7 +7,7 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-@import '../../components/variables.scss';
+@import '../../components/global.scss';
 
 .root {
 
@@ -31,39 +31,6 @@
 
 a.nav_link {
   color: $text-white;
-}
-
-.nav_checkbox {
-  background: #fcfff4;
-
-  box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0,0,0,0.5);
-}
-
-input[type="checkbox"].nav_checkbox {
-  position: inherit;
-  margin: 0 1.25rem 0 0;
-  vertical-align: middle;
-
-  &:after {
-    content: '';
-    width: 1.3rem;
-    height: 1.3rem;
-    top: 0.125rem;
-    margin-right: 1.4rem;
-    position: absolute;
-    background-color: $purple-base;
-    border: 1px solid $purple-highlight-lighter;
-    vertical-align: middle;
-  }
-
-  &:checked::after {
-    //content: '✓';
-    font-size: 1.4rem;
-    line-height: 1rem;
-    text-align: center;
-    color: $purple-highlight-lighter;
-    background-color: $purple-highlight-lighter;
-  }
 }
 
 .nav_label {
