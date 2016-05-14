@@ -200,4 +200,6 @@ server.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
 server.listen(port, () => {
   /* eslint-disable no-console */
   console.log(`The server is running at http://localhost:${port}/`);
+  console.log(`Using SSO callback url ${auth.eve.callback}`);
+  console.log(`Environment is ${process.env.NODE_ENV||'debug'}`);
 });
