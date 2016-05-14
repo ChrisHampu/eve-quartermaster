@@ -3,13 +3,13 @@ champu/EveContracts:
   Build:
     - echo "Bundling production release."
   PkgInclude:
-    - build/*
+    - 'build/*/'
   PreInstall:
     - echo "Running npm install for production."
+    - cd build
     - npm install --production
   PostInstall:
     - echo "Finishing install."
   Exec:
     - echo "Starting server."
-    - cd build
     - exec npm start
