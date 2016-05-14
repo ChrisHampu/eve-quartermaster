@@ -18,24 +18,24 @@ export const eve = {
   corp_vcode: process.env.CORPORATION_VCODE || 'Te7P9YRA597tVsa1k8G57mwTRIcGVz4duBpWhd12duWpab6k51xaCSUivwD6Rtfm',
   corp_access: 8388608, // The api key access mask
   corp_id: '98388312',
-  alliance_id: '99005338',//99005397,
+  alliance_id: '99005338', // 99005397,
   contractType: {
-    "ItemExchange": 0,
-    "Courier": 1,
-    "Loan": 2,
-    "Auction": 3
+    ItemExchange: 0,
+    Courier: 1,
+    Loan: 2,
+    Auction: 3
   },
   contractStatus: {
-    "Outstanding": 0,
-    "Deleted": 1,
-    "Completed": 2,
-    "Failed": 3,
-    "CompletedByIssuer": 4,
-    "CompletedByContractor": 5,
-    "Cancelled": 6,
-    "Rejected": 7,
-    "Reversed": 8,
-    "InProgress": 9,
+    Outstanding: 0,
+    Deleted: 1,
+    Completed: 2,
+    Failed: 3,
+    CompletedByIssuer: 4,
+    CompletedByContractor: 5,
+    Cancelled: 6,
+    Rejected: 7,
+    Reversed: 8,
+    InProgress: 9,
   }
 };
 
@@ -73,7 +73,7 @@ export const auth = {
   eve: {
     id: process.env.EVE_CLIENT_ID || 'value',
     secret: process.env.EVE_SECRET_KEY || 'value',
-    callback: 'http://localhost:3001/callback'
+    callback: process.env.EVE_CALLBACK_URL || 'http://localhost:3001/callback'
   }
 
 };

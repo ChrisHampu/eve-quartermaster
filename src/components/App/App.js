@@ -26,7 +26,8 @@ class App extends Component {
       onSetTitle: PropTypes.func,
       onSetMeta: PropTypes.func,
       onPageNotFound: PropTypes.func,
-      isAuthed: PropTypes.func
+      isAuthed: PropTypes.func,
+      getLocation: PropTypes.func,
     }),
     children: PropTypes.element.isRequired,
     error: PropTypes.object,
@@ -63,13 +64,13 @@ class App extends Component {
 
   render() {
 
-    return !this.props.error ? ( 
+    return !this.props.error ? (
       <div className={s.root}>
-        <Header path={this.props.context.getLocation()}/>
+        <Header path={this.props.context.getLocation()} />
         <div className={cx(s.container)}>
             <div className={cx(s.page, 'col-md-12')}>
               { this.props.children }
-            </div>      
+            </div>
         </div>
         <Footer />
       </div>

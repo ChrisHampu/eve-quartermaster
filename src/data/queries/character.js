@@ -7,39 +7,39 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import { GraphQLList as List, GraphQLInt as IntType } from 'graphql';
+import { GraphQLInt as IntType } from 'graphql';
 import fetchXML from '../../core/fetchXML';
 import CharacterType from '../types/CharacterType';
 
 const url = 'https://api.eveonline.com/eve/CharacterInfo.xml.aspx';
 
-let characterCache = new Map();
+const characterCache = new Map();
 
 export async function fetchCharacter(id) {
 
   let result = characterCache.get(id);
 
-  if(result) {
+  if (result) {
 
-    if(result.expires && Date.now() < result.expires) {
+    if (result.expires && Date.now() < result.expires) {
 
-      return new Promise((resolve, reject) => { return resolve(result.data) });
+      return new Promise((resolve) => { return resolve(result.data); });
     }
   }
 
-  result = new fetchXML(url, { characterID: id })
+  result = new fetchXML(url, { characterID: id }) // eslint-disable-line new-cap
   .getXML()
-  .then( ( { xml } ) => {
+  .then(({ xml }) => {
 
-    if(xml.eveapi.error !== undefined) {
-      return null; 
+    if (xml.eveapi.error !== undefined) {
+      return null;
     }
 
-    let res = xml.eveapi.result[0];
+    const res = xml.eveapi.result[0];
 
-    let data = { id: res.characterID[0], name: res.characterName[0], corporation: { id: res.corporationID[0], name: res.corporation[0] }, alliance: res.allianceID[0] };
+    const data = { id: res.characterID[0], name: res.characterName[0], corporation: { id: res.corporationID[0], name: res.corporation[0] }, alliance: res.allianceID[0] };
 
-    let cache = { expires: Date.parse(xml.eveapi.cachedUntil[0] + " UTC"), data: data };
+    const cache = { expires: Date.parse(xml.eveapi.cachedUntil[0] + " UTC"), data: data }; // eslint-disable-line prefer-template
 
     characterCache.set(id, cache);
 
@@ -47,16 +47,16 @@ export async function fetchCharacter(id) {
   });
 
   return result;
-};
+}
 
 const character = {
   type: CharacterType,
   args: {
     id: { type: IntType }
   },
-  resolve(_, { id }, session) {
+  resolve(_, { id }) {
 
-    return fetchCharacter(id);    
+    return fetchCharacter(id);
   },
 };
 

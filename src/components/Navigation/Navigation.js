@@ -15,20 +15,20 @@ import Link from '../Link';
 
 class Navigation extends Component {
 
-	static propTypes = {
-	  className: PropTypes.string,
-	  path: PropTypes.string
-	};
+  static propTypes = {
+    className: PropTypes.string,
+    path: PropTypes.string
+  };
 
-	render() {
-		return (
-			<nav role="navigation" className={cx(s.nav_container, 'nav', 'nav-inline')}>
-				<Link className={cx('nav-link', s.nav_link)} activeClass={s.nav_link_active} to="/" path={this.props.path}>View Contracts</Link>
-				<Link className={cx('nav-link', s.nav_link)} activeClass={s.nav_link_active} to="/requests" path={this.props.path}>View Requests</Link>
-				<Link className={cx('nav-link', s.nav_link)} activeClass={s.nav_link_active} to="/create" path={this.props.path}>Create Request</Link>
-			</nav>
-		);
-	}
+  render() {
+    return (
+      <nav role="navigation" className={cx(s.nav_container, 'nav', 'nav-inline')}>
+        <Link className={cx('nav-link', s.nav_link)} activeClass={s.nav_link_active} to="/" path={this.props.path}>View Contracts</Link>
+        <Link className={cx('nav-link', s.nav_link)} activeClass={s.nav_link_active} to="/requests" path={this.props.path}>View Requests</Link>
+        <Link className={cx('nav-link', s.nav_link)} activeClass={s.nav_link_active} to="/create" path={this.props.path}>Create Request</Link>
+      </nav>
+    );
+  }
 }
 
 export default withStyles(Navigation, s);

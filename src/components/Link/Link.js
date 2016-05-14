@@ -10,7 +10,7 @@
 import React, { Component, PropTypes } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Location from '../../core/Location';
-import classNames from 'classnames/bind'; 
+import classNames from 'classnames/bind';
 import s from './Link.scss';
 
 function isLeftClickEvent(event) {
@@ -28,7 +28,8 @@ class Link extends Component { // eslint-disable-line react/prefer-stateless-fun
     onClick: PropTypes.func,
     path: PropTypes.string,
     activeClass: PropTypes.string,
-    useButtonStyle: PropTypes.bool
+    useButtonStyle: PropTypes.bool,
+    className: PropTypes.string,
   };
 
   handleClick = (event) => {

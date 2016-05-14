@@ -7,7 +7,7 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import { GraphQLList as List } from 'graphql';
+
 import fetchXML from '../../core/fetchXML';
 import ContractListType from '../types/ContractListType';
 import { eve } from '../../config.js';
@@ -20,19 +20,19 @@ let contractList = [];
 let lastFetchTask;
 let nextFetch = new Date(Date.now());
 
-function filterCorporation(contracts, session) {
+function filterCorporation(contracts, session) { // eslint-disable-line no-unused-vars
 
   return contracts;
-};
+}
 
 const contracts = {
 
   type: ContractListType,
   async resolve(_, __, session) {
 
-    let auth = await verifySession(session);
+    const auth = await verifySession(session);
 
-    if(!auth.authenticated) {
+    if (!auth.authenticated) {
       return { contractList: [] };
     }
 
@@ -42,19 +42,20 @@ const contracts = {
 
     if ((new Date(Date.now())) > nextFetch) {
 
-      lastFetchTask = new fetchXML(url)
+      lastFetchTask = new fetchXML(url) // eslint-disable-line new-cap
       .getXML()
-      .then( ({ xml }) => {
+      .then(({ xml }) => {
 
         contractList = [];
 
-        if(xml.eveapi.error === undefined) {
+        if (xml.eveapi.error === undefined) {
+          let contract; // eslint-disable-line vars-on-top
 
-          for(var contract of xml.eveapi.result[0].rowset[0].row) {
+          for (contract of xml.eveapi.result[0].rowset[0].row) {
 
-            let c = contract.$;
+            const c = contract.$;
 
-            contractList.push( { 
+            contractList.push({
               id: c.contractID,
               issuerID: c.issuerID,
               issuerCorpID: c.issuerCorpID,
@@ -67,7 +68,7 @@ const contracts = {
               status: eve.contractStatus[c.status],
               title: c.title,
               forCorp: c.forCorp,
-              public: c.availability === "Public" ? 1 : 0,
+              public: c.availability === 'Public' ? 1 : 0,
               dateIssued: c.dateIssued,
               dateExpired: c.dateExpired,
               dateAccepted: c.dateAccepted,
@@ -82,7 +83,7 @@ const contracts = {
           }
         }
 
-        nextFetch = new Date(Date.parse(xml.eveapi.cachedUntil + " UTC"));
+        nextFetch = new Date(Date.parse(`${xml.eveapi.cachedUntil} UTC`));
 
         lastFetchTask = null;
 

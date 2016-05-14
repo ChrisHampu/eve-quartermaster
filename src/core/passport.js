@@ -13,16 +13,16 @@ import db from './db';
 import { auth as config, eve } from '../config';
 import fetch from './fetch';
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser((user, done) => {
   done(null, user);
 });
 
-passport.deserializeUser(async function(obj, done) {
+passport.deserializeUser(async (obj, done) => {
 
   db.connect(async ({ query }) => {
 
-   let result = await query(
-      `SELECT character_id, character_name, corp_id, corp_name, alliance_id, token_expire FROM login WHERE character_id = $1 LIMIT 1`,
+   const result = await query(
+      `SELECT character_id, character_name, corp_id, corp_name, alliance_id, token_expire FROM login WHERE character_id = $1 LIMIT 1`, // eslint-disable-line quotes
       obj.id
     );
 
@@ -31,28 +31,28 @@ passport.deserializeUser(async function(obj, done) {
       return;
     }
 
-    if(result.rows[0].character_id !== obj.id) {
+    if (result.rows[0].character_id !== obj.id) {
         done(null, false, { message: 'Failed to verify given user id' });
         return;
     }
 
-    const response = await fetch(`/graphql?query={character(id:${obj.id}){id,name,corporation{id,name},alliance}}`);
+    const response = await fetch(`/graphql?query={character(id:${obj.id}){id,name,corporation{id,name},alliance}}`); // eslint-disable-line quotes
     const { data } = await response.json();
 
     // Update potentially out-of-date info
-    if(result.rows[0].corp_id !== data.character.corporation.id) {
-      
+    if (result.rows[0].corp_id !== data.character.corporation.id) {
+
       await query(`
-      UPDATE login SET corp_id = $1, corp_name = $2, alliance_id = $3, token_expire = $4 WHERE character_id = $5`,
-        data.character.corporation.id, data.character.corporation.name, data.character.alliance, charInfo.ExpiresOn, data.character.id);
+      UPDATE login SET corp_id = $1, corp_name = $2, alliance_id = $3 WHERE character_id = $4`,
+        data.character.corporation.id, data.character.corporation.name, data.character.alliance, data.character.id);
     }
 
-    if(data.character.alliance.toString() !== eve.alliance_id) {
+    if (data.character.alliance.toString() !== eve.alliance_id) {
         done(null, false, { message: 'Your corporation or alliance does not have access to this page' });
         return;
     }
 
-    let user = {};
+    const user = {};
 
     user.id = data.character.id;
     user.corp_id = data.character.corporation.id;
@@ -64,7 +64,7 @@ passport.deserializeUser(async function(obj, done) {
     done(null, user);
 
   }).catch(done);
-  
+
 });
 
 passport.use(new EveOnlineStrategy({
@@ -75,27 +75,27 @@ passport.use(new EveOnlineStrategy({
 
   db.connect(async ({ query }) => {
 
-    let result = await query(
+    const result = await query(
         `SELECT character_id, character_name, corp_id, corp_name, alliance_id, token_expire FROM login WHERE character_id = $1`,
         charInfo.CharacterID
     );
 
     if (result.rowCount) {
 
-      let user = {};
+      const user = {};
 
       const response = await fetch(`/graphql?query={character(id:${charInfo.CharacterID}){id,name,corporation{id,name},alliance}}`);
       const { data } = await response.json();
 
       // Update potentially out-of-date info
-      if(result.rows[0].corp_id !== data.character.corporation.id) {
+      if (result.rows[0].corp_id !== data.character.corporation.id) {
 
         await query(`
         UPDATE login SET corp_id = $1, corp_name = $2, alliance_id = $3, token_expire = $4 WHERE character_id = $5`,
           data.character.corporation.id, data.character.corporation.name, data.character.alliance, charInfo.ExpiresOn, data.character.id);
       }
 
-      if(data.character.alliance.toString() !== eve.alliance_id) {
+      if (data.character.alliance.toString() !== eve.alliance_id) {
         done(null, false, { message: 'Your corporation or alliance does not have access to this page' });
         return;
       }
@@ -115,17 +115,17 @@ passport.use(new EveOnlineStrategy({
       const response = await fetch(`/graphql?query={character(id:${charInfo.CharacterID}){id,name,corporation{id,name},alliance}}`);
       const { data } = await response.json();
 
-      if(data.character.id !== charInfo.CharacterID) {
+      if (data.character.id !== charInfo.CharacterID) {
         done(null, false, { message: 'Failed to verify given user id' });
         return;
       }
 
-      if(data.character.alliance.toString() !== eve.alliance_id) {
+      if (data.character.alliance.toString() !== eve.alliance_id) {
         done(null, false, { message: 'Your corporation or alliance does not have access to this page' });
         return;
       }
 
-      let user = {};
+      const user = {};
 
       user.id = data.character.id;
       user.corp_id = data.character.corporation.id;
@@ -139,8 +139,6 @@ passport.use(new EveOnlineStrategy({
             $2, $3, $4, $5, $6) RETURNING(id, character_id)`,
           charInfo.CharacterID, charInfo.CharacterName, data.character.corporation.id, data.character.corporation.name,
             data.character.alliance, charInfo.ExpiresOn);
-
-      console.log("Inserting new user " + charInfo.CharacterName);
 
       done(null, user);
     }

@@ -9,10 +9,6 @@
 
 import {
   GraphQLObjectType as ObjectType,
-  GraphQLID as ID,
-  GraphQLInt as IntType,
-  GraphQLString as StringType,
-  GraphQLNonNull as NonNull,
   GraphQLList as List
 } from 'graphql';
 
@@ -21,7 +17,7 @@ import ContractType from './ContractType';
 const ContractListType = new ObjectType({
   name: 'ContractList',
   fields: {
-    contractList: { type: new List(ContractType)}
+    contractList: { type: new List(ContractType) }
   },
 });
 

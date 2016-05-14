@@ -9,12 +9,9 @@
 
 import React from 'react';
 import ViewRequests from './ViewRequests';
-import fetch from '../../core/fetch';
 
 export const path = '/requests';
 export const action = async (state) => {
-  //const response = await fetch('/graphql?query={news{title,link,contentSnippet}}');
-  //const { data } = await response.json();
   state.context.onSetTitle('57th Eve Contracts');
-  return <ViewRequests/>;
+  return <ViewRequests />;
 };

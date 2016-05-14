@@ -87,16 +87,15 @@ function run() {
       context,
     });
 
-    if(user === null) {
+    if (user === null) {
 
       const query = `/graphql?query={user{authenticated,id,name,corp_id,corp_name,alliance}}`;
-      const response = await fetch(query, {credentials: 'same-origin'});
+      const response = await fetch(query, { credentials: 'same-origin' });
       const { data } = await response.json();
 
-      if(!data.user.authenticated) {
+      if (!data.user.authenticated) {
         currentState.path = '/unauthorized';
-      }
-      else {
+      } else {
         user = data.user;
       }
     }

@@ -9,10 +9,6 @@
 
 import {
   GraphQLObjectType as ObjectType,
-  GraphQLID as ID,
-  GraphQLInt as IntType,
-  GraphQLString as StringType,
-  GraphQLNonNull as NonNull,
   GraphQLList as List
 } from 'graphql';
 
@@ -21,7 +17,7 @@ import AllianceType from './AllianceType';
 const AllianceListType = new ObjectType({
   name: 'AllianceList',
   fields: {
-    alliances: { type: new List(AllianceType)}
+    alliances: { type: new List(AllianceType) }
   },
 });
 

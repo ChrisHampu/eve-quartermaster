@@ -7,7 +7,6 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import { GraphQLList as List, GraphQLInt as IntType } from 'graphql';
 import UserType from '../types/UserType';
 import verifySession from '../../core/verifySession';
 

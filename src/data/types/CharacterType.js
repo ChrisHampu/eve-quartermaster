@@ -13,7 +13,6 @@ import {
   GraphQLInt as IntType,
   GraphQLString as StringType,
   GraphQLNonNull as NonNull,
-  GraphQLList as List
 } from 'graphql';
 
 import CorporationType from './CorporationType';

@@ -7,7 +7,6 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import Promise from 'bluebird';
 import React from 'react';
 import ViewContracts from './ViewContracts';
 import fetch, { fetchLocal } from '../../core/fetch';
@@ -15,30 +14,31 @@ import fetch, { fetchLocal } from '../../core/fetch';
 export const path = '/';
 export const action = async (state) => {
 
-	let data = null;
+  let data = null;
 
-	if(fetchLocal === undefined) {
-		let response = await fetch(`/graphql?query={contracts{contractList{id,issuerID,issuerCorpID,assigneeID,stationName,startStationID,endStationID,type,status,
-								 title,forCorp,public,dateIssued,dateExpired,dateAccepted,numDays,dateCompleted,price,reward,collateral,buyout,volume}}}`,
-								 {credentials: 'same-origin'});
+  if (fetchLocal === undefined) {
+    const response = await fetch(`/graphql?query={contracts{contractList{id,issuerID,issuerCorpID,assigneeID,stationName,startStationID,endStationID,type,status,
+                             title,forCorp,public,dateIssued,dateExpired,dateAccepted,numDays,dateCompleted,price,reward,collateral,buyout,volume}}}`,
+                             { credentials: 'same-origin' });
 
-		let json = await response.json();
+    const json = await response.json();
 
-		data = json.data;
+    data = json.data;
 
-	} else {
-		let json = await fetchLocal(`/graphql?query={contracts{contractList{id,issuerID,issuerCorpID,assigneeID,stationName,startStationID,endStationID,type,status,
-								 title,forCorp,public,dateIssued,dateExpired,dateAccepted,numDays,dateCompleted,price,reward,collateral,buyout,volume}}}`,
-								 { cookies: [state.context.getSession()] });
+  } else {
+    const json = await fetchLocal(`/graphql?query={contracts{contractList{id,issuerID,issuerCorpID,assigneeID,stationName,startStationID,endStationID,type,status,
+                               title,forCorp,public,dateIssued,dateExpired,dateAccepted,numDays,dateCompleted,price,reward,collateral,buyout,volume}}}`,
+                               { cookies: [state.context.getSession()] });
 
-		data = json.data;
-	}
+    data = json.data;
+  }
 
-	let contractList = [];
+  let contractList = [];
 
-	if(data && data.contracts)
-		contractList = data.contracts.contractList || [];
+  if (data && data.contracts) {
+    contractList = data.contracts.contractList || [];
+  }
 
-	state.context.onSetTitle('57th Eve Contracts');
-	return <ViewContracts contracts={contractList}/>;
+  state.context.onSetTitle('57th Eve Contracts');
+  return <ViewContracts contracts={contractList} />;
 };

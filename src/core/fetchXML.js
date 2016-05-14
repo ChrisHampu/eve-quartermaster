@@ -2,44 +2,43 @@ import Promise from 'bluebird';
 import fetch from './fetch';
 import { parseString } from 'xml2js';
 
-let parseXml = Promise.promisify(parseString);
+const parseXml = Promise.promisify(parseString);
 
 class fetchXML {
 
-	constructor(url, options) {
-		
-		if(url === undefined) {
-			throw "No url supplied";
-		}
+  constructor(url, options) {
 
-		var query = url;
+    if (url === undefined) {
+      throw 'No url supplied'; // eslint-disable-line no-throw-literal
+    }
 
-		if(options !== undefined && typeof options === "object") {
+    var query = url;
 
-			query += "?";
-		
-			for (var prop in options) {
+    if (options !== undefined && typeof options === "object") {
 
-				query += prop + "=" + options[prop] + "&";
-			}
-		}
+      query += "?";
 
-		this.url = query;
-	}
+      for (var prop in options) { // eslint-disable-line guard-for-in
 
-	async getXML()  {
-		const response = await fetch(this.url);
-		const body = await response.text();
-		const xml = await parseXml(body);
+        query += prop + "=" + options[prop] + "&"; // eslint-disable-line prefer-template
+      }
+    }
 
-		return new Promise((resolve, reject) => {
-			
-			return resolve({
-				xml: xml
-			})
-		});
-	}
+    this.url = query;
+  }
+
+  async getXML() {
+    const response = await fetch(this.url);
+    const body = await response.text();
+    const xml = await parseXml(body);
+
+    return new Promise((resolve) => {
+
+      return resolve({
+        xml: xml
+      });
+    });
+  }
 }
-
 
 export default fetchXML;

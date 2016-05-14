@@ -11,7 +11,6 @@ import React from 'react';
 import Router from 'react-routing/src/Router';
 import fetch from './core/fetch';
 import App from './components/App';
-import ContentPage from './components/ContentPage';
 import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
 import LoginPage from './components/LoginPage';
@@ -24,15 +23,13 @@ const routes = [
 
 const router = new Router(on => {
 
-  on('/unauthorized', async (state, next) => {
-    return <App context={state.context} error={"unauthorized"}><LoginPage /></App>;
-  });
+  on('/unauthorized', async (state) => { return <App context={state.context} error={ "unauthorized" }><LoginPage /></App>; });
 
-  on('/logout', async (state, next) => {
+  on('/logout', async (state) => {
 
-    await fetch('/logout', {credentials: 'same-origin'});
+    await fetch('/logout', { credentials: 'same-origin' });
 
-    return <App context={state.context} error={"logged out"}><LoginPage /></App>;
+    return <App context={state.context} error={ "logged out" }><LoginPage /></App>;
   });
 
   on('*', async (state, next) => {

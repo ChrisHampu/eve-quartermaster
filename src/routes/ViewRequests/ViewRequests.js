@@ -7,16 +7,15 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Sidebar from '../../components/Sidebar';
-import Link from '../../components/Link';
 import s from './ViewRequests.scss';
 import cx from 'classnames';
 
 class ViewRequests extends Component {
 
-  render () {
+  render() {
     return (
       <div className={s.root}>
         <Sidebar>
@@ -27,7 +26,7 @@ class ViewRequests extends Component {
             <li className="nav-item">
               <div className="checkbox">
                 <label className={s.nav_label}>
-                  <input type="checkbox"/>
+                  <input type="checkbox" />
                   ISK (Low)
                 </label>
               </div>
@@ -35,7 +34,7 @@ class ViewRequests extends Component {
             <li className="nav-item">
               <div className="checkbox">
                 <label className={s.nav_label}>
-                  <input type="checkbox"/>
+                  <input type="checkbox" />
                   ISK (High)
                 </label>
               </div>
@@ -43,7 +42,6 @@ class ViewRequests extends Component {
           </ul>
         </Sidebar>
         <div className={s.container}>
-          
         </div>
       </div>
     );

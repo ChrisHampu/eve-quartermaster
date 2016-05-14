@@ -7,7 +7,7 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import { GraphQLList as List } from 'graphql';
+
 import fetchXML from '../../core/fetchXML';
 import AllianceListType from '../types/AllianceListType';
 
@@ -29,25 +29,22 @@ const alliances = {
 
       lastFetchTime = new Date();
 
-      lastFetchTask = new fetchXML(url)
+      lastFetchTask = new fetchXML(url) // eslint-disable-line new-cap
       .getXML()
-      .then( ({ xml }) => {
+      .then(({ xml }) => {
 
         allianceList = [];
 
-        for(var alliance of xml.eveapi.result[0].rowset[0].row) {
-          //console.log(alliance.rowset[0].row[0]);
+        for (var alliance of xml.eveapi.result[0].rowset[0].row) { // eslint-disable-line vars-on-top no-var
 
-          var corps = [];
+          const corps = [];
 
-          for(var corp of alliance.rowset[0].row) {
-            corps.push({ id: corp.$.corporationID, name: ''});
+          for (var corp of alliance.rowset[0].row) { // eslint-disable-line no-var vars-on-top
+            corps.push({ id: corp.$.corporationID, name: '' });
           }
 
-          allianceList.push( { id: alliance.$.allianceID, name: alliance.$.name, corps: corps });
+          allianceList.push({ id: alliance.$.allianceID, name: alliance.$.name, corps: corps });
         }
-
-        //console.log(xml.eveapi.result[0].rowset[0].row[0].$);
 
         lastFetchTask = null;
 

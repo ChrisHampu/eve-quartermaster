@@ -33,14 +33,9 @@ function localFetch(url, options) {
 
 function fetchLocal(url, options) {
 
-	if(options === undefined)
-		options = {};
-
-	return new Promise((resolve, reject) => {
-		fetchCookie.fetchUrl(localUrl(url), options, (err, meta, body) => {
-			return resolve(JSON.parse(body.toString()));
-		});
-	});
-};
+  return new Promise((resolve) => {
+    fetchCookie.fetchUrl(localUrl(url), options, (err, meta, body) => { return resolve(JSON.parse(body.toString())); });
+  });
+}
 
 export { localFetch as default, Request, Headers, Response, fetchLocal };

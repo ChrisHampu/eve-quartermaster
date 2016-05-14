@@ -9,7 +9,6 @@
 
 import {
   GraphQLObjectType as ObjectType,
-  GraphQLID as ID,
   GraphQLInt as IntType,
   GraphQLString as StringType,
   GraphQLNonNull as NonNull,
@@ -23,7 +22,7 @@ const AllianceType = new ObjectType({
   fields: {
     id: { type: new NonNull(IntType) },
     name: { type: new NonNull(StringType) },
-    corps: { type: new NonNull(new List(CorporationType))}
+    corps: { type: new NonNull(new List(CorporationType)) }
   },
 });
 

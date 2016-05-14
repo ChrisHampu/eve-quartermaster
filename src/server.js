@@ -10,10 +10,9 @@
 import 'babel-polyfill';
 import path from 'path';
 import express from 'express';
-import session from 'express-session'
+import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
-import expressJwt from 'express-jwt';
 import expressGraphQL from 'express-graphql';
 import jwt from 'jsonwebtoken';
 import ReactDOM from 'react-dom/server';
@@ -39,7 +38,7 @@ global.navigator.userAgent = global.navigator.userAgent || 'all';
 // -----------------------------------------------------------------------------
 server.use(express.static(path.join(__dirname, 'public')));
 server.use(cookieParser());
-server.use(session({secret: 'EveContracts', name: 'EVEContractsSess'}));
+server.use(session({ secret: 'EveContracts', name: 'EVEContractsSess' }));
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
 
@@ -50,67 +49,62 @@ server.use(bodyParser.json());
 server.use(passport.initialize());
 server.use(passport.session());
 
-server.get('/auth', 
+server.get('/auth',
   passport.authenticate('eveonline', {
     successRedirect: '/',
-    failureRedirect: '/unauthorized'
+    failureRedirect: '/unauthorized',
   })
 );
 
 server.get('/callback', (req, res, next) => {
   passport.authenticate('eveonline', (err, user, info) => {
-
-    if(err) {
+    if (err) {
       return next(err);
     }
 
-    if(!user) {
-
+    if (!user) {
       const template = require('./views/unauthorized.jade');
 
       res.status(200);
 
       res.send(template({
-        message: info.message
+        message: info.message,
       }));
+    } else {
 
-    }
-    else {
-
-      req.login(user, (err) => {
-
-        if(err) {
+      req.login(user, (error) => {
+        if (error) {
           const template = require('./views/unauthorized.jade');
 
           res.status(200);
 
           res.send(template({
-            message: info.message
+            message: info.message,
           }));
         }
 
-        req.session.jwt = jwt.sign(user, auth.jwt.secret);
+        req.session.jwt = jwt.sign(user, auth.jwt.secret); // eslint-disable-line no-param-reassign
 
         res.redirect('/');
       });
     }
 
+    return; // eslint-disable-line consistent-return
   })(req, res, next);
 });
 
-server.get('/unauthorized', (req, res, next) => {
+server.get('/unauthorized', (req, res) => {
 
   const template = require('./views/unauthorized.jade');
 
   res.status(200);
 
   res.send(template({
-    message: 'Your corporation or alliance does not have access to this page'
+    message: 'Your corporation or alliance does not have access to this page',
   }));
-
 });
 
-server.get('/logout', (req, res, next) => {
+server.get('/logout', (req, res) => {
 
   req.logout();
 
@@ -119,12 +113,12 @@ server.get('/logout', (req, res, next) => {
 
 server.use('/graphql', (req, res, next) => {
 
-  expressGraphQL(req => ({
+  expressGraphQL(request => ({
     schema,
     graphiql: true,
-    rootValue: { request: req },
+    rootValue: { request: request }, // eslint-disable-line object-shorthand
     pretty: process.env.NODE_ENV !== 'production',
-    context: req.session
+    context: req.session,
   }))(req, res, next);
 });
 
@@ -152,23 +146,23 @@ server.get('*', async (req, res, next) => {
       onPageNotFound: () => (statusCode = 404),
       getLocation: () => req.path,
       getUser: () => req.user || null,
-      getSession: () => req.headers.cookie || null
+      getSession: () => req.headers.cookie || null,
     };
 
-    let path = req.path;
-    
-    if(!req.isAuthenticated()) {
-      path = '/unauthorized';
+    let newPath = req.path;
+
+    if (!req.isAuthenticated()) {
+      newPath = '/unauthorized';
     } else {
 
-      let auth = await verifySession(req.session);
+      const authed = await verifySession(req.session);
 
-      if(!auth.authenticated) {
-        path = '/unauthorized';
+      if (!authed.authenticated) {
+        newPath = '/unauthorized';
       }
     }
 
-    await Router.dispatch({ path: path,  query: req.query, context }, (state, component) => {
+    await Router.dispatch({ path: newPath, query: req.query, context }, (state, component) => {
 
       data.body = ReactDOM.renderToString(component);
       data.css = css.join('');
@@ -176,7 +170,7 @@ server.get('*', async (req, res, next) => {
 
     res.status(statusCode);
     res.send(template(data));
- 
+
   } catch (err) {
     next(err);
   }

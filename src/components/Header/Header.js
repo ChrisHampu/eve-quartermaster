@@ -15,27 +15,25 @@ import Navigation from '../Navigation';
 
 class Header extends Component {
 
-	static propTypes = {
-    	path: PropTypes.string
-	};
+  static propTypes = {
+      path: PropTypes.string
+  };
 
-	render() {
-		return (
-			<div className={s.root}>
-				<div className={s.logo_container}>
-					<div className={s.logo_text}>
-						EVE Quartermaster
-					</div>
-				</div>
-				<Navigation path={this.props.path}/>
-				<Link to="/logout" className={s.logout_button} useButtonStyle={true}>
-					Logout
-				</Link>
-
-				
-			</div>
-		);
-	}
+  render() {
+    return (
+      <div className={s.root}>
+        <div className={s.logo_container}>
+          <div className={s.logo_text}>
+            EVE Quartermaster
+          </div>
+        </div>
+        <Navigation path={this.props.path} />
+        <Link to="/logout" className={s.logout_button} useButtonStyle={true}>
+          Logout
+        </Link>
+      </div>
+    );
+  }
 }
 
 export default withStyles(Header, s);

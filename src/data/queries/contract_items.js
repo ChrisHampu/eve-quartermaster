@@ -7,34 +7,34 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import { GraphQLList as List, GraphQLInt as IntType } from 'graphql';
+import { GraphQLInt as IntType } from 'graphql';
 import fetchXML from '../../core/fetchXML';
 import ContractItemListType from '../types/ContractItemListType';
 import { eve } from '../../config.js';
 import verifySession from '../../core/verifySession';
 
 const contractItemUrl = `https://api.eveonline.com/corp/ContractItems.xml.aspx?keyID=${eve.corp_key}&vCode=${eve.corp_vcode}&contractID=`;
-const typeNameUrl = `https://api.eveonline.com/eve/TypeName.xml.aspx?ids=`;
+const typeNameUrl = `https://api.eveonline.com/eve/TypeName.xml.aspx?ids=`; // eslint-disable-line quotes
 
-let typeNameCache = new Map();
-let contractItemCache = new Map(); // Contract items are basically cached permanently as they will not change
-let fetchTaskCache = new Map();
+const typeNameCache = new Map();
+const contractItemCache = new Map(); // Contract items are basically cached permanently as they will not change
+const fetchTaskCache = new Map();
 
 // Takes an array of EVE type IDs and resolves them to type names using the EVE api
 // It batches as much as possible to avoid a large number of requests to the api
 // Each type name is cached after its retrieved to facilitate rate limiting
 async function getTypeNames(typeIDs) {
 
-  let names = [];
-  let requests = [];
+  const names = [];
+  const requests = [];
 
   // First check IDs against cache
   typeIDs.forEach((id) => {
 
-    let name = typeNameCache.get(id);
+    const name = typeNameCache.get(id);
 
-    if(name) {
-      names.push({id: id, name: name });
+    if (name) {
+      names.push({ id: id, name: name });
     } else {
       // If not cached, place into list that needs to be queried
       requests.push(parseInt(id)); // XML api takes the id as an integer
@@ -43,21 +43,22 @@ async function getTypeNames(typeIDs) {
   });
 
   // For remaining, create an XML request
-  if(requests.length) {
+  if (requests.length) {
 
-    let ids = requests.join(',');
+    const ids = requests.join(',');
 
-    let url = `${typeNameUrl}${ids}`;
+    const url = `${typeNameUrl}${ids}`;
 
-    let resp = await new fetchXML(url).getXML();
+    const resp = await new fetchXML(url).getXML(); // eslint-disable-line new-cap
 
-    if(resp.xml.eveapi.error === undefined) {
-      
-      for(var name of resp.xml.eveapi.result[0].rowset[0].row) {
+    if (resp.xml.eveapi.error === undefined) {
+      var name; // eslint-disable-line vars-on-top no-var
+
+      for (name of resp.xml.eveapi.result[0].rowset[0].row) {
 
         typeNameCache.set(name.$.typeID, name.$.typeName);
 
-        names.push({id: name.$.typeID, name: name.$.typeName});
+        names.push({ id: name.$.typeID, name: name.$.typeName });
       }
     }
   }
@@ -73,35 +74,36 @@ const contractItems = {
   },
   async resolve(_, { id }, session) {
 
-    let auth = await verifySession(session);
+    const auth = await verifySession(session);
 
-    if(!auth.authenticated) {
+    if (!auth.authenticated) {
       return { itemList: [] };
     }
 
-    let result = contractItemCache.get(id);
+    const result = contractItemCache.get(id);
 
-    if(result) {
+    if (result) {
       return { itemList: result };
     }
 
-    let fetchTask = fetchTaskCache.get(id);
+    const fetchTask = fetchTaskCache.get(id);
 
-    if(fetchTask) {
+    if (fetchTask) {
       return fetchTask;
     }
 
-    let newFetchTask = new fetchXML(`${contractItemUrl}${id}`)
+    const newFetchTask = new fetchXML(`${contractItemUrl}${id}`) // eslint-disable-line new-cap
       .getXML()
-      .then( async ({ xml }) => {
+      .then(async ({ xml }) => {
 
-        let items = [];
+        const items = [];
 
-        if(xml.eveapi.error === undefined) {
+        if (xml.eveapi.error === undefined) {
 
-          let typeIDs = [];
+          const typeIDs = [];
+          var item;
 
-          for (var item of xml.eveapi.result[0].rowset[0].row) {
+          for (item of xml.eveapi.result[0].rowset[0].row) {
 
             items.push({
               id: item.$.recordID,
@@ -114,14 +116,15 @@ const contractItems = {
           }
 
           // Retrieve a mapping of type id -> type name using local cache + eve api
-          let nameMap = await getTypeNames(typeIDs);
+          const nameMap = await getTypeNames(typeIDs);
 
           // Attach respective type name to the item
-          for(var i = 0; i < items.length; i++) {
+          for (let i = 0; i < items.length; i++) {
+            var pair;
 
-            for(var pair of nameMap) {
+            for (pair of nameMap) {
 
-              if(items[i].typeID === pair.id) {
+              if (items[i].typeID === pair.id) {
 
                 items[i].typeName = pair.name;
                 break;
