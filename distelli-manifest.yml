@@ -3,7 +3,7 @@ champu/EveContracts:
   Build:
     - echo "Bundling production release."
   PkgInclude:
-    - 'build/*/'
+    - 'build/**'
   PostInstall:
     - echo "Preparing build contents."
     - cd build
