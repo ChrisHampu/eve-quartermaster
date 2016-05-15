@@ -11,4 +11,4 @@ champu/EveContracts:
   Exec:
     - echo "Starting server."
     - cd build
-    - exec npm start
+    - exec node server.js

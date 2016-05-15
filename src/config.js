@@ -10,7 +10,7 @@
 /* eslint-disable max-len */
 /* jscs:disable maximumLineLength */
 
-export const port = process.env.PORT || 3100;
+export const port = process.env.PORT || 3000;
 export const host = process.env.WEBSITE_HOSTNAME || `localhost:${port}`;
 
 export const eve = {
@@ -18,7 +18,7 @@ export const eve = {
   corp_vcode: process.env.CORPORATION_VCODE || 'Te7P9YRA597tVsa1k8G57mwTRIcGVz4duBpWhd12duWpab6k51xaCSUivwD6Rtfm',
   corp_access: 8388608, // The api key access mask
   corp_id: process.env.CORPORATION_ID || '98388312',
-  alliance_id: process.env.ALLIANCE_ID || '99005338', // 99005397,
+  alliance_id: process.env.ALLIANCE_ID || '99005338',
   contractType: {
     ItemExchange: 0,
     Courier: 1,
@@ -72,6 +72,7 @@ export const auth = {
   },
 
   eve: {
+    // The following API settings only work on a local deployment
     id: process.env.EVE_CLIENT_ID || 'value',
     secret: process.env.EVE_SECRET_KEY || 'value',
     callback: process.env.EVE_CALLBACK_URL || 'http://localhost:3001/callback'
