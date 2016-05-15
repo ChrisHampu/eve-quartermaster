@@ -14,3 +14,16 @@ CREATE TABLE login
 WITH (
   OIDS=FALSE
 );
+
+CREATE TABLE session
+(
+  sid character varying NOT NULL,
+  expires date,
+  data text,
+  "createdAt" date,
+  "updatedAt" date,
+  CONSTRAINT session_pkey PRIMARY KEY (sid)
+)
+WITH (
+  OIDS=FALSE
+);

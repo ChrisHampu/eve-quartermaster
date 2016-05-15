@@ -21,8 +21,10 @@ import passport from './core/passport';
 import schema from './data/schema';
 import Router from './routes';
 import assets from './assets';
-import { port, auth, analytics } from './config';
+import { port, auth, analytics, databaseUrl } from './config';
 import verifySession from './core/verifySession';
+import sequelize from 'sequelize';
+import connectSessionSequelize from 'connect-session-sequelize';
 
 const server = global.server = express();
 
@@ -38,9 +40,36 @@ global.navigator.userAgent = global.navigator.userAgent || 'all';
 // -----------------------------------------------------------------------------
 server.use(express.static(path.join(__dirname, 'public')));
 server.use(cookieParser());
-server.use(session({ secret: auth.session.secret, name: 'EVEContractsSess' }));
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
+
+//
+// Session management
+// -----------------------------------------------------------------------------
+const sequelizeDB = new sequelize(databaseUrl, { logging: false }); // eslint-disable-line new-cap
+
+const sessionDB = sequelizeDB.define('session', { // eslint-disable-line no-unused-vars
+  sid: {
+    type: sequelize.STRING,
+    primaryKey: true
+  },
+  expires: sequelize.DATE,
+  data: sequelize.TEXT,
+},
+{
+  tableName: 'session',
+  freezeTableName: true
+});
+
+server.use(session({
+  secret: auth.session.secret,
+  name: 'EVEContractsSess',
+  store: new (connectSessionSequelize(session.Store))({ // eslint-disable-line new-cap
+    db: sequelizeDB,
+    table: 'session',
+  }),
+  resave: false,
+}));
 
 //
 // Authentication
