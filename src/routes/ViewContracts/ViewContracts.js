@@ -381,7 +381,7 @@ class ViewContracts extends Component {
                             <div className="col-md-4">Quantity</div>
                             <div className="col-md-8">Name</div>
                           </div>
-                          <div className="row">
+                          <div className={cx("row", s.contract_items)}>
                           {
                             this.state.activeContract.items.length > 0 ?
                               this.state.activeContract.items.map((item) => {

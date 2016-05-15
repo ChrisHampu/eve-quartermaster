@@ -52,13 +52,36 @@
 
   .contract_item_container {
 
+    position: fixed;
+    height: calc(100% - 3.1rem);
+    top: 0;
+    margin: 9rem 1rem 0 0rem;
+    overflow: hidden;
+
+    > div {
+      overflow: hidden;
+      height: inherit;
+      position: relative;
+    }
+
     .contract_item_list {
+
+      overflow: hidden;
+      height: inherit;
+      position: relative;
 
       .contract_item_header {
 
         text-align: center;
         font-size: 1rem;
         font-weight:400;
+      }
+
+      .contract_items {
+        overflow: scroll;
+        position: relative;
+        margin: 0;
+        height: inherit;
       }
 
       h5 {
