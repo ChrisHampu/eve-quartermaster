@@ -201,5 +201,5 @@ server.listen(port, () => {
   /* eslint-disable no-console */
   console.log(`The server is running at http://localhost:${port}/`);
   console.log(`Using SSO callback url ${auth.eve.callback}`);
-  console.log(`Environment is ${process.env.NODE_ENV||'debug'}`);
+  console.log(`Environment is ${process.env.NODE_ENV || 'debug'}`);
 });
