@@ -273,11 +273,19 @@ class ViewContracts extends Component {
     return (d > 0 ? d + ' days ' : '') + (h > 0 ? h + ' hours ' : '') + 'left'; // eslint-disable-line prefer-template
   }
 
+  prettyContractStatus(contract) {
+
+    switch(contract.status) {
+      case "InProgress": return "In Progress";
+      default: return contract.status;
+    }
+  }
+
   prettyContractType(contract) {
 
     switch (contract.type) {
       case "ItemExchange": return "Item Exchange";
-      default: return "Unknown";
+      default: return contract.type;
     }
   }
 
@@ -336,15 +344,18 @@ class ViewContracts extends Component {
               <div className="row">
                 <div className={cx(s.contract_container, { "col-md-12": this.state.activeContract === null, "col-md-10": this.state.activeContract !== null })}>
                   <div className={cx("row", s.contract_header)}>
-                    <div className="col-md-3" onClick={() => this.toggleSetSortBy('title')}>
+                    <div className="col-md-2" onClick={() => this.toggleSetSortBy('title')}>
                       Title
                       <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.title.ascending && this.state.sortBy === 'title', "fa-sort-desc": !this.state.sortByParams.title.ascending && this.state.sortBy === 'title' })}></i>
+                    </div>
+                    <div className="col-md-2">
+                      Status
                     </div>
                     <div className="col-md-2" onClick={() => this.toggleSetSortBy('type')}>
                       Type
                       <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.type.ascending && this.state.sortBy === 'type', "fa-sort-desc": !this.state.sortByParams.type.ascending && this.state.sortBy === 'type' })}></i>
                     </div>
-                    <div className="col-md-3" onClick={() => this.toggleSetSortBy('price')}>
+                    <div className="col-md-2" onClick={() => this.toggleSetSortBy('price')}>
                       Price
                       <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.price.ascending && this.state.sortBy === 'price', "fa-sort-desc": !this.state.sortByParams.price.ascending && this.state.sortBy === 'price' })}></i>
                     </div>
@@ -361,9 +372,10 @@ class ViewContracts extends Component {
                   { this.state.contracts.map((contract) => {
                     return (
                       <li key={contract.id} className={this.state.activeContract === contract ? cx("row", s.contract_list_active) : cx("row")} onClick={() => { this.toggleActiveContract(contract); }}>
-                        <div className="col-md-3">{contract.title || "[Multiple Items]"}</div>
+                        <div className="col-md-2">{contract.title || "[Multiple Items]"}</div>
+                        <div className="col-md-2">{contract.status}</div>
                         <div className="col-md-2">{this.prettyContractType(contract)}</div>
-                        <div className="col-md-3">{contract.price.toLocaleString()} ISK</div>
+                        <div className="col-md-2">{contract.price.toLocaleString()} ISK</div>
                         <div className="col-md-2">{contract.stationName}</div>
                         <div className="col-md-2">{this.prettyExpireTime(contract)}</div>
                       </li>
