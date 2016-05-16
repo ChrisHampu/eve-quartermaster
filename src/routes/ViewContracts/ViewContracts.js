@@ -275,7 +275,7 @@ class ViewContracts extends Component {
 
   prettyContractStatus(contract) {
 
-    switch(contract.status) {
+    switch (contract.status) {
       case "InProgress": return "In Progress";
       default: return contract.status;
     }
