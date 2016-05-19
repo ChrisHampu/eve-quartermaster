@@ -22,7 +22,9 @@ let nextFetch = new Date(Date.now());
 
 function filterCorporation(contracts, session) { // eslint-disable-line no-unused-vars
 
-  return contracts;
+  return contracts.filter((contract) => {
+    return process.env.NODE_ENV === 'development' || contract.public || (contract.forCorp === '1' && parseInt(contract.issuerCorpID) === session.passport.user.corp_id);
+  });
 }
 
 const contracts = {
@@ -87,17 +89,17 @@ const contracts = {
 
         lastFetchTask = null;
 
-        return { contractList: contractList };
+        return { contractList: filterCorporation(contractList, session) };
       });
 
       if (contractList.length) {
-        return { contractList: contractList };
+        return { contractList: filterCorporation(contractList, session) };
       }
 
       return lastFetchTask;
     }
 
-    return { contractList: contractList };
+    return { contractList: filterCorporation(contractList, session) };
   },
 };
 
