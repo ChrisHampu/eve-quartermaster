@@ -144,7 +144,7 @@ server.use('/graphql', (req, res, next) => {
 
   expressGraphQL(request => ({
     schema,
-    graphiql: true,
+    graphiql: process.env.NODE_ENV !== 'production',
     rootValue: { request: request }, // eslint-disable-line object-shorthand
     pretty: process.env.NODE_ENV !== 'production',
     context: req.session,
