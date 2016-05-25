@@ -11,37 +11,25 @@ import React, { Component } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Sidebar from '../../components/Sidebar';
 import s from './ViewRequests.scss';
-import cx from 'classnames';
+// import cx from 'classnames';
 
 class ViewRequests extends Component {
 
   render() {
     return (
-      <div className={s.root}>
-        <Sidebar>
-          <div className={s.sidebar_header}>
-            Sort By
+      process.env.NODE_ENV !== undefined && process.env.NODE_ENV === 'production' ?
+        <div className={s.root}>
+          <Sidebar />
+          <div className={s.container}>
+            <h4>Active Contract Requests</h4>
+            <div>Coming Soon</div>
           </div>
-          <ul role="navigation" className={cx(s.nav_container, 'nav')}>
-            <li className="nav-item">
-              <div className="checkbox">
-                <label className={s.nav_label}>
-                  <input type="checkbox" />
-                  ISK (Low)
-                </label>
-              </div>
-            </li>
-            <li className="nav-item">
-              <div className="checkbox">
-                <label className={s.nav_label}>
-                  <input type="checkbox" />
-                  ISK (High)
-                </label>
-              </div>
-            </li>
-          </ul>
-        </Sidebar>
+        </div> :
+      <div className={s.root}>
+        <Sidebar />
         <div className={s.container}>
+            <h4>Active Contract Requests</h4>
+            <div>Coming Soon</div>
         </div>
       </div>
     );

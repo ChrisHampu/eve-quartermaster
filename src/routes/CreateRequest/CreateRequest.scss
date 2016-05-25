@@ -13,6 +13,11 @@
 
 }
 
+.container {
+  padding: 0.4rem;
+  padding-bottom: 2rem;
+}
+
 .sidebar_header {
   padding: 15px 0;
   font-weight: 600;
@@ -35,4 +40,41 @@ a.nav_link {
 
 .nav_label {
   user-select: none;
+}
+
+.container > div {
+  margin-top: 20px;
+}
+
+.container input {
+  border: none;
+  border-bottom: 1px solid $purple-highlight-lighter;
+  color: $text-white;
+  background-color: $purple-base-lighter;
+  max-width: 250px;
+  margin-right: 1rem;
+}
+
+.container input:focus {
+  border-bottom: 1px solid color($purple-highlight-lighter lightness(+15%));
+}
+
+.form_checkbox {
+  margin: 1.4rem 0;
+}
+
+.button_style {
+  border: 2px solid $deep-orange;
+  color: $deep-orange;
+  border-radius: 7px;
+  padding: 0.4rem;
+  font-weight: 400;
+  font-size: 1.0rem;
+  background: none;
+
+
+  &:hover {
+    background-color: $deep-orange;
+    color: $text-white;
+  }
 }
