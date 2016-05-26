@@ -191,6 +191,11 @@ server.get('*', async (req, res, next) => {
       }
     }
 
+    console.log("session");
+    console.log(req.session);
+    console.log(`Path adjusted to ${newPath}. User: `);
+    console.log(req.user);
+
     await Router.dispatch({ path: newPath, query: req.query, context }, (state, component) => {
 
       data.body = ReactDOM.renderToString(component);
