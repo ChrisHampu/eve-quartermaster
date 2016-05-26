@@ -39,7 +39,7 @@ passport.deserializeUser(async (obj, done) => {
     const response = await fetch(`/graphql?query={character(id:${obj.id}){id,name,corporation{id,name},alliance}}`); // eslint-disable-line quotes
     const { data } = await response.json();
 
-    if (data.character.id === null || data.character.id !== charInfo.CharacterID) {
+    if (data.character.id === null) {
 
       done(null, false, { message: 'Failed to verify given user id' });
       return;
