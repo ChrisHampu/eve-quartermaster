@@ -169,7 +169,7 @@ class CreateRequest extends Component {
                 {
                   this.state.selectedItems.length > 0 ?
                     this.state.selectedItems.map((item, i) => {
-                      return <div key={i}><li>{item.count} {item.name}<i className="fa fa-times" onClick={() => { this.onRemoveItem(item); }}></i></li></div>;
+                      return <div key={i}><li>{item.count} {item.name}<i className="fa fa-times" onClick={() => { this.onRemoveItem(item.name); }}></i></li></div>;
                     }) :
                     <div>No items selected</div>
                 }
