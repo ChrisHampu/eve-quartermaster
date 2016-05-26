@@ -88,11 +88,8 @@ passport.use(new EveOnlineStrategy({
       const { data } = await response.json();
 
       if (data.character.id === null || data.character.id !== charInfo.CharacterID) {
-        // eslint-disable
-        console.log("Not a valid character id");
-        console.log(charInfo);
+
         done(null, false, { message: 'Failed to verify given user id' });
-        // eslint-enable
         return;
       }
 
