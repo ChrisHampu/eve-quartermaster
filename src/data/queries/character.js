@@ -37,7 +37,7 @@ export async function fetchCharacter(id) {
 
     const res = xml.eveapi.result[0];
 
-    const data = { id: res.characterID[0], name: res.characterName[0], corporation: { id: res.corporationID[0], name: res.corporation[0] }, alliance: res.allianceID[0] };
+    const data = { id: res.characterID[0], name: res.characterName[0], corporation: { id: res.corporationID[0], name: res.corporation[0] }, alliance: res.alliance ? res.allianceID[0] : '0' };
 
     const cache = { expires: Date.parse(xml.eveapi.cachedUntil[0] + " UTC"), data: data }; // eslint-disable-line prefer-template
 
