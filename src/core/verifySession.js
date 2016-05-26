@@ -13,9 +13,6 @@ async function verifySession(session) {
 
       const res = await fetchCharacter(user.id);
 
-      console.log("verifying");
-      console.log(res);
-
       if (eve.corp_only === 'true') {
         if (res.corporation.id !== eve.corp_id) {
           return { authenticated: false };

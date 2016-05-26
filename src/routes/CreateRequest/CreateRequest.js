@@ -131,6 +131,11 @@ class CreateRequest extends Component {
       <div className={s.container}>
         <h4>Create Contract Request</h4>
         <div className="container-fluid">
+          <div className={cx("row", s.instructions)}>
+            <div className="col-md-12">
+            Add each of the the items you want in the contract, give your request a descriptive title, and then submit your request.
+            </div>
+          </div>
           <div className="row">
             <div className="col-md-12">
               <fieldset className={cx("form-group", s.item_name_fieldset, { "has-danger": this.state.contractTitleValid === false, "has-success": this.state.contractTitleValid === true })}>

@@ -74,9 +74,6 @@ passport.deserializeUser(async (obj, done) => {
     user.name = data.character.name;
     user.expires = obj.expires;
 
-    console.log("deserialized");
-    console.log(user);
-
     done(null, user);
 
   }).catch(done);
@@ -137,9 +134,6 @@ passport.use(new EveOnlineStrategy({
       user.expires = charInfo.ExpiresOn;
 
       // TODO: Verify token?
-
-      console.log("User authorized");
-      console.log(user);
 
       done(null, user);
     } else {
