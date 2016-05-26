@@ -126,69 +126,62 @@ class CreateRequest extends Component {
 
   render() {
     return (
-      process.env.NODE_ENV !== undefined && process.env.NODE_ENV === 'production' ?
-        <div className={s.root}>
-          <Sidebar />
-          <div className={s.container}>
-            <h4>Create Contract Request</h4>
-            <div>Coming Soon</div>
-          </div>
-        </div> :
-        <div className={s.root}>
-        <Sidebar />
-        <div className={s.container}>
-          <h4>Create Contract Request</h4>
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-md-12">
-                <fieldset className={cx("form-group", s.item_name_fieldset, { "has-danger": this.state.contractTitleValid === false, "has-success": this.state.contractTitleValid === true })}>
-                  <label className="form-control-label" htmlFor="create-request-title">Title</label>
-                  <input onChange={() => { this.onValidateTitle(); }} ref="title" type="text" className={cx("form-control", { "form-control-danger": this.state.contractTitleValid === false, "form-control-success": this.state.contractTitleValid === true })} id="create-request-title" placeholder="" />
-                </fieldset>
-                <fieldset className="form-group">
-                  <label className="form-control-label">Contract Items</label>
-                  <div className={s.contract_item_list}>
+      <div className={s.root}>
+      <Sidebar />
+      <div className={s.container}>
+        <h4>Create Contract Request</h4>
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-md-12">
+              <fieldset className={cx("form-group", s.item_name_fieldset, { "has-danger": this.state.contractTitleValid === false, "has-success": this.state.contractTitleValid === true })}>
+                <label className="form-control-label" htmlFor="create-request-title">Title</label>
+                <input onChange={() => { this.onValidateTitle(); }} ref="title" type="text" className={cx("form-control", { "form-control-danger": this.state.contractTitleValid === false, "form-control-success": this.state.contractTitleValid === true })} id="create-request-title" placeholder="" />
+              </fieldset>
+              <fieldset className="form-group">
+                <label className="form-control-label">Contract Items</label>
+                <div className={s.contract_item_list}>
+                {
+                  this.state.selectedItems.length > 0 ?
+                    this.state.selectedItems.map((item, i) => {
+                      return <div key={i}><li>{item.count} {item.name}<i className="fa fa-times" onClick={() => { this.onRemoveItem(item); }}></i></li></div>;
+                    }) :
+                    <div>No items selected</div>
+                }
+                </div>
+              </fieldset>
+              <div className="form-inline">
+                <fieldset className={cx("form-group", s.item_name_fieldset, { "has-danger": this.state.itemNameValid === false, "has-success": this.state.itemNameValid === true })}>
+                  <label className="form-control-label" htmlFor="create-request-item">Item Name</label>
+                  <input onChange={() => { this.onValidateItemName(); }} ref="item_name" type="text" className={cx("form-control", { "form-control-danger": this.state.itemNameValid === false, "form-control-success": this.state.itemNameValid === true })} id="create-request-item" placeholder="" />
                   {
-                    this.state.selectedItems.length > 0 ?
-                      this.state.selectedItems.map((item, i) => {
-                        return <div key={i}><li>{item.count} {item.name}<i className="fa fa-times" onClick={() => { this.onRemoveItem(item); }}></i></li></div>;
-                      }) :
-                      <div>No items selected</div>
+                    this.state.itemSuggestions.length > 0 ?
+                      <div className="dropdown-menu open">
+                        {
+                          this.state.itemSuggestions.map((item, i) => {
+                          return <a key={i} className="dropdown-item" onClick={() => { this.selectItemSuggestion(item); }}>{item}</a>;
+                          })
+                        }
+                      </div> : false
                   }
-                  </div>
                 </fieldset>
-                <div className="form-inline">
-                  <fieldset className={cx("form-group", s.item_name_fieldset, { "has-danger": this.state.itemNameValid === false, "has-success": this.state.itemNameValid === true })}>
-                    <label className="form-control-label" htmlFor="create-request-item">Item Name</label>
-                    <input onChange={() => { this.onValidateItemName(); }} ref="item_name" type="text" className={cx("form-control", { "form-control-danger": this.state.itemNameValid === false, "form-control-success": this.state.itemNameValid === true })} id="create-request-item" placeholder="" />
-                    {
-                      this.state.itemSuggestions.length > 0 ?
-                        <div className="dropdown-menu open">
-                          {
-                            this.state.itemSuggestions.map((item, i) => {
-                            return <a key={i} className="dropdown-item" onClick={() => { this.selectItemSuggestion(item); }}>{item}</a>;
-                            })
-                          }
-                        </div> : false
-                    }
-                  </fieldset>
-                  <fieldset className={cx("form-group", { "has-danger": this.state.itemCountValid === false, "has-success": this.state.itemCountValid === true })}>
-                    <label className="form-control-label" htmlFor="create-request-itemcount">Amount</label>
-                    <input defaultValue="1" onChange={() => { this.onValidateItemCount(); }} ref="item_count" type="number" className={cx("form-control", { "form-control-danger": this.state.itemCountValid === false, "form-control-success": this.state.itemCountValid === true })} id="create-request-itemcount" placeholder="" />
-                  </fieldset>
-                  <button type="submit" className={cx("btn", s.button_style, { disabled: this.state.itemCountValid === false || this.state.itemNameValid === false || this.state.itemNameValid === undefined || this.state.itemCountValid === false })} onClick={() => { this.addSelectedItem(); }}>ADD</button>
-                </div>
-                <div className={cx("checkbox", s.form_checkbox)}>
-                  <label>
-                    <input type="checkbox" id="create-request-corponly" /> Corp Only
-                  </label>
-                </div>
-                <button type="submit" className={cx("btn", s.button_style, { disabled: this.state.contractTitleValid !== true || this.state.selectedItems.length <= 0 })}>SUBMIT</button>
+                <fieldset className={cx("form-group", { "has-danger": this.state.itemCountValid === false, "has-success": this.state.itemCountValid === true })}>
+                  <label className="form-control-label" htmlFor="create-request-itemcount">Amount</label>
+                  <input defaultValue="1" onChange={() => { this.onValidateItemCount(); }} ref="item_count" type="number" className={cx("form-control", { "form-control-danger": this.state.itemCountValid === false, "form-control-success": this.state.itemCountValid === true })} id="create-request-itemcount" placeholder="" />
+                </fieldset>
+                <button type="submit" className={cx("btn", s.button_style, { disabled: this.state.itemCountValid === false || this.state.itemNameValid === false || this.state.itemNameValid === undefined || this.state.itemCountValid === false })} onClick={() => { this.addSelectedItem(); }}>ADD</button>
               </div>
+              <div className={cx("checkbox", s.form_checkbox)}>
+                <label>
+                  <input type="checkbox" id="create-request-corponly" /> Corp Only
+                </label>
+              </div>
+              <button type="submit" className={cx("btn", s.button_style, { disabled: this.state.contractTitleValid !== true || this.state.selectedItems.length <= 0 || true })}>SUBMIT</button>
+              <div>Under Construction</div>
             </div>
           </div>
         </div>
       </div>
+    </div>
     );
   }
 }
