@@ -104,9 +104,16 @@ passport.use(new EveOnlineStrategy({
           data.character.corporation.id, data.character.corporation.name, data.character.alliance, charInfo.ExpiresOn, data.character.id);
       }
 
-      if (data.character.alliance.toString() !== eve.alliance_id) {
-        done(null, false, { message: 'Your corporation or alliance does not have access to this page' });
-        return;
+      if (eve.corp_only === 'true') {
+        if (data.character.corporation.id.toString() !== eve.corp_id) {
+          done(null, false, { message: 'Your corporation does not have access to this page' });
+          return;
+        }
+      } else {
+        if (data.character.alliance.toString() !== eve.alliance_id) {
+          done(null, false, { message: 'Your corporation or alliance does not have access to this page' });
+          return;
+        }
       }
 
       user.id = data.character.id;
@@ -129,9 +136,16 @@ passport.use(new EveOnlineStrategy({
         return;
       }
 
-      if (data.character.alliance.toString() !== eve.alliance_id) {
-        done(null, false, { message: 'Your corporation or alliance does not have access to this page' });
-        return;
+      if (eve.corp_only === 'true') {
+        if (data.character.corporation.id.toString() !== eve.corp_id) {
+          done(null, false, { message: 'Your corporation does not have access to this page' });
+          return;
+        }
+      } else {
+        if (data.character.alliance.toString() !== eve.alliance_id) {
+          done(null, false, { message: 'Your corporation or alliance does not have access to this page' });
+          return;
+        }
       }
 
       const user = {};

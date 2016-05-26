@@ -18,6 +18,7 @@ export const eve = {
   corp_vcode: process.env.CORPORATION_VCODE || 'Te7P9YRA597tVsa1k8G57mwTRIcGVz4duBpWhd12duWpab6k51xaCSUivwD6Rtfm',
   corp_access: 8388608, // The api key access mask
   corp_id: process.env.CORPORATION_ID || '98388312',
+  corp_only: process.env.CORP_ONLY || 'true', // If set to true, the alliance id is ignored
   alliance_id: process.env.ALLIANCE_ID || '99005338',
   contractType: {
     ItemExchange: 0,
