@@ -39,6 +39,12 @@ passport.deserializeUser(async (obj, done) => {
     const response = await fetch(`/graphql?query={character(id:${obj.id}){id,name,corporation{id,name},alliance}}`); // eslint-disable-line quotes
     const { data } = await response.json();
 
+    if (data.character.id === null || data.character.id !== charInfo.CharacterID) {
+
+      done(null, false, { message: 'Failed to verify given user id' });
+      return;
+    }
+
     // Update potentially out-of-date info
     if (result.rows[0].corp_id !== data.character.corporation.id) {
 
@@ -47,19 +53,29 @@ passport.deserializeUser(async (obj, done) => {
         data.character.corporation.id, data.character.corporation.name, data.character.alliance, data.character.id);
     }
 
-    if (data.character.alliance.toString() !== eve.alliance_id) {
+    if (eve.corp_only === 'true') {
+      if (data.character.corporation.id.toString() !== eve.corp_id) {
+        done(null, false, { message: 'Your corporation does not have access to this page' });
+        return;
+      }
+    } else {
+      if (data.character.alliance.toString() !== eve.alliance_id) {
         done(null, false, { message: 'Your corporation or alliance does not have access to this page' });
         return;
+      }
     }
 
     const user = {};
 
     user.id = data.character.id;
-    user.corp_id = data.character.corporation.id;
-    user.corp_name = data.character.corporation.name;
+    user.corp_id = data.character.corporation !== null ? data.character.corporation.id : '0';
+    user.corp_name = data.character.corporation !== null ? data.character.corporation.name : '';
     user.alliance = data.character.alliance;
     user.name = data.character.name;
     user.expires = obj.expires;
+
+    console.log("deserialized");
+    console.log(user);
 
     done(null, user);
 
@@ -121,6 +137,9 @@ passport.use(new EveOnlineStrategy({
       user.expires = charInfo.ExpiresOn;
 
       // TODO: Verify token?
+
+      console.log("User authorized");
+      console.log(user);
 
       done(null, user);
     } else {
