@@ -47,12 +47,12 @@ const createRequest = {
 
     // Validate title
     if (args.title.length < TitleMinLength || args.title.length > TitleMaxLength) {
-      return { success: 0, message: `Contract title must be greater than ${TitleMinLength} and less than ${TitleMaxLength} characters.` };
+      return { success: 0, message: `Contract title must be at least ${TitleMinLength} characters and less than ${TitleMaxLength} characters in length.` };
     }
 
     // Validate contract count
     if (args.count < 1 || args.count > ContractMaxCount) {
-      return { success: 0, message: `Number of requested contract must be greater than 1 and less than ${ContractMaxCount}.` };
+      return { success: 0, message: `Number of requested contracts must be at least 1 and less than ${ContractMaxCount}.` };
     }
 
     // Validate items

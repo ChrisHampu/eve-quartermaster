@@ -36,8 +36,6 @@
   label {
     padding-left: 0;
   }
-
-
 }
 
 .item_name_fieldset {
@@ -89,6 +87,10 @@
       padding-left: 8px;
     }
   }
+}
+
+.submission_error {
+  color: $light-red;
 }
 
 .nav_container {

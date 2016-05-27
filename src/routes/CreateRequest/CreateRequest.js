@@ -13,6 +13,7 @@ import Sidebar from '../../components/Sidebar';
 import s from './CreateRequest.scss';
 import cx from 'classnames';
 import { itemNames } from '../../constants/itemNames';
+import fetch, { fetchLocal } from '../../core/fetch';
 import fuzzy from 'fuzzy';
 
 /*
@@ -37,14 +38,15 @@ class CreateRequest extends Component {
         itemSuggestions: [],
         itemCountValid: true,
         itemNameValid: undefined,
-        contractTitleValid: undefined
+        contractTitleValid: undefined,
+        submissionResult: undefined
       };
   }
 
   onValidateTitle() {
 
     this.setState({
-      contractTitleValid: this.refs.title.value.length > 0 && this.refs.title.value.length < 64
+      contractTitleValid: this.refs.title.value.length >= 4 && this.refs.title.value.length < 60
     });
   }
 
@@ -79,7 +81,7 @@ class CreateRequest extends Component {
     const count = this.refs.item_count.value;
 
     this.setState({
-      itemCountValid: count !== '' && !isNaN(parseInt(count))
+      itemCountValid: count !== '' && !isNaN(parseInt(count)) && parseInt(count) >= 1 && parseInt(count) <= 1000000
     });
   }
 
@@ -94,15 +96,49 @@ class CreateRequest extends Component {
     });
   }
 
-  selectItemSuggestion(item) {
+  async onSubmitRequest() {
+
+    if (!this.isSubmissionAllowed()) {
+      return;
+    }
+
+    const itemString = this.state.selectedItems.map((item) => {
+      return `{name:"${item.name}",count:${item.count}}`;
+    }).join(',');
+
+    const graphString = `/graphql?query={createRequest(title:"${this.refs.title.value}",count:1,corp_only:${this.refs.corp_only.checked},items:[${itemString}])
+                                   {success,message}}`; // eslint-disable-line object-curly-spacing
+
+    let result = null;
+
+    try {
+      if (fetchLocal === undefined) {
+        const response = await fetch(graphString, { credentials: 'same-origin' });
+
+        const json = await response.json();
+
+        result = json.data.createRequest;
+      } else {
+        const json = await fetchLocal(graphString, { cookies: [this.state.context.getSession()] });
+
+        result = json.data.createRequest;
+      }
+    } catch (err) { // eslint-disable-line object-curly-spacing
+
+      this.setState({
+        submissionResult: { success: 0, message: "There was an error submitting your request. Refresh the page and try again or contact a Director." }
+      });
+
+      return;
+    }
 
     this.setState({
-      itemSuggestions: [],
-      itemNameValid: true
-    }, () => {
-
-      this.refs.item_name.value = item;
+      submissionResult: result
     });
+  }
+
+  isSubmissionAllowed() {
+    return this.state.contractTitleValid === true && this.state.selectedItems.length > 0;
   }
 
   addSelectedItem() {
@@ -121,6 +157,17 @@ class CreateRequest extends Component {
     this.setState({
       selectedItems: this.state.selectedItems,
       itemNameValid: false
+    });
+  }
+
+  selectItemSuggestion(item) {
+
+    this.setState({
+      itemSuggestions: [],
+      itemNameValid: true
+    }, () => {
+
+      this.refs.item_name.value = item;
     });
   }
 
@@ -159,7 +206,7 @@ class CreateRequest extends Component {
                 </fieldset>
                 <fieldset className={cx("form-group", { "has-danger": this.state.itemCountValid === false, "has-success": this.state.itemCountValid === true })}>
                   <label className="form-control-label" htmlFor="create-request-itemcount">Amount</label>
-                  <input defaultValue="1" onChange={() => { this.onValidateItemCount(); }} ref="item_count" type="number" className={cx("form-control", { "form-control-danger": this.state.itemCountValid === false, "form-control-success": this.state.itemCountValid === true })} id="create-request-itemcount" placeholder="" />
+                  <input defaultValue="1" min="1" max="1000000" onChange={() => { this.onValidateItemCount(); }} ref="item_count" type="number" className={cx("form-control", { "form-control-danger": this.state.itemCountValid === false, "form-control-success": this.state.itemCountValid === true })} id="create-request-itemcount" placeholder="" />
                 </fieldset>
                 <button type="submit" className={cx("btn", s.button_style, { disabled: this.state.itemCountValid === false || this.state.itemNameValid === false || this.state.itemNameValid === undefined || this.state.itemCountValid === false })} onClick={() => { this.addSelectedItem(); }}>ADD ITEM</button>
               </div>
@@ -171,21 +218,24 @@ class CreateRequest extends Component {
                     this.state.selectedItems.map((item, i) => {
                       return <div key={i}><li>{item.count} {item.name}<i className="fa fa-times" onClick={() => { this.onRemoveItem(item.name); }}></i></li></div>;
                     }) :
-                    <div>No items selected</div>
+                    <div>At least one item must be selected.</div>
                 }
                 </div>
               </fieldset>
               <fieldset className="form-group">
                 <div className={cx("checkbox", s.form_checkbox)}>
                   <label>
-                    <input type="checkbox" id="create-request-corponly" /> Corp Only
+                    <input ref="corp_only" type="checkbox" id="create-request-corponly" /> Corp Only
                   </label>
                 </div>
               </fieldset>
               <fieldset className="form-group">
-                <button type="submit" className={cx("btn", s.button_style, { disabled: this.state.contractTitleValid !== true || this.state.selectedItems.length <= 0 || true })}>SUBMIT</button>
+                <button onClick={() => { this.onSubmitRequest(); }} type="submit" className={cx("btn", s.button_style, { disabled: !this.isSubmissionAllowed() })}>SUBMIT</button>
               </fieldset>
-              <div>Under Construction</div>
+              {
+                this.state.submissionResult !== undefined ?
+                  <div className={ this.state.submissionResult.success === 0 ? cx(s.submission_error) : cx() }>{this.state.submissionResult.message}</div> : false
+              }
             </div>
           </div>
         </div>
