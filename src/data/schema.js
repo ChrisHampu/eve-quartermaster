@@ -17,6 +17,7 @@ import character from './queries/character';
 import contracts from './queries/contracts';
 import user from './queries/user';
 import contractItems from './queries/contract_items';
+import createRequest from './queries/create_request';
 
 const schema = new Schema({
   query: new ObjectType({
@@ -26,7 +27,8 @@ const schema = new Schema({
       character,
       contracts,
       user,
-      contractItems
+      contractItems,
+      createRequest
     },
   }),
 });

@@ -1,11 +1,11 @@
-create sequence login_id_seq increment by 1 minvalue 1 no maxvalue start with 1;
+CREATE TYPE fulfilled AS ENUM ('none', 'partial', 'full');
 
-CREATE TABLE login
+CREATE TABLE IF NOT EXISTS login
 (
   character_id integer NOT NULL,
   character_name text NOT NULL,
-  corp_id integer,
-  id integer NOT NULL DEFAULT nextval('login_id_seq'::regclass),
+  corp_id integer NOT NULL DEFAULT 0,
+  id serial NOT NULL,
   token_expire text NOT NULL,
   alliance_id integer NOT NULL DEFAULT 0,
   corp_name text NOT NULL,
@@ -15,14 +15,43 @@ WITH (
   OIDS=FALSE
 );
 
-CREATE TABLE session
+CREATE TABLE IF NOT EXISTS session
 (
   sid character varying NOT NULL,
   expires date,
   data text,
-  "createdAt" date,
-  "updatedAt" date,
+  createdAt date,
+  updatedAt date,
   CONSTRAINT session_pkey PRIMARY KEY (sid)
+)
+WITH (
+  OIDS=FALSE
+);
+
+CREATE TABLE IF NOT EXISTS requests
+(
+  id serial NOT NULL,
+  title text NOT NULL,
+  status fulfilled NOT NULL DEFAULT 'none',
+  corp_only boolean NOT NULL DEFAULT FALSE,
+  character_id integer NOT NULL,
+  contract_count integer NOT NULL DEFAULT 1,
+  CONSTRAINT requests_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+
+CREATE TABLE IF NOT EXISTS request_items
+(
+  id serial NOT NULL,
+  request_id integer NOT NULL,
+  item_name text NOT NULL,
+  item_count integer NOT NULL DEFAULT 1,
+  CONSTRAINT request_item_pkey PRIMARY KEY (id),
+  CONSTRAINT request_fkey FOREIGN KEY (request_id)
+      REFERENCES requests (id) MATCH SIMPLE
+      ON UPDATE CASCADE ON DELETE CASCADE
 )
 WITH (
   OIDS=FALSE
