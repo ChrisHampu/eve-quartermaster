@@ -15,9 +15,19 @@ import Navigation from '../Navigation';
 
 class Header extends Component {
 
+  static contextTypes = {
+    getUser: PropTypes.func
+  }
+
   static propTypes = {
-      path: PropTypes.string
+    path: PropTypes.string
   };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {};
+  }
 
   render() {
     return (
@@ -28,9 +38,15 @@ class Header extends Component {
           </div>
         </div>
         <Navigation path={this.props.path} />
-        <Link to="/logout" className={s.logout_button} useButtonStyle={true}>
-          Logout
-        </Link>
+        <div className="pull-xs-right">
+          <div className={s.user_info}>
+            <img className={s.user_image} src={`https://image.eveonline.com/Character/${this.context.getUser().id}_64.jpg`} />
+            {this.context.getUser().name}
+          </div>
+          <Link to="/logout" className={s.logout_button} useButtonStyle={true}>
+            Logout
+          </Link>
+        </div>
       </div>
     );
   }

@@ -28,6 +28,7 @@ class App extends Component {
       onPageNotFound: PropTypes.func,
       isAuthed: PropTypes.func,
       getLocation: PropTypes.func,
+      getUser: PropTypes.func
     }),
     children: PropTypes.element.isRequired,
     error: PropTypes.object,
@@ -38,7 +39,8 @@ class App extends Component {
     onSetTitle: PropTypes.func.isRequired,
     onSetMeta: PropTypes.func.isRequired,
     onPageNotFound: PropTypes.func.isRequired,
-    getLocation: PropTypes.func.isRequired || emptyFunction,
+    getLocation: PropTypes.func.isRequired,
+    getUser: PropTypes.func.isRequired
   };
 
   getChildContext() {
@@ -49,6 +51,7 @@ class App extends Component {
       onSetMeta: context.onSetMeta || emptyFunction,
       onPageNotFound: context.onPageNotFound || emptyFunction,
       getLocation: context.getLocation || emptyFunction,
+      getUser: context.getUser || emptyFunction
     };
   }
 

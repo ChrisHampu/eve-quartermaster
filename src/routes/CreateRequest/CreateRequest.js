@@ -19,18 +19,18 @@ import fuzzy from 'fuzzy';
 class CreateRequest extends Component {
 
   constructor(props) {
-      super(props);
+    super(props);
 
-      this.state = {
-        selectedItems: [],
-        itemSuggestions: [],
-        itemCountValid: true,
-        itemNameValid: undefined,
-        contractTitleValid: undefined,
-        submissionResult: undefined,
-        itemInputActive: 'manual',
-        fittingValid: undefined
-      };
+    this.state = {
+      selectedItems: [],
+      itemSuggestions: [],
+      itemCountValid: true,
+      itemNameValid: undefined,
+      contractTitleValid: undefined,
+      submissionResult: undefined,
+      itemInputActive: 'manual',
+      fittingValid: undefined
+    };
   }
 
   onValidateTitle() {
@@ -275,6 +275,7 @@ class CreateRequest extends Component {
   }
 
   render() {
+
     return (
       <div className={s.root}>
       <Sidebar />
