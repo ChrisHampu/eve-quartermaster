@@ -146,19 +146,39 @@ class CreateRequest extends Component {
     const lines = this.refs.fitting.value.split('\n');
 
     if (!lines.length) {
+
+      this.setState({
+        fittingValid: false
+      });
       return;
     }
 
     // The first line should be a ship and fitting name
     const header = /^\[(.+), (.+)\]/.exec(lines.shift());
 
-    if (header.length !== 3) {
+    try {
+      if (header.length !== 3) {
+
+        this.setState({
+          fittingValid: false
+        });
+        return;
+      }
+    } catch(err) {
+
+      this.setState({
+        fittingValid: false
+      });
       return;
     }
 
     const ship = header[1];
 
     if (itemNames.indexOf(ship) === -1) {
+
+      this.setState({
+        fittingValid: false
+      });
       return;
     }
 
@@ -184,7 +204,8 @@ class CreateRequest extends Component {
     }
 
     this.setState({
-      selectedItems: this.state.selectedItems
+      selectedItems: this.state.selectedItems,
+      fittingValid: undefined
     }, () => {
       this.refs.fitting.value = "";
     });
@@ -301,7 +322,7 @@ class CreateRequest extends Component {
                 this.state.itemInputActive === 'eft' ?
                 <div>
                   <fieldset className={cx("form-group", { "has-danger": this.state.fittingValid === false, "has-success": this.state.fittingValid === true })}>
-                    <label className="form-control-label" htmlFor="paste-fitting">Paste into text area below</label>
+                    <label className="form-control-label" htmlFor="paste-fitting">Paste fitting into text area below</label>
                     <textarea onChange={() => { this.onValidateFitting(); }} ref="fitting" className={cx("form-control", { "form-control-danger": this.state.fittingValid === false, "form-control-success": this.state.fittingValid === true })} id="paste-fitting" />
                   </fieldset>
                   <button type="submit" className={cx("btn", s.button_style)} onClick={() => { this.resetItemList(); }}>RESET ITEMS</button>
