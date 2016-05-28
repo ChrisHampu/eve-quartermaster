@@ -193,7 +193,12 @@ class CreateRequest extends Component {
       const match = /^(.+) x([0-9]+)|(.+)/.exec(line);
 
       const count = parseInt(match[2]) || 1;
-      const item = match[1] || match[3];
+      let item = match[1] || match[3];
+
+      // EFT adds a comma with a preloaded ammo type after it. Remove anything after the first comma
+      if (item.indexOf(',') !== -1) {
+        item = item.split(', ')[0];
+      }
 
       if (itemNames.indexOf(item) === -1) {
         continue;
