@@ -16,6 +16,34 @@
 .container {
   padding: 0.4rem;
   padding-bottom: 6rem; // Make room for absolute positioned suggestion dropdown
+
+  .item_input_selector {
+    padding: 1.2rem 0;
+
+    button {
+      background: $purple-base-lighter;
+      color: $text-white;
+      border-color: $purple-highlight-lighter;
+      font-weight: 400;
+
+      &:hover {
+        background: color($purple-highlight-lighter lightness(-5%));
+        border-color: $purple-highlight-lighter;
+        color: $text-white;
+      }
+
+      &:focus, &:active {
+        background: color($purple-highlight-lighter lightness(-5%));
+        border-color: $purple-highlight-lighter;
+        color: $text-white;
+      }
+    }
+
+    button[data-state="active"] {
+      background: color($purple-highlight-lighter lightness(+5%));
+      color: white;
+    }
+  }
 }
 
 .instructions {
@@ -54,7 +82,16 @@
   }
 }
 
+.add_item_button {
+  margin-right: 3rem;
+}
+
 .contract_item_list {
+
+  max-height: 300px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-width: 320px;
 
   > div {
     font-size: 0.9em;
@@ -93,6 +130,8 @@
   color: $light-red;
 }
 
+
+
 .nav_container {
 
 }
@@ -113,18 +152,24 @@ a.nav_link {
   margin-top: 20px;
 }
 
-.container input {
+.container input, .container textarea {
   border: none;
   border-bottom: 1px solid $purple-highlight-lighter;
   color: $text-white;
   background-color: $purple-base-lighter;
   max-width: 250px;
   margin-right: 1rem;
+
+  &:focus {
+    border-bottom: 1px solid color($purple-highlight-lighter lightness(+15%));
+  }
 }
 
-.container input:focus {
-  border-bottom: 1px solid color($purple-highlight-lighter lightness(+15%));
+.container textarea {
+  max-width: 300px;
+
 }
+
 
 .form_checkbox {
   margin-top: 1rem;
@@ -138,7 +183,7 @@ a.nav_link {
   font-weight: 400;
   font-size: 1.0rem;
   background: none;
-
+  margin-top: 0.2rem;
 
   &:hover {
     background-color: $deep-orange;

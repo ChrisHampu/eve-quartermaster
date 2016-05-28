@@ -16,18 +16,6 @@ import { itemNames } from '../../constants/itemNames';
 import fetch, { fetchLocal } from '../../core/fetch';
 import fuzzy from 'fuzzy';
 
-/*
-Contract request form
-
-  Title
-  Number of contracts wanted
-  [ Items ]:
-    Item Name, Item Amount
-  Corp Only
-
-  Submit
-*/
-
 class CreateRequest extends Component {
 
   constructor(props) {
@@ -39,7 +27,9 @@ class CreateRequest extends Component {
         itemCountValid: true,
         itemNameValid: undefined,
         contractTitleValid: undefined,
-        submissionResult: undefined
+        submissionResult: undefined,
+        itemInputActive: 'manual',
+        fittingValid: undefined
       };
   }
 
@@ -132,13 +122,109 @@ class CreateRequest extends Component {
       return;
     }
 
+    if (result.success === 1) {
+
+      this.setState({
+        submissionResult: result,
+        selectedItems: [],
+        contractTitleValid: undefined
+      }, () => {
+
+        this.refs.title.value = "";
+      });
+
+    } else {
+
+      this.setState({
+        submissionResult: result
+      });
+    }
+  }
+
+  onValidateFitting() {
+
+    const lines = this.refs.fitting.value.split('\n');
+
+    if (!lines.length) {
+      return;
+    }
+
+    // The first line should be a ship and fitting name
+    const header = /^\[(.+), (.+)\]/.exec(lines.shift());
+
+    if (header.length !== 3) {
+      return;
+    }
+
+    const ship = header[1];
+
+    if (itemNames.indexOf(ship) === -1) {
+      return;
+    }
+
+    this.addItemToList(ship, 1);
+
+    for (const line of lines) {
+
+      if (!line.length || line[0] === ' ') {
+        continue;
+      }
+
+      const match = /^(.+) x([0-9]+)|(.+)/.exec(line);
+
+      const count = parseInt(match[2]) || 1;
+      const item = match[1] || match[3];
+
+      if (itemNames.indexOf(item) === -1) {
+        continue;
+      }
+
+      // Group all the items & counts together
+      this.addItemToList(item, count);
+    }
+
     this.setState({
-      submissionResult: result
+      selectedItems: this.state.selectedItems
+    }, () => {
+      this.refs.fitting.value = "";
     });
   }
 
-  isSubmissionAllowed() {
-    return this.state.contractTitleValid === true && this.state.selectedItems.length > 0;
+  onItemNameKeyDown(ev) {
+
+    if (ev.keyCode === 13) { // Enter key
+
+      this.addSelectedItem();
+
+    } else if (ev.keyCode === 9 && this.refs.item_name.value.length > 0 && this.state.itemSuggestions.length > 0) { // Tab key
+
+      this.refs.item_name.value = this.state.itemSuggestions[0];
+
+      this.setState({
+        itemSuggestions: [],
+        itemNameValid: true
+      });
+
+      ev.preventDefault();
+    }
+  }
+
+  setItemInput(input) {
+
+    this.setState({
+      itemInputActive: input
+    });
+  }
+
+  selectItemSuggestion(item) {
+
+    this.setState({
+      itemSuggestions: [],
+      itemNameValid: true
+    }, () => {
+
+      this.refs.item_name.value = item;
+    });
   }
 
   addSelectedItem() {
@@ -156,18 +242,35 @@ class CreateRequest extends Component {
 
     this.setState({
       selectedItems: this.state.selectedItems,
-      itemNameValid: false
+      itemNameValid: false,
+      itemSuggestions: []
     });
   }
 
-  selectItemSuggestion(item) {
+  isSubmissionAllowed() {
+    return this.state.contractTitleValid === true && this.state.selectedItems.length > 0;
+  }
+
+  addItemToList(item, count) {
+
+    const itemCount = count || 1;
+
+    const idx = this.state.selectedItems.findIndex((val) => {
+      return val.name === item;
+    });
+
+    // If item is already in the array, increment its counter
+    if (idx !== -1) {
+      this.state.selectedItems[idx].count += itemCount;
+    } else {
+      this.state.selectedItems.push({ name: item, count: itemCount });
+    }
+  }
+
+  resetItemList() {
 
     this.setState({
-      itemSuggestions: [],
-      itemNameValid: true
-    }, () => {
-
-      this.refs.item_name.value = item;
+      selectedItems: []
     });
   }
 
@@ -186,39 +289,55 @@ class CreateRequest extends Component {
           <div className="row">
             <div className="col-md-12">
               <fieldset className={cx("form-group", { "has-danger": this.state.contractTitleValid === false, "has-success": this.state.contractTitleValid === true })}>
-                <label className="form-control-label" htmlFor="create-request-title">Title</label>
+                <label className="form-control-label" htmlFor="create-request-title">Request Title/Description</label>
                 <input onChange={() => { this.onValidateTitle(); }} ref="title" type="text" className={cx("form-control", { "form-control-danger": this.state.contractTitleValid === false, "form-control-success": this.state.contractTitleValid === true })} id="create-request-title" placeholder="" />
               </fieldset>
-              <div className="">
-                <fieldset className={cx("form-group", s.item_name_fieldset, { "has-danger": this.state.itemNameValid === false, "has-success": this.state.itemNameValid === true })}>
-                  <label className="form-control-label" htmlFor="create-request-item">Item Name</label>
-                  <input onChange={() => { this.onValidateItemName(); }} ref="item_name" type="text" className={cx("form-control", { "form-control-danger": this.state.itemNameValid === false, "form-control-success": this.state.itemNameValid === true })} id="create-request-item" placeholder="" />
-                  {
-                    this.state.itemSuggestions.length > 0 ?
-                      <div className="dropdown-menu open">
-                        {
-                          this.state.itemSuggestions.map((item, i) => {
-                          return <a key={i} className="dropdown-item" onClick={() => { this.selectItemSuggestion(item); }}>{item}</a>;
-                          })
-                        }
-                      </div> : false
-                  }
-                </fieldset>
-                <fieldset className={cx("form-group", { "has-danger": this.state.itemCountValid === false, "has-success": this.state.itemCountValid === true })}>
-                  <label className="form-control-label" htmlFor="create-request-itemcount">Amount</label>
-                  <input defaultValue="1" min="1" max="1000000" onChange={() => { this.onValidateItemCount(); }} ref="item_count" type="number" className={cx("form-control", { "form-control-danger": this.state.itemCountValid === false, "form-control-success": this.state.itemCountValid === true })} id="create-request-itemcount" placeholder="" />
-                </fieldset>
-                <button type="submit" className={cx("btn", s.button_style, { disabled: this.state.itemCountValid === false || this.state.itemNameValid === false || this.state.itemNameValid === undefined || this.state.itemCountValid === false })} onClick={() => { this.addSelectedItem(); }}>ADD ITEM</button>
+              <div className={cx("btn-group", s.item_input_selector)} role="group">
+                <button type="button" onClick={() => { this.setItemInput('manual'); }} data-state={ this.state.itemInputActive === 'manual' ? 'active' : 'inactive' } className="btn btn-secondary">Manual</button>
+                <button type="button" onClick={() => { this.setItemInput('eft'); }} data-state={ this.state.itemInputActive === 'eft' ? 'active' : 'inactive' } className="btn btn-secondary">Paste Fitting</button>
               </div>
+              {
+                this.state.itemInputActive === 'eft' ?
+                <div>
+                  <fieldset className={cx("form-group", { "has-danger": this.state.fittingValid === false, "has-success": this.state.fittingValid === true })}>
+                    <label className="form-control-label" htmlFor="paste-fitting">Paste into text area below</label>
+                    <textarea onChange={() => { this.onValidateFitting(); }} ref="fitting" className={cx("form-control", { "form-control-danger": this.state.fittingValid === false, "form-control-success": this.state.fittingValid === true })} id="paste-fitting" />
+                  </fieldset>
+                  <button type="submit" className={cx("btn", s.button_style)} onClick={() => { this.resetItemList(); }}>RESET ITEMS</button>
+                </div>
+                :
+                <div>
+                  <fieldset className={cx("form-group", s.item_name_fieldset, { "has-danger": this.state.itemNameValid === false, "has-success": this.state.itemNameValid === true })}>
+                    <label className="form-control-label" htmlFor="create-request-item">Item Name</label>
+                    <input onKeyDown={(ev) => { this.onItemNameKeyDown(ev); }} onChange={() => { this.onValidateItemName(); }} ref="item_name" type="text" className={cx("form-control", { "form-control-danger": this.state.itemNameValid === false, "form-control-success": this.state.itemNameValid === true })} id="create-request-item" placeholder="" />
+                    {
+                      this.state.itemSuggestions.length > 0 ?
+                        <div className="dropdown-menu open">
+                          {
+                            this.state.itemSuggestions.map((item, i) => {
+                            return <a key={i} className="dropdown-item" onClick={() => { this.selectItemSuggestion(item); }}>{item}</a>;
+                            })
+                          }
+                        </div> : false
+                    }
+                  </fieldset>
+                  <fieldset className={cx("form-group", { "has-danger": this.state.itemCountValid === false, "has-success": this.state.itemCountValid === true })}>
+                    <label className="form-control-label" htmlFor="create-request-itemcount">Amount</label>
+                    <input tabIndex="-1" defaultValue="1" min="1" max="1000000" onChange={() => { this.onValidateItemCount(); }} ref="item_count" type="number" className={cx("form-control", { "form-control-danger": this.state.itemCountValid === false, "form-control-success": this.state.itemCountValid === true })} id="create-request-itemcount" placeholder="" />
+                  </fieldset>
+                  <button type="submit" className={cx("btn", s.button_style, s.add_item_button, { disabled: this.state.itemCountValid === false || this.state.itemNameValid === false || this.state.itemNameValid === undefined || this.state.itemCountValid === false })} onClick={() => { this.addSelectedItem(); }}>ADD ITEM</button>
+                  <button type="submit" className={cx("btn", s.button_style)} onClick={() => { this.resetItemList(); }}>RESET ITEMS</button>
+                </div>
+              }
               <fieldset className={cx("form-group", s.contract_items_fieldset)}>
                 <label className="form-control-label">Contract Items</label>
-                <div className={s.contract_item_list}>
+                <div className={cx(s.contract_item_list)}>
                 {
                   this.state.selectedItems.length > 0 ?
                     this.state.selectedItems.map((item, i) => {
                       return <div key={i}><li>{item.count} {item.name}<i className="fa fa-times" onClick={() => { this.onRemoveItem(item.name); }}></i></li></div>;
                     }) :
-                    <div>At least one item must be selected.</div>
+                    <div>At least one item must be added.<br />You can add items by typing in a name or by pasting a ship fitting.</div>
                 }
                 </div>
               </fieldset>
