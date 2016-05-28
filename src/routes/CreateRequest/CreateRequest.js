@@ -335,7 +335,7 @@ class CreateRequest extends Component {
                 {
                   this.state.selectedItems.length > 0 ?
                     this.state.selectedItems.map((item, i) => {
-                      return <div key={i}><li>{item.count} {item.name}<i className="fa fa-times" onClick={() => { this.onRemoveItem(item.name); }}></i></li></div>;
+                      return <div key={i}><li><span>{item.count} {item.name}</span><i className="fa fa-times" onClick={() => { this.onRemoveItem(item.name); }}></i></li></div>;
                     }) :
                     <div>At least one item must be added.<br />You can add items by typing in a name or by pasting a ship fitting.</div>
                 }

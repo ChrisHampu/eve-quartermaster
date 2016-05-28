@@ -103,7 +103,6 @@
     display: inline-block;
     clear: both;
     list-style-type: none;
-    //display: inline-block;
     height: 32px;
     font-size: 13px;
     font-weight: 500;
@@ -113,8 +112,16 @@
     margin: 3px 0;
     border-radius: 16px;
     background-color: #e4e4e4;
-    //color: $purple-highlight-lighter;
-    //background-color: $light-purple;
+    overflow: hidden;
+    max-width: 300px;
+
+    span {
+      max-width: 250px;
+      display: inline-block;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
 
     i {
       cursor: pointer;
