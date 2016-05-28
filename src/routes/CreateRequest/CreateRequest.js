@@ -164,7 +164,7 @@ class CreateRequest extends Component {
         });
         return;
       }
-    } catch(err) {
+    } catch (err) {
 
       this.setState({
         fittingValid: false
