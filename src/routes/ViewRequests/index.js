@@ -9,9 +9,34 @@
 
 import React from 'react';
 import ViewRequests from './ViewRequests';
+import fetch, { fetchLocal } from '../../core/fetch';
 
 export const path = '/requests';
 export const action = async (state) => {
+
+  let data = null;
+
+  if (fetchLocal === undefined) {
+    const response = await fetch(`/graphql?query={requests{title,status,character_name,contract_count,items{name,count}}}`,
+                             { credentials: 'same-origin' });
+
+    const json = await response.json();
+
+    data = json.data;
+
+  } else {
+    const json = await fetchLocal(`/graphql?query={requests{title,status,character_name,contract_count,items{name,count}}}`,
+                               { cookies: [state.context.getSession()] });
+
+    data = json.data;
+  }
+
+  let requestList = [];
+
+  if (data && data.requests) {
+    requestList = data.requests || [];
+  }
+
   state.context.onSetTitle('57th Eve Contracts');
-  return <ViewRequests />;
+  return <ViewRequests requests={requestList} />;
 };
