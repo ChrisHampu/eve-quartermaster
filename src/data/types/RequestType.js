@@ -12,6 +12,7 @@ import {
   GraphQLInt as IntType,
   GraphQLString as StringType,
   GraphQLNonNull as NonNull,
+  GraphQLFloat as FloatType,
   GraphQLList as List
 } from 'graphql';
 
@@ -30,7 +31,9 @@ const RequestType = new ObjectType({
     status: { type: new NonNull(StringType) },
     character_name: { type: new NonNull(StringType) },
     contract_count: { type: new NonNull(IntType) },
-    items: { type: new NonNull(new List(RequestItemType)) }
+    items: { type: new NonNull(new List(RequestItemType)) },
+    station: { type: new NonNull(StringType) },
+    expires: { type: FloatType },
   },
 });
 

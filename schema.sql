@@ -32,10 +32,12 @@ CREATE TABLE IF NOT EXISTS requests
 (
   id serial NOT NULL,
   title text NOT NULL,
-  status fulfilled NOT NULL DEFAULT 'none',
-  corp_only boolean NOT NULL DEFAULT FALSE,
+  status fulfilled NOT NULL DEFAULT 'none'::fulfilled,
+  corp_only boolean NOT NULL DEFAULT false,
   character_id integer NOT NULL,
   contract_count integer NOT NULL DEFAULT 1,
+  location integer,
+  expires timestamp with time zone,
   CONSTRAINT requests_pkey PRIMARY KEY (id)
 )
 WITH (

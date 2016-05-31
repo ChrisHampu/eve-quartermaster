@@ -13,6 +13,7 @@ import Sidebar from '../../components/Sidebar';
 import s from './CreateRequest.scss';
 import cx from 'classnames';
 import { itemNames } from '../../constants/itemNames';
+import { stationNames } from '../../constants/stationNames';
 import fetch, { fetchLocal } from '../../core/fetch';
 import fuzzy from 'fuzzy';
 
@@ -27,6 +28,8 @@ class CreateRequest extends Component {
       itemCountValid: true,
       itemNameValid: undefined,
       contractTitleValid: undefined,
+      contractStationValid: undefined,
+      stationSuggestions: [],
       submissionResult: undefined,
       itemInputActive: 'manual',
       fittingValid: undefined
@@ -40,12 +43,34 @@ class CreateRequest extends Component {
     });
   }
 
+  onValidateStation() {
+
+    if (this.refs.station.value.length <= 0) {
+
+      this.setState({
+        contractStationValid: undefined,
+        stationSuggestions: []
+      });
+
+      return;
+    }
+
+    const matches = fuzzy.filter(this.refs.station.value, stationNames).slice(0, 6).map((match) => {
+      return match.original;
+    });
+
+    this.setState({
+      contractStationValid: matches.map((match) => { return match.toLowerCase(); }).indexOf(this.refs.station.value.toLowerCase()) !== -1,
+      stationSuggestions: matches
+    });
+  }
+
   onValidateItemName() {
 
     if (this.refs.item_name.value.length <= 0) {
 
       this.setState({
-        itemNameValid: false,
+        itemNameValid: undefined,
         itemSuggestions: []
       });
 
@@ -61,7 +86,7 @@ class CreateRequest extends Component {
     });
 
     this.setState({
-      itemNameValid: matches.map((match) => { return match.toLowerCase(); }).indexOf(this.refs.item_name.value.toLowerCase()) !== -1 || matches.length === 1,
+      itemNameValid: matches.map((match) => { return match.toLowerCase(); }).indexOf(this.refs.item_name.value.toLowerCase()) !== -1,
       itemSuggestions: matches
     });
   }
@@ -96,7 +121,7 @@ class CreateRequest extends Component {
       return `{name:"${item.name}",count:${item.count}}`;
     }).join(',');
 
-    const graphString = `/graphql?query={createRequest(title:"${this.refs.title.value}",count:1,corp_only:${this.refs.corp_only.checked},items:[${itemString}])
+    const graphString = `/graphql?query={createRequest(title:"${this.refs.title.value}",station:"${this.refs.station.value}",count:1,corp_only:${this.refs.corp_only.checked},items:[${itemString}])
                                    {success,message}}`; // eslint-disable-line object-curly-spacing
 
     let result = null;
@@ -242,6 +267,17 @@ class CreateRequest extends Component {
     });
   }
 
+  selectStationSuggestion(item) {
+
+    this.setState({
+      stationSuggestions: [],
+      contractStationValid: true
+    }, () => {
+
+      this.refs.station.value = item;
+    });
+  }
+
   selectItemSuggestion(item) {
 
     this.setState({
@@ -274,7 +310,7 @@ class CreateRequest extends Component {
   }
 
   isSubmissionAllowed() {
-    return this.state.contractTitleValid === true && this.state.selectedItems.length > 0;
+    return this.state.contractTitleValid === true && this.state.contractStationValid === true && this.state.selectedItems.length > 0;
   }
 
   addItemToList(item, count) {
@@ -319,6 +355,20 @@ class CreateRequest extends Component {
                 <label className="form-control-label" htmlFor="create-request-title">Request Title/Description</label>
                 <input onChange={() => { this.onValidateTitle(); }} ref="title" type="text" className={cx("form-control", { "form-control-danger": this.state.contractTitleValid === false, "form-control-success": this.state.contractTitleValid === true })} id="create-request-title" placeholder="" />
               </fieldset>
+              <fieldset className={cx("form-group", s.fieldset_has_dropdown, { "has-danger": this.state.contractTitleValid === false, "has-success": this.state.contractStationValid === true })}>
+                <label className="form-control-label" htmlFor="create-request-title">Station</label>
+                <input onChange={() => { this.onValidateStation(); }} ref="station" type="text" className={cx("form-control", { "form-control-danger": this.state.contractStationValid === false, "form-control-success": this.state.contractStationValid === true })} id="create-request-title" placeholder="" />
+                {
+                  this.state.stationSuggestions.length > 0 ?
+                    <div className="dropdown-menu open">
+                      {
+                        this.state.stationSuggestions.map((item, i) => {
+                        return <a key={i} className="dropdown-item" onClick={() => { this.selectStationSuggestion(item); }}>{item}</a>;
+                        })
+                      }
+                    </div> : false
+                  }
+              </fieldset>
               <div className={cx("btn-group", s.item_input_selector)} role="group">
                 <button type="button" onClick={() => { this.setItemInput('manual'); }} data-state={ this.state.itemInputActive === 'manual' ? 'active' : 'inactive' } className="btn btn-secondary">Manual</button>
                 <button type="button" onClick={() => { this.setItemInput('eft'); }} data-state={ this.state.itemInputActive === 'eft' ? 'active' : 'inactive' } className="btn btn-secondary">Paste Fitting</button>
@@ -334,7 +384,7 @@ class CreateRequest extends Component {
                 </div>
                 :
                 <div>
-                  <fieldset className={cx("form-group", s.item_name_fieldset, { "has-danger": this.state.itemNameValid === false, "has-success": this.state.itemNameValid === true })}>
+                  <fieldset className={cx("form-group", s.fieldset_has_dropdown, { "has-danger": this.state.itemNameValid === false, "has-success": this.state.itemNameValid === true })}>
                     <label className="form-control-label" htmlFor="create-request-item">Item Name</label>
                     <input onKeyDown={(ev) => { this.onItemNameKeyDown(ev); }} onChange={() => { this.onValidateItemName(); }} ref="item_name" type="text" className={cx("form-control", { "form-control-danger": this.state.itemNameValid === false, "form-control-success": this.state.itemNameValid === true })} id="create-request-item" placeholder="" />
                     {

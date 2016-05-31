@@ -5,6 +5,7 @@ import {
 
 import db from '../../core/db';
 import verifySession from '../../core/verifySession';
+import { stationIDToName } from '../../constants/stationIDToName';
 
 import RequestType from '../types/RequestType';
 
@@ -25,7 +26,7 @@ const getRequests = {
     const error = await db.connect(async ({ query }) => {
 
       const result = await query(
-        `SELECT requests.id, title, status, corp_only, contract_count, character_name FROM requests LEFT JOIN login ON (requests.character_id = login.character_id)`
+        `SELECT requests.id, title, status, corp_only, contract_count, character_name, location as station, (date_part('epoch', expires)*1000)::bigint as expires FROM requests LEFT JOIN login ON (requests.character_id = login.character_id) WHERE expires > now() - interval '14 day'`
       );
 
       if (!result.rowCount) {
@@ -42,6 +43,8 @@ const getRequests = {
         const res = row;
 
         res.items = itemResult.rows;
+        res.station = res.station !== null ? stationIDToName[res.station] : "Unknown";
+        res.expires = parseFloat(res.expires);
 
         requests.push(res);
       }

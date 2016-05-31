@@ -41,6 +41,31 @@ class ViewRequests extends Component {
 
   }
 
+  prettyExpireTime(request) {
+
+    var d;
+    var h;
+    var m;
+    var sec;
+    const expiry = new Date(request.expires); // eslint-disable-line prefer-template
+
+    if (new Date(Date.now()) > expiry) {
+      return 'Expired';
+    }
+
+    const ms = expiry - Date.now();
+
+    sec = Math.floor(ms / 1000);
+    m = Math.floor(sec / 60);
+    sec = sec % 60;
+    h = Math.floor(m / 60);
+    m = m % 60;
+    d = Math.floor(h / 24);
+    h = h % 24;
+
+    return (d > 0 ? d + ' days ' : '') + (h > 0 ? h + ' hours ' : '') + 'left'; // eslint-disable-line prefer-template
+  }
+
   render() {
     return (
       process.env.NODE_ENV !== undefined && process.env.NODE_ENV === 'production' ?
@@ -81,7 +106,7 @@ class ViewRequests extends Component {
                       Expires
                     </div>
                     <div className="col-md-2">
-                      EFT
+                      Actions
                     </div>
                   </div>
                   <div className="row">
@@ -92,8 +117,8 @@ class ViewRequests extends Component {
                           <div className="col-md-2">{request.title}</div>
                           <div className="col-md-2">{request.character_name}</div>
                           <div className="col-md-2">{request.status}</div>
-                          <div className="col-md-2">N/A</div>
-                          <div className="col-md-2">N/A</div>
+                          <div className="col-md-2">{request.station}</div>
+                          <div className="col-md-2">{this.prettyExpireTime(request)}</div>
                           <div className="col-md-2">N/A</div>
                         </li>
                       );

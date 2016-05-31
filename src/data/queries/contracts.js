@@ -11,7 +11,7 @@
 import fetchXML from '../../core/fetchXML';
 import ContractListType from '../types/ContractListType';
 import { eve } from '../../config.js';
-import { stationNames } from '../../constants/stationNames';
+import { stationIDToName } from '../../constants/stationIDToName';
 import verifySession from '../../core/verifySession';
 
 const url = `https://api.eveonline.com/corp/Contracts.xml.aspx?keyID=${eve.corp_key}&vCode=${eve.corp_vcode}`;
@@ -63,7 +63,7 @@ const contracts = {
               issuerCorpID: c.issuerCorpID,
               assigneeID: c.assigneeID,
               acceptorID: c.acceptorID,
-              stationName: stationNames[c.startStationID],
+              stationName: stationIDToName[c.startStationID],
               startStationID: c.startStationID,
               endStationID: c.endStationID,
               type: eve.contractType[c.type],

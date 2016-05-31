@@ -18,6 +18,7 @@ import {
 import db from '../../core/db';
 import verifySession from '../../core/verifySession';
 import { itemNames } from '../../constants/itemNames';
+import { stationNameToID } from '../../constants/stationNameToID';
 
 import CreateRequestResultType from '../types/CreateRequestResultType';
 import RequestItemType from '../types/RequestItemType';
@@ -32,6 +33,7 @@ const createRequest = {
   type: CreateRequestResultType,
   args: {
     title: { type: new NonNull(StringType) },
+    station: { type: new NonNull(StringType) },
     count: { type: new NonNull(IntType) },
     corp_only: { type: new NonNull(BooleanType) },
     items: { type: new NonNull(new List(RequestItemType)) }
@@ -48,6 +50,11 @@ const createRequest = {
     // Validate title
     if (args.title.length < TitleMinLength || args.title.length > TitleMaxLength) {
       return { success: 0, message: `Contract title must be at least ${TitleMinLength} characters and less than ${TitleMaxLength} characters in length.` };
+    }
+
+    // Validate station
+    if (args.station.length < 0 || stationNameToID[args.station] === undefined) {
+      return { success: 0, message: `Invalid station for this contract request.` };
     }
 
     // Validate contract count
@@ -81,8 +88,8 @@ const createRequest = {
     const error = await db.connect(async ({ query }) => {
 
       const result = await query(
-        `INSERT INTO requests (title, corp_only, character_id, contract_count) VALUES ($1, $2, $3, $4) RETURNING id`,
-        args.title, args.corp_only ? 'TRUE' : 'FALSE', auth.id, args.count
+        `INSERT INTO requests (title, corp_only, character_id, contract_count, location, expires) VALUES ($1, $2, $3, $4, $5, NOW() + interval '14 day') RETURNING id`,
+        args.title, args.corp_only ? 'TRUE' : 'FALSE', auth.id, args.count, stationNameToID[args.station]
       );
 
       if (!result.rowCount) {
