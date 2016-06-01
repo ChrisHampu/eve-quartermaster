@@ -29,7 +29,7 @@ class Header extends Component {
 
     this.state = {
       notifications: [],
-      showDrawer: true
+      showDrawer: false
     };
   }
 
