@@ -101,7 +101,7 @@ class ViewContracts extends Component {
       return this.state.activeContract.items;
     }
 
-    let items = ['a', 'b'];
+    let items = [];
     const id = contract.id;
 
     try {
@@ -123,7 +123,9 @@ class ViewContracts extends Component {
     } catch (err) { // eslint-disable-line no-empty
     }
 
-    this.state.activeContract.items = items;
+    if (this.state.activeContract !== null) {
+      this.state.activeContract.items = items;
+    }
 
     this.setState({
       activeContract: this.state.activeContract
@@ -342,7 +344,7 @@ class ViewContracts extends Component {
               <h4>Contracts</h4>
               <div className={s.contract_count}>Showing { this.state.contracts.length } contracts</div>
               <div className="row">
-                <div className={cx(s.contract_container, { "col-md-12": this.state.activeContract === null, "col-md-10": this.state.activeContract !== null })}>
+                <div className={cx(s.contract_container, "col-md-12")}>
                   <div className={cx("row", s.contract_header)}>
                     <div className="col-md-2" onClick={() => this.toggleSetSortBy('title')}>
                       Title
@@ -383,7 +385,7 @@ class ViewContracts extends Component {
                   })}
                   </ul>
                 </div>
-                <div className={cx(s.contract_item_container, { "col-md-2": this.state.activeContract !== null })}>
+                <div style={this.state.activeContract === null ? {} : { transform: 'translateX(0%)' }} className={cx(s.contract_item_container, { "col-md-2": this.state.activeContract !== null })}>
                   { this.state.activeContract !== null ?
                       <div>
                       { this.state.activeContract.items !== undefined ?
@@ -403,7 +405,7 @@ class ViewContracts extends Component {
                               <div>Failed to fetch items or none available</div>
                           }
                           </div>
-                        </div> : <div><div><h5>Contract Items</h5></div>Loading items..</div>
+                        </div> : <div><div className={s.contract_item_list}><h5>Contract Items</h5></div>Loading items..</div>
                       }
                       </div>
                     : false

@@ -53,10 +53,18 @@
   .contract_item_container {
 
     position: fixed;
-    height: calc(100% - 3.1rem);
+    height: 100%;
     top: 0;
-    margin: 9rem 1rem 0 0rem;
+    right: 0;
+    margin: $header-height 0 0 0;
+    background: #010A33;
+    will-change: transform;
+    z-index: 2;
+    width: 290px;
+    transform: translateX(100%);
+    box-shadow: rgba(0, 0, 0, 0.14902) 2px 2px 4px;
     overflow: hidden;
+    transition: transform .3s ease-out;
 
     > div {
       overflow: hidden;
@@ -66,7 +74,7 @@
 
     .contract_item_list {
 
-      overflow: hidden;
+      overflow-y: scroll;
       height: inherit;
       position: relative;
 
@@ -79,10 +87,9 @@
       }
 
       .contract_items {
-        overflow: scroll;
+        overflow: hidden;
         position: relative;
-        margin: 0;
-        height: inherit;
+        margin: 0 0 $header-height 0;
       }
 
       h5 {
