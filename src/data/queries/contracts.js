@@ -36,11 +36,20 @@ async function checkFulfilledRequests(contracts) {
 
   for (const contract of contracts) {
 
+    if (contract.type !== 0) { // Item exchange contract
+      continue;
+    }
+
     const items = await getContractItems(contract.id);
 
     for (const request of requests) {
 
       if (request.status === 'full') {
+        continue;
+      }
+
+      // Must be at same location
+      if (contract.startStationID !== request.location) {
         continue;
       }
 

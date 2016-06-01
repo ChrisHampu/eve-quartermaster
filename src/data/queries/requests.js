@@ -9,6 +9,8 @@ import { stationIDToName } from '../../constants/stationIDToName';
 
 import RequestType from '../types/RequestType';
 
+// TODO: Filter 'for corp' requests when sending to user
+
 // Update the status of a request by ID to 'newStatus'
 export async function fulfillRequest(id, newStatus) {
 
