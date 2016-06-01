@@ -92,6 +92,10 @@
       }
 
       div {
+        text-align: inherit;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         padding: 0.4rem 0.5rem;
       }
 

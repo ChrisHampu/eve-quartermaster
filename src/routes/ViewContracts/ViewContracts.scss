@@ -196,6 +196,10 @@ a.nav_link {
 
     div {
       padding: 0.4rem 0.5rem;
+      text-align: inherit;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     &:last-child {

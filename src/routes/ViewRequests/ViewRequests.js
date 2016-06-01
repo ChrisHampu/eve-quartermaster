@@ -12,6 +12,7 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Sidebar from '../../components/Sidebar';
 import s from './ViewRequests.scss';
 import cx from 'classnames';
+import fuzzy from 'fuzzy';
 
 class ViewRequests extends Component {
 
@@ -37,8 +38,29 @@ class ViewRequests extends Component {
     });
   }
 
+  filterPredicate(request) {
+
+    if (request === null) {
+      return false;
+    }
+
+    return true;
+  }
+
   updateRequests() {
 
+    let requests = this.props.requests.filter((request) => this.filterPredicate(request));
+
+    if (requests.length > 0) {
+
+      if (this.state.searchText.length > 0) {
+        requests = fuzzy.filter(this.state.searchText, requests, {
+          extract: request => { return request.title + request.stationName; }
+        }).map(el => { return el.original; });
+      }
+    }
+
+    this.setState({ requests: requests });
   }
 
   prettyExpireTime(request) {
