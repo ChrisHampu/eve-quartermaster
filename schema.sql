@@ -58,3 +58,16 @@ CREATE TABLE IF NOT EXISTS request_items
 WITH (
   OIDS=FALSE
 );
+
+CREATE TABLE IF NOT EXISTS notifications
+(
+   id serial, 
+   character_id integer, 
+   viewed boolean, 
+   message text, 
+   CONSTRAINT notifications_pkey PRIMARY KEY (id)
+) 
+WITH (
+  OIDS = FALSE
+)
+;

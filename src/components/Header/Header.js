@@ -12,6 +12,7 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Header.scss';
 import Link from '../Link';
 import Navigation from '../Navigation';
+import cx from 'classnames';
 
 class Header extends Component {
 
@@ -26,7 +27,9 @@ class Header extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      notifications: []
+    };
   }
 
   render() {
@@ -38,14 +41,23 @@ class Header extends Component {
           </div>
         </div>
         <Navigation path={this.props.path} />
-        <div className="pull-xs-right">
+        <div className={cx("pull-xs-right", s.content_right)}>
           <div className={s.user_info}>
-            <img className={s.user_image} src={`https://image.eveonline.com/Character/${this.context.getUser().id}_64.jpg`} />
-            {this.context.getUser().name}
+            <div className={s.user_image}>
+              <img src={`https://image.eveonline.com/Character/${this.context.getUser().id}_64.jpg`} />
+            </div>
+            <div className={s.user_name}>
+              {this.context.getUser().name}
+            </div>
+            <div className={this.state.notifications.length > 0 ? cx(s.notification_counter, s.has_notifications) : s.notification_counter}>
+              {this.state.notifications.length}
+            </div>
           </div>
-          <Link to="/logout" className={s.logout_button} useButtonStyle={true}>
-            Logout
-          </Link>
+          <div className={s.logout_button}>
+            <Link to="/logout" useButtonStyle={true}>
+              Logout
+            </Link>
+          </div>
         </div>
       </div>
     );

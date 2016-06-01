@@ -10,9 +10,9 @@
 @import '../variables.scss';
 
  .root {
- 	background-color: $purple-base-darker;
- 	height: $header-height;
- 	width: 100%;
+    background-color: $purple-base-darker;
+    height: $header-height;
+    width: 100%;
     position: fixed;
     top: 0;
     left: 0;
@@ -20,38 +20,81 @@
  }
 
 .logo_container {
-	width: $sidebar-width;
-	float: left;
-	height: 100%;
+    width: $sidebar-width;
+    float: left;
+    height: 100%;
     display: flex;
     align-items: center;
 }
 
 .logo_text {
-	color: $text-white;
-	font-size: 1.4rem;
-	margin: 0 auto;
+    color: $text-white;
+    font-size: 1.4rem;
+    margin: 0 auto;
+}
+
+.content_right {
+    height: 100%;
 }
 
 .user_info {
     display: inline-block;
     margin-right: 1rem;
     font-weight: 400;
+    vertical-align: middle;
+    height: 100%;
+    padding: 0 0.5rem;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $purple-base-lighter;
+    }
 
     .user_image {
-        border-radius: 50%;
-        margin-right: 0.5rem;
-        max-width: 48px;
-        max-height: 48px;
         display: inline-block;
+        margin-top: 6px;
+        vertical-align: middle;
+
+        img {
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            max-width: 48px;
+            max-height: 48px;
+            display: inline-block;
+        }
+    }
+
+    .user_name {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .notification_counter {
+        vertical-align: middle;
+        width: 1.3rem;
+        height: 1.3rem;
+        margin-left: 0.6rem;
+        background-color: $dark-cyan;
+        display: inline-block;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 1.3;
+        font-size: 0.9rem;
+
+        &.has_notifications {
+            background-color: $light-red;
+        }
     }
 }
 
 .logout_button {
     display: inline-block;
     margin-right: 1rem;
-    font-weight: 400;
-    font-size: 1.0rem;
-    text-transform: uppercase;
-    margin-top: 0.55rem;
+    vertical-align: middle;
+
+    a {
+        font-weight: 400;
+        font-size: 1.0rem;
+        text-transform: uppercase;
+    }
 }
