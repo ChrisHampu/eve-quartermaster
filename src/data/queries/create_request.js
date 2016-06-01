@@ -105,7 +105,9 @@ const createRequest = {
         );
       }
 
-    }).catch(() => {
+    }).catch((err) => {
+
+      console.log(err); // eslint-disable-line no-console
 
       return { success: 0, message: 'There was a database error submitting your request. Refresh the page and try again or contact a Director.' };
     });
