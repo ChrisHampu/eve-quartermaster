@@ -385,7 +385,7 @@ class ViewContracts extends Component {
                   })}
                   </ul>
                 </div>
-                <div style={this.state.activeContract === null ? {} : { transform: 'translateX(0%)' }} className={cx(s.contract_item_container, { "col-md-2": this.state.activeContract !== null })}>
+                <div style={this.state.activeContract === null ? {} : { transform: 'translateX(0%)' }} className={s.contract_item_container}>
                   { this.state.activeContract !== null ?
                       <div>
                       { this.state.activeContract.items !== undefined ?
@@ -405,7 +405,7 @@ class ViewContracts extends Component {
                               <div>Failed to fetch items or none available</div>
                           }
                           </div>
-                        </div> : <div><div className={s.contract_item_list}><h5>Contract Items</h5></div>Loading items..</div>
+                        </div> : <div><div className={s.contract_item_list}><h5>Contract Items</h5><div>Loading items..</div></div></div>
                       }
                       </div>
                     : false

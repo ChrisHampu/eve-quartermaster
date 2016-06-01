@@ -25,7 +25,8 @@ class ViewRequests extends Component {
 
     this.state = {
       requests: this.props.requests,
-      searchText: undefined
+      searchText: undefined,
+      activeRequest: null
     };
   }
 
@@ -60,7 +61,7 @@ class ViewRequests extends Component {
       }
     }
 
-    this.setState({ requests: requests });
+    this.setState({ requests: requests, activeRequest: requests[0] });
   }
 
   prettyExpireTime(request) {
@@ -86,6 +87,22 @@ class ViewRequests extends Component {
     h = h % 24;
 
     return (d > 0 ? d + ' days ' : '') + (h > 0 ? h + ' hours ' : '') + 'left'; // eslint-disable-line prefer-template
+  }
+
+  toggleActiveRequest(request) {
+
+    if (this.state.activeRequest !== null && this.state.activeRequest === request) {
+
+      this.setState({
+        activeRequest: null,
+      });
+
+      return;
+    }
+
+    this.setState({
+      activeRequest: request,
+    });
   }
 
   render() {
@@ -127,7 +144,7 @@ class ViewRequests extends Component {
                     <ul className={cx("col-md-12", s.request_list)}>
                     { this.state.requests.map((request, i) => {
                       return (
-                        <li key={i} className="row">
+                        <li key={i} className={this.state.activeRequest === request ? cx("row", s.request_list_active) : cx("row")} onClick={() => { this.toggleActiveRequest(request); }}>
                           <div className="col-md-2">{request.title}</div>
                           <div className="col-md-2">{request.character_name}</div>
                           <div className="col-md-2">{request.status}</div>
@@ -139,6 +156,32 @@ class ViewRequests extends Component {
                     })}
                     </ul>
                   </div>
+                  <div style={this.state.activeRequest === null ? {} : { transform: 'translateX(0%)' }} className={s.request_item_container}>
+                  { this.state.activeRequest !== null ?
+                      <div>
+                      { this.state.activeRequest.items !== undefined ?
+                        <div className={s.request_item_list}>
+                          <h5>Requested Items</h5>
+                          <div className={cx("row", s.request_item_header)}>
+                            <div className="col-md-4">Quantity</div>
+                            <div className="col-md-8">Name</div>
+                          </div>
+                          <div className={cx("row", s.request_items)}>
+                          {
+                            this.state.activeRequest.items.length > 0 ?
+                              this.state.activeRequest.items.map((item, i) => {
+                                return <div key={i} className="row col-md-12"><div className="col-md-3"><span>{item.count}</span></div><div className="col-md-9">{item.name}</div></div>;
+                              })
+                              :
+                              <div>Failed to fetch items or none available</div>
+                          }
+                          </div>
+                        </div> : <div><div className={s.request_item_list}><h5>Requested Items</h5><div>Loading items..</div></div></div>
+                      }
+                      </div>
+                    : false
+                  }
+                </div>
                 </div>
               </div>
             </div>

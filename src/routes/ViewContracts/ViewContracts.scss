@@ -90,6 +90,7 @@
         overflow: hidden;
         position: relative;
         margin: 0 0 $header-height 0;
+        padding: 0 0.5rem;
       }
 
       h5 {
@@ -106,7 +107,6 @@
         margin: 0;
         padding: 0.5rem 0;
         position: relative;
-        //padding:-0.25rem;
       }
 
       > div:not(.contract_item_header) > div:last-child {

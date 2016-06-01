@@ -110,6 +110,87 @@
       }
     }
   }
+
+  .request_item_container {
+
+    position: fixed;
+    height: 100%;
+    top: 0;
+    right: 0;
+    margin: $header-height 0 0 0;
+    background: #010A33;
+    will-change: transform;
+    z-index: 2;
+    width: 290px;
+    transform: translateX(100%);
+    box-shadow: rgba(0, 0, 0, 0.14902) 2px 2px 4px;
+    overflow: hidden;
+    transition: transform .3s ease-out;
+
+    > div {
+      overflow: hidden;
+      height: inherit;
+      position: relative;
+    }
+
+    .request_item_list {
+
+      overflow-y: scroll;
+      height: inherit;
+      position: relative;
+
+      .request_item_header {
+
+        text-align: center;
+        font-size: 1rem;
+        font-weight: 400;
+        margin: 0;
+      }
+
+      .request_items {
+        overflow: hidden;
+        position: relative;
+        margin: 0 0 $header-height 0;
+        padding: 0 0.5rem;
+      }
+
+      h5 {
+        text-align: center;
+      }
+
+      > div {
+        padding: 0 0.5rem;
+        font-size: 0.9rem;
+      }
+
+      > div > div {
+        border-bottom: 1px solid $purple-highlight-lighter;
+        margin: 0;
+        padding: 0.5rem 0;
+        position: relative;
+      }
+
+      > div:not(.request_item_header) > div:last-child {
+        border-bottom: none;
+      }
+
+      > div > div > div {
+        padding: 0.25rem 0.5rem;
+        vertical-align: middle;
+        display: table-cell;
+      }
+
+      > div > div > div:first-child {
+        text-align: center;
+        display: flex;
+        align-items: center;
+      }
+
+      > div > div > div:first-child span {
+        margin: 0 auto;
+      }
+    }
+  }
 }
 
 .sidebar_header {
