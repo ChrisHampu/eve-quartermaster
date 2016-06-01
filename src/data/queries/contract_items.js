@@ -17,7 +17,7 @@ const contractItemUrl = `https://api.eveonline.com/corp/ContractItems.xml.aspx?k
 const typeNameUrl = `https://api.eveonline.com/eve/TypeName.xml.aspx?ids=`; // eslint-disable-line quotes
 
 const typeNameCache = new Map();
-const contractItemCache = new Map(); // Contract items are basically cached permanently as they will not change
+const contractItemCache = new Map(); // Contract items are cached permanently TODO: flush cache on a daily basis to avoid overgrowth
 const fetchTaskCache = new Map();
 
 // Takes an array of EVE type IDs and resolves them to type names using the EVE api
@@ -66,6 +66,73 @@ async function getTypeNames(typeIDs) {
   return names;
 }
 
+export async function getContractItems(id) {
+
+  const result = contractItemCache.get(id);
+
+  if (result) {
+    return { itemList: result };
+  }
+
+  const fetchTask = fetchTaskCache.get(id);
+
+  if (fetchTask) {
+    return fetchTask;
+  }
+
+  const newFetchTask = new fetchXML(`${contractItemUrl}${id}`) // eslint-disable-line new-cap
+    .getXML()
+    .then(async ({ xml }) => {
+
+      const items = [];
+
+      if (xml.eveapi.error === undefined) {
+
+        const typeIDs = [];
+        var item;
+
+        for (item of xml.eveapi.result[0].rowset[0].row) {
+
+          items.push({
+            id: item.$.recordID,
+            typeID: item.$.typeID,
+            quantity: item.$.quantity,
+            typeName: "Unknown"
+          });
+
+          typeIDs.push(item.$.typeID);
+        }
+
+        // Retrieve a mapping of type id -> type name using local cache + eve api
+        const nameMap = await getTypeNames(typeIDs);
+
+        // Attach respective type name to the item
+        for (let i = 0; i < items.length; i++) {
+          var pair;
+
+          for (pair of nameMap) {
+
+            if (items[i].typeID === pair.id) {
+
+              items[i].typeName = pair.name;
+              break;
+            }
+          }
+        }
+
+        contractItemCache.set(id, items);
+      }
+
+      fetchTaskCache.delete(id);
+
+      return { itemList: items };
+  });
+
+  fetchTaskCache.set(id, newFetchTask);
+
+  return newFetchTask;
+}
+
 const contractItems = {
 
   type: ContractItemListType,
@@ -80,69 +147,7 @@ const contractItems = {
       return { itemList: [] };
     }
 
-    const result = contractItemCache.get(id);
-
-    if (result) {
-      return { itemList: result };
-    }
-
-    const fetchTask = fetchTaskCache.get(id);
-
-    if (fetchTask) {
-      return fetchTask;
-    }
-
-    const newFetchTask = new fetchXML(`${contractItemUrl}${id}`) // eslint-disable-line new-cap
-      .getXML()
-      .then(async ({ xml }) => {
-
-        const items = [];
-
-        if (xml.eveapi.error === undefined) {
-
-          const typeIDs = [];
-          var item;
-
-          for (item of xml.eveapi.result[0].rowset[0].row) {
-
-            items.push({
-              id: item.$.recordID,
-              typeID: item.$.typeID,
-              quantity: item.$.quantity,
-              typeName: "Unknown"
-            });
-
-            typeIDs.push(item.$.typeID);
-          }
-
-          // Retrieve a mapping of type id -> type name using local cache + eve api
-          const nameMap = await getTypeNames(typeIDs);
-
-          // Attach respective type name to the item
-          for (let i = 0; i < items.length; i++) {
-            var pair;
-
-            for (pair of nameMap) {
-
-              if (items[i].typeID === pair.id) {
-
-                items[i].typeName = pair.name;
-                break;
-              }
-            }
-          }
-
-          contractItemCache.set(id, items);
-        }
-
-        fetchTaskCache.delete(id);
-
-        return { itemList: items };
-    });
-
-    fetchTaskCache.set(id, newFetchTask);
-
-    return newFetchTask;
+    return getContractItems(id);
   },
 };
 
