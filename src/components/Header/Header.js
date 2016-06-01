@@ -28,8 +28,27 @@ class Header extends Component {
     super(props);
 
     this.state = {
-      notifications: []
+      notifications: [],
+      showDrawer: true
     };
+  }
+
+  componentDidMount() {
+
+  }
+
+  countUnreadNotifications() {
+
+    return this.state.notifications.filter((alert) => {
+      return alert.viewed === false;
+    }).length;
+  }
+
+  toggleNotificationDrawer() {
+
+    this.setState({
+      showDrawer: !this.state.showDrawer
+    });
   }
 
   render() {
@@ -42,15 +61,37 @@ class Header extends Component {
         </div>
         <Navigation path={this.props.path} />
         <div className={cx("pull-xs-right", s.content_right)}>
-          <div className={s.user_info}>
+          <div className={s.user_info} onClick={() => { this.toggleNotificationDrawer(); }}>
             <div className={s.user_image}>
               <img src={`https://image.eveonline.com/Character/${this.context.getUser().id}_64.jpg`} />
             </div>
             <div className={s.user_name}>
               {this.context.getUser().name}
             </div>
-            <div className={this.state.notifications.length > 0 ? cx(s.notification_counter, s.has_notifications) : s.notification_counter}>
-              {this.state.notifications.length}
+            <div className={this.countUnreadNotifications() > 0 ? cx(s.notification_counter, s.has_notifications) : s.notification_counter}>
+              {this.countUnreadNotifications()}
+            </div>
+            <div className={cx(s.notification_drawer, this.state.showDrawer ? s.show : {})}>
+              <div className={s.notification_header}>
+              Notifications
+              </div>
+              <div className={s.list}>
+                {
+                  this.state.notifications.length > 0 ?
+                    this.state.notifications.map((alert, i) => {
+
+                      return (<div className={cx(s.notification, alert.viewed === false ? s.unread : {})} key={i}>
+                        <div className={s.status}>
+                          <div className={s.marker} />
+                        </div>
+                        <div className={s.text}>{alert.text}</div>
+                      </div>);
+                    })
+                  :
+                  <span>No new notifications.</span>
+                }
+              </div>
+              <div className={s.notification_tail}></div>
             </div>
           </div>
           <div className={s.logout_button}>

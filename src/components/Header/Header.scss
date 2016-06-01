@@ -45,6 +45,7 @@
     height: 100%;
     padding: 0 0.5rem;
     cursor: pointer;
+    position: relative;
 
     &:hover {
         background-color: $purple-base-lighter;
@@ -84,6 +85,80 @@
         &.has_notifications {
             background-color: $light-red;
         }
+    }
+
+    .notification_drawer {
+        cursor: default;
+        position: absolute;
+        clear: both;
+        top: $header-height;
+        width: 100%;
+        width: calc(100% + 100px);
+        left: -100px;
+        background-color: rgb(91, 86, 184);
+        border-radius: 8px;
+        font-size: 0.9rem;
+        z-index: 3;
+        display: none;
+
+        &.show {
+            display: block;
+        }
+
+        .notification_tail {
+            transform: rotate(45deg);
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            top: -8px;
+            background-color: rgb(91, 86, 184);
+            left: 50%;
+            z-index: 2;
+        }
+
+        .notification_header {
+            text-align: center;
+            padding: 0.4rem;
+            z-index: 4;
+            font-weight: 500;
+        }
+
+        .list {
+            z-index: 4;
+            padding: 0 1em 0.4rem 0.8rem;
+
+            .notification {
+                padding: 0.4rem 0;
+
+                .text {
+                    display: inline-block;
+                    width: 90%;
+                    vertical-align: middle;
+                }
+
+                .status {
+                    //width: 6px;
+                    //height: 6px;
+                    /* margin: 0 10px 0 0; */
+                    width: 8%;
+                    display: inline-block;
+                    vertical-align: middle;
+
+                    .marker {
+                        height: 0.5rem;
+                        width: 0.5rem;
+                        border: 1px solid #fff;
+                        border-radius: 50%;
+                    }
+                }
+
+                &.unread .marker {
+                    display: block;
+                    background-color: #fff;
+                }
+            }
+        }
+        
     }
 }
 
