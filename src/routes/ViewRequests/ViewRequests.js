@@ -55,7 +55,7 @@ class ViewRequests extends Component {
 
       if (this.state.searchText.length > 0) {
         requests = fuzzy.filter(this.state.searchText, requests, {
-          extract: request => { return request.title + request.stationName; }
+          extract: request => { return request.title + request.station; }
         }).map(el => { return el.original; });
       }
     }
@@ -90,14 +90,6 @@ class ViewRequests extends Component {
 
   render() {
     return (
-      process.env.NODE_ENV !== undefined && process.env.NODE_ENV === 'production' ?
-        <div className={s.root}>
-          <Sidebar />
-          <div className={s.container}>
-            <h4>Active Contract Requests</h4>
-            <div>Coming Soon</div>
-          </div>
-        </div> :
       <div className={s.root}>
         <Sidebar />
         <div className={s.container}>
