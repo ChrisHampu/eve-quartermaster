@@ -75,7 +75,7 @@ async function checkFulfilledRequests(contracts) {
       if (matched === items.length && matched === request.items.length) {
 
         // TODO: Remove when no longer needed as testing output
-        console.log(`Fulfilled contract "${request.title}" with ID ${request.id}`);
+        console.log(`Fulfilled request "${request.title}" with ID ${request.id}`);
 
         // TODO: There is currently no support for partial fulfillment or fulfilling requests for multiple contracts
         // For tracking in this loop (making sure not fulfilled more than once)
@@ -114,6 +114,9 @@ const contracts = {
     }
 
     if ((new Date(Date.now())) > nextFetch) {
+
+      console.log("Beginning task to fetch contracts.");
+      console.time('fetch_contracts');
 
       lastFetchTask = new fetchXML(url) // eslint-disable-line new-cap
       .getXML()
@@ -159,6 +162,9 @@ const contracts = {
         nextFetch = new Date(Date.parse(`${xml.eveapi.cachedUntil} UTC`));
 
         lastFetchTask = null;
+
+        console.log("Finished fetching contracts. Time taken:");
+        console.timeEnd('fetch_contracts');
 
         checkFulfilledRequests(contractList);
 
