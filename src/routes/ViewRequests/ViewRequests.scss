@@ -113,6 +113,7 @@
         padding: 0.4rem 0.5rem;
 
         .request_actions {
+          
           div {
             display: inline-block;
             margin-right: 0.5rem;
@@ -125,12 +126,20 @@
             &:hover {
               background-color: color($dark-cyan lightness(+10%));
             }
+            &:active {
+              background-color: color($dark-cyan lightness(-5%));
+            }
           }
 
           .delete_request {
             background-color: #B71C1C;
+
             &:hover {
               background-color: #D50000;
+            }
+
+            &:active {
+              background-color: color(#B71C1C lightness(-5%));
             }
           }
         }
