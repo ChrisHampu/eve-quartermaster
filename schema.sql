@@ -61,13 +61,13 @@ WITH (
 
 CREATE TABLE IF NOT EXISTS notifications
 (
-   id serial, 
-   character_id integer, 
-   viewed boolean, 
-   message text, 
-   CONSTRAINT notifications_pkey PRIMARY KEY (id)
+  id serial, 
+  character_id integer NOT NULL, 
+  viewed boolean NOT NULL DEFAULT false,
+  message text NOT NULL,
+  time timestamp with time zone NOT NULL DEFAULT now(),
+  CONSTRAINT notifications_pkey PRIMARY KEY (id)
 ) 
 WITH (
   OIDS = FALSE
-)
-;
+);

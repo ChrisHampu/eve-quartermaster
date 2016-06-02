@@ -19,6 +19,8 @@ import user from './queries/user';
 import contractItems from './queries/contract_items';
 import createRequest from './queries/create_request';
 import requests from './queries/requests';
+import notifications from './queries/notifications';
+import viewNotification from './queries/view_notification';
 
 const schema = new Schema({
   query: new ObjectType({
@@ -30,7 +32,9 @@ const schema = new Schema({
       user,
       contractItems,
       createRequest,
-      requests
+      requests,
+      notifications,
+      viewNotification
     },
   }),
 });

@@ -14,7 +14,7 @@ import RequestType from '../types/RequestType';
 // Update the status of a request by ID to 'newStatus'
 export async function fulfillRequest(id, newStatus) {
 
-  db.connect(async ({ query }) => {
+  db.connect(({ query }) => {
 
     query(
       `UPDATE requests SET status = $1 WHERE id = $2`,
@@ -27,44 +27,46 @@ export async function fulfillRequest(id, newStatus) {
 
 export async function getAllRequests() {
 
- const requests = [];
+  return new Promise((resolve) => {
 
-  const error = await db.connect(async ({ query }) => {
+    db.connect(async ({ query }) => {
 
-    const result = await query(
-      `SELECT requests.id, title, status, corp_only, contract_count, character_name, location as station, (date_part('epoch', expires)*1000)::bigint as expires FROM requests LEFT JOIN login ON (requests.character_id = login.character_id) WHERE expires > now() - interval '14 day'`
-    );
+      const requests = [];
 
-    if (!result.rowCount) {
-      return;
-    }
-
-    for (const row of result.rows) {
-
-      const itemResult = await query(
-        `SELECT item_name as name, item_count as count FROM request_items WHERE request_id = $1`,
-        row.id
+      const result = await query(
+        `SELECT requests.id, title, status, corp_only, contract_count, character_name, location as station, (date_part('epoch', expires)*1000)::bigint as expires FROM requests LEFT JOIN login ON (requests.character_id = login.character_id) WHERE expires > now() - interval '14 day'`
       );
 
-      const res = row;
+      if (!result.rowCount) {
+        resolve([]);
+        return;
+      }
 
-      res.items = itemResult.rows;
-      res.station = res.station !== null ? stationIDToName[res.station] : "Unknown";
-      res.expires = parseFloat(res.expires);
+      for (const row of result.rows) {
 
-      requests.push(res);
-    }
+        const itemResult = await query(
+          `SELECT item_name as name, item_count as count FROM request_items WHERE request_id = $1`,
+          row.id
+        );
 
-  }).catch(() => {
+        const res = row;
 
-    return [];
+        res.items = itemResult.rows;
+        res.station = res.station !== null ? stationIDToName[res.station] : "Unknown";
+        res.expires = parseFloat(res.expires);
+
+        requests.push(res);
+      }
+
+      resolve(requests);
+
+    }).catch((err) => {
+
+      console.log(err);
+
+      resolve([]);
+    });
   });
-
-  if (error) {
-    return error;
-  }
-
-  return requests;
 }
 
 const getRequests = {
