@@ -67,22 +67,15 @@ const createRequest = {
       return { success: 0, message: `Number of items in a request must be at least one and less than ${ContractItemsMaxCount}.` };
     }
 
-    const usedNames = [];
-
     for (const item of args.items) {
 
       // Item name must exist (case sensitive) in the static item list
       if (itemNames.indexOf(item.name) === -1) {
         return { success: 0, message: `Item '${item.name}' does not exist in valid item list.` };
       }
-      if (usedNames.indexOf(item.name) !== -1) {
-        return { success: 0, message: `Item '${item.name}' appeared more than once. Duplicates are not allowed.` };
-      }
       if (item.count < 1 || item.count > ItemMaxCount) {
         return { success: 0, message: `The Number of '${item.name}' in the request must be greater than 1 and less than ${ItemMaxCount}.` };
       }
-
-      usedNames.push(item.name);
     }
 
     const error = await db.connect(async ({ query }) => {

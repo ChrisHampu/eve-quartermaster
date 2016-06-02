@@ -77,11 +77,7 @@ class CreateRequest extends Component {
       return;
     }
 
-    const selectedNames = this.state.selectedItems.map((item) => { return item.name; });
-
-    const matches = fuzzy.filter(this.refs.item_name.value, itemNames).slice(0, 6).filter((match) => {
-      return selectedNames.indexOf(match.original) === -1;
-    }).map((match) => {
+    const matches = fuzzy.filter(this.refs.item_name.value, itemNames).slice(0, 6).map((match) => {
       return match.original;
     });
 
@@ -100,11 +96,9 @@ class CreateRequest extends Component {
     });
   }
 
-  onRemoveItem(item) {
+  onRemoveItem(index) {
 
-    this.state.selectedItems.splice(this.state.selectedItems.findIndex((itemObj) => {
-      return itemObj.name === item;
-    }), 1);
+    this.state.selectedItems.splice(index, 1);
 
     this.setState({
       selectedItems: this.state.selectedItems
@@ -317,16 +311,7 @@ class CreateRequest extends Component {
 
     const itemCount = count || 1;
 
-    const idx = this.state.selectedItems.findIndex((val) => {
-      return val.name === item;
-    });
-
-    // If item is already in the array, increment its counter
-    if (idx !== -1) {
-      this.state.selectedItems[idx].count += itemCount;
-    } else {
-      this.state.selectedItems.push({ name: item, count: itemCount });
-    }
+    this.state.selectedItems.push({ name: item, count: itemCount });
   }
 
   resetItemList() {
@@ -412,7 +397,7 @@ class CreateRequest extends Component {
                 {
                   this.state.selectedItems.length > 0 ?
                     this.state.selectedItems.map((item, i) => {
-                      return <div key={i}><li><span>{item.count} {item.name}</span><i className="fa fa-times" onClick={() => { this.onRemoveItem(item.name); }}></i></li></div>;
+                      return <div key={i}><li><span>{item.count} {item.name}</span><i className="fa fa-times" onClick={() => { this.onRemoveItem(i); }}></i></li></div>;
                     }) :
                     <div>At least one item must be added.<br />You can add items by typing in a name or by pasting a ship fitting.</div>
                 }
