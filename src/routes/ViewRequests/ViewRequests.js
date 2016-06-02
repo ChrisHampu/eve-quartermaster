@@ -13,8 +13,13 @@ import Sidebar from '../../components/Sidebar';
 import s from './ViewRequests.scss';
 import cx from 'classnames';
 import fuzzy from 'fuzzy';
+import { shipNames } from '../../constants/shipNames.js';
 
 class ViewRequests extends Component {
+
+  static contextTypes = {
+    getUser: PropTypes.func
+  }
 
   static propTypes = {
     requests: PropTypes.array.isRequired,
@@ -37,6 +42,29 @@ class ViewRequests extends Component {
     }, () => {
       this.updateRequests();
     });
+  }
+
+  getRequestActions(request) {
+
+    // Find the ships that exist in this request to see if EFT is possible
+    const ships = [];
+
+    for (const item of request.items) {
+
+      const idx = shipNames.indexOf(item.name);
+
+      if (idx !== -1) {
+        ships.push(shipNames[idx]);
+      }
+    }
+
+    // Check if user is request creator to see if delete action possible
+    const deletionPossible = request.character_name === this.context.getUser().name;
+
+    return (<div className={s.request_actions}>
+      {ships.length === 1 ? <div className={cx(s.copy_eft, "btn")} onClick={(ev) => { ev.stopPropagation(); this.copyFitting(request, ships[0]); }}>Copy EFT</div> : false}
+      {deletionPossible ? <div className={cx(s.delete_request, "btn", "disabled")} onClick={(ev) => { ev.stopPropagation(); this.deleteRequest(request); }}>Delete</div> : false}
+    </div>);
   }
 
   filterPredicate(request) {
@@ -105,6 +133,27 @@ class ViewRequests extends Component {
     });
   }
 
+  copyFitting(request, ship) {
+
+    const header = `[${ship}, ${request.title}]`;
+
+    const body = request.items.filter((item) => {
+      return item.name !== ship;
+    }).map((item) => {
+      return item.count > 1 ? `${item.name} x${item.count}` : `${item.name}`;
+    });
+
+    this.refs.eft_text.value = `${header}\n${body.join('\n')}`;
+    this.refs.eft_text.select();
+
+    document.execCommand('copy');
+  }
+
+  deleteRequest() {
+
+    // TODO: Implement deletion
+  }
+
   render() {
     return (
       <div className={s.root}>
@@ -150,7 +199,7 @@ class ViewRequests extends Component {
                           <div className="col-md-2">{request.status}</div>
                           <div className="col-md-2">{request.station}</div>
                           <div className="col-md-2">{this.prettyExpireTime(request)}</div>
-                          <div className="col-md-2">N/A</div>
+                          <div className="col-md-2">{this.getRequestActions(request)}</div>
                         </li>
                       );
                     })}
@@ -189,6 +238,7 @@ class ViewRequests extends Component {
             <h4>There are currently no requests</h4>
           }
         </div>
+        <textarea ref="eft_text" className={s.eft_textarea} />
       </div>
     );
   }

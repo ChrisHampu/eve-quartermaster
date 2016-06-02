@@ -13,6 +13,20 @@
 
 }
 
+.eft_textarea {
+  background: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 2em;
+  height: 2em;
+  padding: 0;
+  opacity: 0;
+}
+
 .container {
   padding: 0.4rem;
   padding-bottom: 2rem;
@@ -91,12 +105,35 @@
         border-right: 1px solid $purple-highlight-lighter;
       }
 
-      div {
+      > div {
         text-align: inherit;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         padding: 0.4rem 0.5rem;
+
+        .request_actions {
+          div {
+            display: inline-block;
+            margin-right: 0.5rem;
+            padding: 0.2rem;
+          }
+
+          .copy_eft {
+            background-color: $dark-cyan;
+
+            &:hover {
+              background-color: color($dark-cyan lightness(+10%));
+            }
+          }
+
+          .delete_request {
+            background-color: #B71C1C;
+            &:hover {
+              background-color: #D50000;
+            }
+          }
+        }
       }
 
       &:last-child {
