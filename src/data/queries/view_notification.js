@@ -20,20 +20,26 @@ const setNoficiationViewed = {
       return false;
     }
 
-    db.connect(({ query }) => {
+    return new Promise((resolve) => {
 
-      // Notifications will show up as viewed first, and newest first
-      query(
-        `UPDATE notifications SET viewed = true WHERE id = $1 AND character_id = $2`,
-        id, auth.id
-      );
+      db.connect(async ({ query }) => {
 
-    }).catch((err) => {
+        // Notifications will show up as viewed first, and newest first
+        await query(
+          `UPDATE notifications SET viewed = true WHERE id = $1 AND character_id = $2`,
+          id, auth.id
+        );
 
-      console.log(err);
+        resolve(true);
+
+      }).catch((err) => {
+
+        console.log("Error while updating notification:");
+        console.log(err);
+
+        resolve(true);
+      });
     });
-
-    return true;
   },
 };
 

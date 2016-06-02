@@ -82,7 +82,7 @@ async function checkFulfilledRequests(contracts) {
         request.status = 'full';
 
         // Query database to update contract status
-        fulfillRequest(request.id, 'full');
+        fulfillRequest(request, 'full');
       }
     }
   }

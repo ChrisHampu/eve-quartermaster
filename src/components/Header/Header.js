@@ -93,6 +93,13 @@ class Header extends Component {
     });
   }
 
+  closeNotificationDrawer() {
+
+    this.setState({
+      showDrawer: false
+    });
+  }
+
   markNotificationsRead() {
 
     // Check if even necessary
@@ -130,11 +137,11 @@ class Header extends Component {
     let msg = "";
 
     if (d > 0) {
-      msg = `${d} days`;
+      msg = `${d} ${d === 1 ? 'day' : 'days'}`;
     } else if (h > 0) {
-      msg = `${h} hours`;
+      msg = `${h} ${h === 1 ? 'hour' : 'hours'}`;
     } else if (m > 0) {
-      msg = `${m} minutes`;
+      msg = `${m}  ${m === 1 ? 'minute' : 'minutes'}`;
     } else {
       msg = `${sec} seconds`;
     }
@@ -152,7 +159,7 @@ class Header extends Component {
         </div>
         <Navigation path={this.props.path} />
         <div className={cx("pull-xs-right", s.content_right)}>
-          <div className={s.user_info} onClick={() => { this.toggleNotificationDrawer(); }}>
+          <div className={s.user_info} onMouseLeave={() => { this.closeNotificationDrawer(); }} onClick={() => { this.toggleNotificationDrawer(); }}>
             <div className={s.user_image}>
               <img src={`https://image.eveonline.com/Character/${this.context.getUser().id}_64.jpg`} />
             </div>

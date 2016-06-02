@@ -65,8 +65,6 @@ const getNotifications = {
       return [];
     }
 
-    console.log(auth);
-
     return getAllNoficiations(auth.id);
   },
 };

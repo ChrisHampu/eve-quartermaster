@@ -12,16 +12,29 @@ import RequestType from '../types/RequestType';
 // TODO: Filter 'for corp' requests when sending to user
 
 // Update the status of a request by ID to 'newStatus'
-export async function fulfillRequest(id, newStatus) {
+export async function fulfillRequest(request, newStatus) {
 
-  db.connect(({ query }) => {
+  db.connect(async ({ query }) => {
 
-    query(
+    await query(
       `UPDATE requests SET status = $1 WHERE id = $2`,
-      newStatus, id
+      newStatus, request.id
     );
 
-  }).catch(() => {
+    const message = `Your request titled ${request.title} was fulfilled`;
+
+    console.log(request);
+
+    await query(
+      `INSERT INTO notifications (character_id, message) VALUES ((SELECT character_id FROM requests WHERE id = $1), '${message}')`,
+      request.id
+    );
+
+    console.log("inserted notification");
+
+  }).catch((err) => {
+    console.log("Error while fulfilling request:");
+    console.log(err);
   });
 }
 
