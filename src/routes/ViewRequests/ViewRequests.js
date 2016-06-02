@@ -89,7 +89,7 @@ class ViewRequests extends Component {
       }
     }
 
-    this.setState({ requests: requests, activeRequest: requests[0] });
+    this.setState({ requests: requests });
   }
 
   prettyExpireTime(request) {
