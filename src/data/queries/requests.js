@@ -23,14 +23,10 @@ export async function fulfillRequest(request, newStatus) {
 
     const message = `Your request titled ${request.title} was fulfilled`;
 
-    console.log(request);
-
     await query(
       `INSERT INTO notifications (character_id, message) VALUES ((SELECT character_id FROM requests WHERE id = $1), '${message}')`,
       request.id
     );
-
-    console.log("inserted notification");
 
   }).catch((err) => {
     console.log("Error while fulfilling request:");
@@ -75,6 +71,7 @@ export async function getAllRequests() {
 
     }).catch((err) => {
 
+      console.log("Database error while querying for requests:");
       console.log(err);
 
       resolve([]);

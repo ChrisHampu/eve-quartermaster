@@ -33,7 +33,8 @@ const RequestType = new ObjectType({
     contract_count: { type: new NonNull(IntType) },
     items: { type: new NonNull(new List(RequestItemType)) },
     station: { type: new NonNull(StringType) },
-    expires: { type: FloatType },
+    expires: { type: new NonNull(FloatType) },
+    id: { type: new NonNull(IntType) },
   },
 });
 

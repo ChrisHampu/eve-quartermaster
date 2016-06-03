@@ -18,6 +18,7 @@ import contracts from './queries/contracts';
 import user from './queries/user';
 import contractItems from './queries/contract_items';
 import createRequest from './queries/create_request';
+import deleteRequest from './queries/delete_request';
 import requests from './queries/requests';
 import notifications from './queries/notifications';
 import viewNotification from './queries/view_notification';
@@ -32,6 +33,7 @@ const schema = new Schema({
       user,
       contractItems,
       createRequest,
+      deleteRequest,
       requests,
       notifications,
       viewNotification

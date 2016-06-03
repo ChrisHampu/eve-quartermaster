@@ -29,7 +29,8 @@ class ViewRequests extends Component {
     super(props);
 
     this.state = {
-      requests: this.props.requests,
+      initialRequests: this.props.requests, // This is the core set of requests
+      requests: this.props.requests, // This is the active (viewable) requests, IE when searching
       searchText: undefined,
       activeRequest: null
     };
@@ -63,7 +64,7 @@ class ViewRequests extends Component {
 
     return (<div className={s.request_actions}>
       {ships.length === 1 ? <div className={cx(s.copy_eft, "btn")} onClick={(ev) => { ev.stopPropagation(); this.copyFitting(request, ships[0]); }}>Copy EFT</div> : false}
-      {deletionPossible ? <div className={cx(s.delete_request, "btn", "disabled")} onClick={(ev) => { ev.stopPropagation(); this.deleteRequest(request); }}>Delete</div> : false}
+      {deletionPossible ? <div className={cx(s.delete_request, "btn")} onClick={(ev) => { ev.stopPropagation(); this.deleteRequest(request); }}>Delete</div> : false}
     </div>);
   }
 
@@ -78,7 +79,7 @@ class ViewRequests extends Component {
 
   updateRequests() {
 
-    let requests = this.props.requests.filter((request) => this.filterPredicate(request));
+    let requests = this.state.initialRequests.filter((request) => this.filterPredicate(request));
 
     if (requests.length > 0) {
 
@@ -149,9 +150,39 @@ class ViewRequests extends Component {
     document.execCommand('copy');
   }
 
-  deleteRequest() {
+  async deleteRequest(request) {
 
-    // TODO: Implement deletion
+    if (!request) {
+      return;
+    }
+
+    // Query server to remove request
+    const graphString = `/graphql?query={deleteRequest(id:${request.id})}`;
+
+    try {
+       if (fetch !== undefined) {
+
+        await fetch(graphString, { credentials: 'same-origin' });
+      }
+    } catch (e) { // eslint-disable-line no-empty
+    }
+
+    const idx = this.state.initialRequests.findIndex((req) => {
+      return request.id === req.id;
+    });
+
+    if (idx === -1) {
+      return;
+    }
+
+    // Remove this request from root array
+    delete this.state.initialRequests[idx];
+
+    this.setState({
+      initialRequests: this.state.initialRequests
+    }, () => {
+      this.updateRequests();
+    });
   }
 
   render() {

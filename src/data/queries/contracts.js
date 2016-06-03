@@ -36,54 +36,92 @@ async function checkFulfilledRequests(contracts) {
 
   for (const contract of contracts) {
 
-    if (contract.type !== 0) { // Item exchange contract
-      continue;
-    }
+    try {
 
-    const items = await getContractItems(contract.id);
-
-    for (const request of requests) {
-
-      if (request.status === 'full') {
+      // Make sure its an item exchange contract
+      if (contract.type !== 0) {
         continue;
       }
 
-      // Must be at same location
-      if (contract.startStationID !== request.location) {
-        continue;
+      let items = [];
+
+      try {
+        // Pull contract items from EVE API
+        const res = await getContractItems(contract.id);
+        items = res.itemList;
+
+      } catch (err) {
+        items = [];
       }
 
-      let matched = 0;
+      for (const request of requests) {
 
-      for (const item of request.items) { // Request items
-
-        const idx = items.findIndex((it) => {
-          return item.name === it.typeName;
-        });
-
-        if (idx === -1) {
-          break;
+        // Check if this request hasn't been already fulfilled
+        if (request.status === 'full') {
+          continue;
         }
 
-        if (items[idx].quantity !== item.count) {
-          break;
+        // Must be at same location
+        if (stationIDToName[contract.startStationID] !== request.station) {
+          continue;
         }
 
-        matched++;
+        // Need to first properly group together request items
+        // There could be duplicate name entries with different amounts
+        const requestItems = [];
+
+        for (const item of request.items) {
+
+          const idx = requestItems.findIndex((it) => {
+            return item.name === it.typeName;
+          });
+
+          if (idx === -1) {
+            requestItems.push({ name: item.name, count: item.count });
+          } else {
+            requestItems[idx].count += item.count;
+          }
+        }
+
+        let matched = 0;
+
+        // Now loop through request + contract items together
+        for (const item of requestItems) {
+
+          // Check for name match
+          const idx = items.findIndex((it) => {
+            return item.name === it.typeName;
+          });
+
+          if (idx === -1) {
+            break;
+          }
+
+          // Check if same number if items in request & contract
+          if (parseInt(items[idx].quantity) !== item.count) {
+            break;
+          }
+
+          matched++;
+        }
+
+        // Make sure the same amount of items are in the request & contract
+        if (matched === items.length && matched === request.items.length) {
+
+          // TODO: Remove when no longer needed as testing output
+          console.log(`Fulfilled request "${request.title}" with ID ${request.id}`);
+
+          // TODO: There is currently no support for partial fulfillment or fulfilling requests for multiple contracts
+          // For tracking in this loop (making sure not fulfilled more than once)
+          request.status = 'full';
+
+          // Query database to update contract status
+          fulfillRequest(request, 'full');
+        }
       }
-
-      if (matched === items.length && matched === request.items.length) {
-
-        // TODO: Remove when no longer needed as testing output
-        console.log(`Fulfilled request "${request.title}" with ID ${request.id}`);
-
-        // TODO: There is currently no support for partial fulfillment or fulfilling requests for multiple contracts
-        // For tracking in this loop (making sure not fulfilled more than once)
-        request.status = 'full';
-
-        // Query database to update contract status
-        fulfillRequest(request, 'full');
-      }
+    } catch (err) {
+      console.log("Error while fulfilling request:");
+      console.log(err);
     }
   }
 

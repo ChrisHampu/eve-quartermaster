@@ -26,7 +26,7 @@ import RequestItemType from '../types/RequestItemType';
 const TitleMinLength = 4; // Min length of request title
 const TitleMaxLength = 60; // Max length of request title
 const ContractMaxCount = 20; // Maximum number of contracts that this request can represent
-const ContractItemsMaxCount = 30; // Maximum number of an item that can be in a request
+const ContractItemsMaxCount = 50; // Maximum number of an item that can be in a request
 const ItemMaxCount = 1000000; // Maximum number of each item that can be requested
 
 const createRequest = {

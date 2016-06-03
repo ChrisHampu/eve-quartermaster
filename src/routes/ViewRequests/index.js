@@ -17,7 +17,7 @@ export const action = async (state) => {
   let data = null;
 
   if (fetchLocal === undefined) {
-    const response = await fetch(`/graphql?query={requests{title,status,character_name,contract_count,expires,station,items{name,count}}}`,
+    const response = await fetch(`/graphql?query={requests{id,title,status,character_name,contract_count,expires,station,items{name,count}}}`,
                              { credentials: 'same-origin' });
 
     const json = await response.json();
@@ -25,7 +25,7 @@ export const action = async (state) => {
     data = json.data;
 
   } else {
-    const json = await fetchLocal(`/graphql?query={requests{title,status,character_name,contract_count,expires,station,items{name,count}}}`,
+    const json = await fetchLocal(`/graphql?query={requests{id,title,status,character_name,contract_count,expires,station,items{name,count}}}`,
                                { cookies: [state.context.getSession()] });
 
     data = json.data;
