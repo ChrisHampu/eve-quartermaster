@@ -24,29 +24,20 @@
 
 import React from 'react';
 import ViewContracts from './ViewContracts';
-import fetch, { fetchLocal } from '../../core/fetch';
+import fetch from '../../core/fetch';
 
 export const path = '/';
 export const action = async (state) => {
 
   let data = null;
 
-  if (fetchLocal === undefined) {
-    const response = await fetch(`/graphql?query={contracts{contractList{id,issuerID,issuerCorpID,assigneeID,stationName,startStationID,endStationID,type,status,
-                             title,forCorp,public,dateIssued,dateExpired,dateAccepted,numDays,dateCompleted,price,reward,collateral,buyout,volume}}}`,
-                             { credentials: 'same-origin' });
-
-    const json = await response.json();
-
-    data = json.data;
-
-  } else {
-    const json = await fetchLocal(`/graphql?query={contracts{contractList{id,issuerID,issuerCorpID,assigneeID,stationName,startStationID,endStationID,type,status,
+  const response = await fetch(`/graphql?query={contracts{contractList{id,issuerID,issuerCorpID,assigneeID,stationName,startStationID,endStationID,type,status,
                                title,forCorp,public,dateIssued,dateExpired,dateAccepted,numDays,dateCompleted,price,reward,collateral,buyout,volume}}}`,
                                { cookies: [state.context.getSession()] });
 
-    data = json.data;
-  }
+  const json = await response.json();
+
+  data = json.data;
 
   let contractList = [];
 
@@ -54,6 +45,6 @@ export const action = async (state) => {
     contractList = data.contracts.contractList || [];
   }
 
-  state.context.onSetTitle('57th Eve Contracts');
+  state.context.onSetTitle('EVE Quartermaster');
   return <ViewContracts contracts={contractList} />;
 };

@@ -27,7 +27,7 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Sidebar from '../../components/Sidebar';
 import s from './ViewContracts.scss';
 import cx from 'classnames';
-import fetch, { fetchLocal } from '../../core/fetch';
+import fetch from '../../core/fetch';
 import fuzzy from 'fuzzy';
 
 class ViewContracts extends Component {
@@ -117,24 +117,16 @@ class ViewContracts extends Component {
     }
 
     let items = [];
-    const id = contract.id;
 
     try {
-      if (fetchLocal === undefined) {
-        const response = await fetch(`/graphql?query={contractItems(id:${id})
-                                   {itemList{id,quantity,typeID,typeName}}}`, // eslint-disable-line object-curly-spacing
-                     { credentials: 'same-origin' });
 
-        const json = await response.json();
+      const response = await fetch(`/graphql?query={contractItems(id:${contract.id})
+                                 {itemList{id,quantity,typeID,typeName}}}`); // eslint-disable-line object-curly-spacing
 
-        items = json.data.contractItems.itemList;
-      } else {
-        const json = await fetchLocal(`/graphql?query={contractItems(id:${id})
-                                    {itemList{id,quantity,typeID,typeName}}}`, // eslint-disable-line object-curly-spacing
-                     { cookies: [this.state.context.getSession()] });
+      const json = await response.json();
 
-        items = json.data.contractItems.itemList;
-      }
+      items = json.data.contractItems.itemList;
+
     } catch (err) { // eslint-disable-line no-empty
     }
 

@@ -24,27 +24,17 @@
 
 import React from 'react';
 import ViewRequests from './ViewRequests';
-import fetch, { fetchLocal } from '../../core/fetch';
+import fetch from '../../core/fetch';
 
 export const path = '/requests';
 export const action = async (state) => {
 
-  let data = null;
+  const response = await fetch(`/graphql?query={requests{id,title,status,character_name,contract_count,expires,station,items{name,count}}}`,
+                             { cookies: [state.context.getSession()] });
 
-  if (fetchLocal === undefined) {
-    const response = await fetch(`/graphql?query={requests{id,title,status,character_name,contract_count,expires,station,items{name,count}}}`,
-                             { credentials: 'same-origin' });
+  const json = await response.json();
 
-    const json = await response.json();
-
-    data = json.data;
-
-  } else {
-    const json = await fetchLocal(`/graphql?query={requests{id,title,status,character_name,contract_count,expires,station,items{name,count}}}`,
-                               { cookies: [state.context.getSession()] });
-
-    data = json.data;
-  }
+  const data = json.data;
 
   let requestList = [];
 
@@ -52,6 +42,6 @@ export const action = async (state) => {
     requestList = data.requests || [];
   }
 
-  state.context.onSetTitle('57th Eve Contracts');
+  state.context.onSetTitle('EVE Quartermaster');
   return <ViewRequests requests={requestList} />;
 };

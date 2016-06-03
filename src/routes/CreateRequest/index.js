@@ -27,6 +27,7 @@ import CreateRequest from './CreateRequest';
 
 export const path = '/create';
 export const action = async (state) => {
-  state.context.onSetTitle('57th Eve Contracts');
+	
+  state.context.onSetTitle('EVE Quartermaster');
   return <CreateRequest />;
 };

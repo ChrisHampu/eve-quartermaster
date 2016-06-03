@@ -6,6 +6,14 @@ Additionally, members can place requests for specific contracts to be seeded. Th
 list of requested items, selecting a station, and giving their request a title. Once the contract has been seeded
 to the corporation, the user will get a notification that their requests is fulfilled.
 
+Notable features of this application include:
+* Automatic fulfillment of requests when matching contracts are seeded
+* User notifications when requests are fulfilled
+* Realtime searching through contracts/requests
+* Autocomplete when typing item names/stations for creating requests
+* Importing/exporting EFT fits to and from contract requests
+* Sorting contracts by location, price, status, and name
+
 #### Screenshot
 ![Screenshot software](http://url/screenshot-software.png "screenshot software")
 

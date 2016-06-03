@@ -177,7 +177,7 @@ class ViewRequests extends Component {
     try {
        if (fetch !== undefined) {
 
-        await fetch(graphString, { credentials: 'same-origin' });
+        await fetch(graphString);
       }
     } catch (e) { // eslint-disable-line no-empty
     }
