@@ -27,7 +27,6 @@ import emptyFunction from 'fbjs/lib/emptyFunction';
 import cx from 'classnames';
 import s from './App.scss';
 import Header from '../Header';
-import Footer from '../Footer';
 
 import bs from '../../core/bootstrap/scss/bootstrap.scss';
 import fa from '../../core/fontawesome/font-awesome.scss';
@@ -90,7 +89,6 @@ class App extends Component {
               { this.props.children }
             </div>
         </div>
-        <Footer />
       </div>
     ) : this.props.children;
   }

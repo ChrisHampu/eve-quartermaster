@@ -43,4 +43,4 @@ class Sidebar extends Component {
   }
 }
 
-export default withStyles(Sidebar, s);
+export default withStyles(s)(Sidebar);

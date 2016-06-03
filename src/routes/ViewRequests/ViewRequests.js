@@ -290,4 +290,4 @@ class ViewRequests extends Component {
   }
 }
 
-export default withStyles(ViewRequests, s);
+export default withStyles(s)(ViewRequests);

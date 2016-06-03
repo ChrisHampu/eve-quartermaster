@@ -428,4 +428,4 @@ class ViewContracts extends Component {
   }
 }
 
-export default withStyles(ViewContracts, s);
+export default withStyles(s)(ViewContracts);

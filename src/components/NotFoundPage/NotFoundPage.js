@@ -51,4 +51,4 @@ class NotFoundPage extends Component {
 
 }
 
-export default withStyles(NotFoundPage, s);
+export default withStyles(s)(NotFoundPage);

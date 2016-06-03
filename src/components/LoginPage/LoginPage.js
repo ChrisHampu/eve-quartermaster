@@ -46,4 +46,4 @@ function LoginPage() {
   );
 }
 
-export default withStyles(LoginPage, s);
+export default withStyles(s)(LoginPage);

@@ -94,4 +94,4 @@ class Link extends Component { // eslint-disable-line react/prefer-stateless-fun
 
 }
 
-export default withStyles(Link, s);
+export default withStyles(s)(Link);

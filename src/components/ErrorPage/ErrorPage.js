@@ -50,4 +50,4 @@ class ErrorPage extends Component {
 
 }
 
-export default withStyles(ErrorPage, s);
+export default withStyles(s)(ErrorPage);

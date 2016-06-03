@@ -441,4 +441,4 @@ class CreateRequest extends Component {
   }
 }
 
-export default withStyles(CreateRequest, s);
+export default withStyles(s)(CreateRequest);
