@@ -21,7 +21,7 @@ export async function fulfillRequest(request, newStatus) {
       newStatus, request.id
     );
 
-    const message = `Your request titled ${request.title} was fulfilled`;
+    const message = `Your request titled '${request.title}' was fulfilled`;
 
     await query(
       `INSERT INTO notifications (character_id, message) VALUES ((SELECT character_id FROM requests WHERE id = $1), '${message}')`,
