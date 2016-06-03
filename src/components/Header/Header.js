@@ -46,7 +46,7 @@ class Header extends Component {
     this.state = {
       notifications: [],
       showDrawer: false,
-      showMobileMenu: true
+      showMobileMenu: false
     };
   }
 
