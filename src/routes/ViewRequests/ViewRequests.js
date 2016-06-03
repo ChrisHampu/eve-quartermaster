@@ -222,10 +222,10 @@ class ViewRequests extends Component {
                     <div className="col-md-2">
                       Issuer
                     </div>
-                    <div className="col-md-2">
+                    <div className="col-md-1">
                       Fulfilled
                     </div>
-                    <div className="col-md-2">
+                    <div className="col-md-3">
                       Location
                     </div>
                     <div className="col-md-2">
@@ -237,18 +237,20 @@ class ViewRequests extends Component {
                   </div>
                   <div className="row">
                     <ul className={cx("col-md-12", s.request_list)}>
-                    { this.state.requests.map((request, i) => {
-                      return (
-                        <li key={i} className={this.state.activeRequest === request ? cx("row", s.request_list_active) : cx("row")} onClick={() => { this.toggleActiveRequest(request); }}>
-                          <div className="col-md-2">{request.title}</div>
-                          <div className="col-md-2">{request.character_name}</div>
-                          <div className="col-md-2">{request.status}</div>
-                          <div className="col-md-2">{request.station}</div>
-                          <div className="col-md-2">{this.prettyExpireTime(request)}</div>
-                          <div className="col-md-2">{this.getRequestActions(request)}</div>
-                        </li>
-                      );
-                    })}
+                    { 
+                      this.state.requests.map((request, i) => {
+                        return (
+                          <li key={i} className={this.state.activeRequest === request ? cx("row", s.request_list_active) : cx("row")} onClick={() => { this.toggleActiveRequest(request); }}>
+                            <div className="col-md-2">{request.title}</div>
+                            <div className="col-md-2">{request.character_name}</div>
+                            <div className="col-md-1">{request.status}</div>
+                            <div className="col-md-3">{request.station}</div>
+                            <div className="col-md-2">{this.prettyExpireTime(request)}</div>
+                            <div className="col-md-2">{this.getRequestActions(request)}</div>
+                          </li>
+                        );
+                      })
+                    }
                     </ul>
                   </div>
                   <div style={this.state.activeRequest === null ? {} : { transform: 'translateX(0%)' }} className={s.request_item_container}>
