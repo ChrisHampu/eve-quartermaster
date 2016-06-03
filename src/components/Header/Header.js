@@ -45,7 +45,8 @@ class Header extends Component {
 
     this.state = {
       notifications: [],
-      showDrawer: false
+      showDrawer: false,
+      showMobileMenu: true
     };
   }
 
@@ -164,12 +165,25 @@ class Header extends Component {
     return `${msg} ago.`; // eslint-disable-line prefer-template
   }
 
+  toggleMobileMenu(show) {
+
+    this.setState({
+      showMobileMenu: show !== undefined ? show : !this.state.showMobileMenu
+    });
+  }
+
   render() {
     return (
       <div className={s.root}>
         <div className={s.logo_container}>
           <div className={s.logo_text}>
             EVE Quartermaster
+          </div>
+          <div className={cx(s.logo_text, s.logo_text_short)}>
+            EVE QM
+          </div>
+          <div onClick={() => { this.toggleMobileMenu(); }} className={s.mobile_menu_toggle}>
+            <i className="fa fa-bars" aria-hidden="true"></i>
           </div>
         </div>
         <Navigation path={this.props.path} />
@@ -213,6 +227,21 @@ class Header extends Component {
             </Link>
           </div>
         </div>
+        <div onClick={(ev) => { this.onNavMenuHandler(ev); }}className={cx(s.mobile_menu, this.state.showMobileMenu ? s.mobile_menu_visible : {})}>
+          <div className={s.logo_text}>
+            EVE Quartermaster
+          </div>
+          <div className={s.user_info}>
+            <div className={s.user_image}>
+              <img src={`https://image.eveonline.com/Character/${this.context.getUser().id}_64.jpg`} />
+            </div>
+            <div className={s.user_name}>
+              {this.context.getUser().name}
+            </div>
+          </div>
+          <Navigation path={this.props.path} className={s.mobile_nav} />
+        </div>
+        <div onClick={() => { this.toggleMobileMenu(false); }} className={cx(s.mobile_menu_overlay, this.state.showMobileMenu ? s.mobile_menu_visible : {})} />
       </div>
     );
   }

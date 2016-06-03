@@ -237,7 +237,7 @@ class ViewRequests extends Component {
                   </div>
                   <div className="row">
                     <ul className={cx("col-md-12", s.request_list)}>
-                    { 
+                    {
                       this.state.requests.map((request, i) => {
                         return (
                           <li key={i} className={this.state.activeRequest === request ? cx("row", s.request_list_active) : cx("row")} onClick={() => { this.toggleActiveRequest(request); }}>

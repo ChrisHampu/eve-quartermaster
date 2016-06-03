@@ -37,7 +37,7 @@ class Navigation extends Component {
 
   render() {
     return (
-      <nav role="navigation" className={cx(s.nav_container, 'nav', 'nav-inline')}>
+      <nav role="navigation" className={cx(s.nav_container, 'nav', 'nav-inline', this.props.className)}>
         <Link className={cx('nav-link', s.nav_link)} activeClass={s.nav_link_active} to="/" path={this.props.path}>View Contracts</Link>
         <Link className={cx('nav-link', s.nav_link)} activeClass={s.nav_link_active} to="/requests" path={this.props.path}>View Requests</Link>
         <Link className={cx('nav-link', s.nav_link)} activeClass={s.nav_link_active} to="/create" path={this.props.path}>Create Request</Link>

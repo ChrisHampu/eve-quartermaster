@@ -32,6 +32,88 @@
     top: 0;
     left: 0;
     z-index: 1000;
+
+    @media screen and (max-width: $screen-md-min) {
+
+        nav {
+            display: none;
+        }
+
+        .user_info {
+            display: none;
+        }
+
+        .logout_button {
+            position: absolute;
+            right: 0.1rem;
+            top: 1.2rem;
+        }
+    }
+
+ }
+
+ .mobile_menu {
+    overflow-y: auto;
+    left: 0;
+    position: fixed;
+    width: 240px;
+    top: 0;
+    margin: 0;
+    height: 100%;
+    background-color: $purple-base-lighter;
+    z-index: 999;
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translateX(-105%);
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+    padding: 0;
+    transition: transform .3s ease-out;
+
+    .logo_text {
+        text-align: center;
+        margin: 1rem 0;
+    }
+
+    .user_info {
+        height: auto;
+        margin: 0 auto;
+        display: table;
+    }
+
+    .mobile_nav {
+        margin-top: 1rem;
+        display: block;
+
+        a {
+            margin-left: 1rem;
+            padding: 0.6rem 0.8rem;
+        }
+    }
+ }
+
+.mobile_menu_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 120vh;
+    background-color: rgba(0,0,0,0.3);
+    z-index: 996;
+    will-change: opacity;
+    opacity: 0;
+    transition: opacity .3s ease-out;
+    pointer-events: none;
+
+    &.mobile_menu_visible {
+        pointer-events: auto;
+        opacity: 1;
+        display: block;
+    }
+}
+
+
+ .mobile_menu_visible {
+    transform: translateX(0px);
  }
 
 .logo_container {
@@ -42,10 +124,80 @@
     align-items: center;
 }
 
+
 .logo_text {
     color: $text-white;
     font-size: 1.4rem;
     margin: 0 auto;
+}
+
+.logo_text_short {
+    display: none;
+}
+
+.mobile_menu_toggle {
+    margin-left: 1rem;
+    font-size: 2rem;
+    color: $text-white;
+    cursor: pointer;
+
+    &:hover {
+        color: $text-grey;
+    }
+
+    &:active {
+        color: color($text-grey lightness(-5%));
+    }
+}
+
+@media screen and (min-width: $screen-md-min) and (max-width: $screen-lg-min) {
+    .logo_container {
+
+        width: 100px;
+
+        .logo_text {
+            display: none;
+        }
+
+        .logo_text_short {
+            display: block;
+        }
+    }
+}
+
+@media screen and (min-width: $screen-md-min) {
+
+    .mobile_menu_toggle {
+        display: none;
+    }
+}
+
+@media screen and (max-width: $screen-md-min) {
+
+    nav {
+        display: none;
+    }
+
+    .logo_container {
+        
+        .logo_text {
+            display: none;
+        }
+    }
+}
+
+@media screen and (max-width: $screen-sm-min) {
+
+    .logo_container {
+        
+        .logo_text {
+            display: none;
+
+            .logo_text_short {
+                display: none;
+            }
+        }
+    }
 }
 
 .content_right {
