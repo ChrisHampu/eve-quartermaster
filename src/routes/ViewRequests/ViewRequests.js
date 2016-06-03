@@ -176,7 +176,7 @@ class ViewRequests extends Component {
     }
 
     // Remove this request from root array
-    delete this.state.initialRequests[idx];
+    this.state.initialRequests.splice(idx, 1);
 
     this.setState({
       initialRequests: this.state.initialRequests
