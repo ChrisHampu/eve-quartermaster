@@ -31,7 +31,7 @@ class ViewRequests extends Component {
     this.state = {
       initialRequests: this.props.requests, // This is the core set of requests
       requests: this.props.requests, // This is the active (viewable) requests, IE when searching
-      searchText: undefined,
+      searchText: "",
       activeRequest: null
     };
   }

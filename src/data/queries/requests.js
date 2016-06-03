@@ -43,7 +43,7 @@ export async function getAllRequests() {
       const requests = [];
 
       const result = await query(
-        `SELECT requests.id, title, status, corp_only, contract_count, character_name, location as station, (date_part('epoch', expires)*1000)::bigint as expires FROM requests LEFT JOIN login ON (requests.character_id = login.character_id) WHERE expires > now() - interval '14 day'`
+        `SELECT requests.id, corp_id, title, status, corp_only, contract_count, character_name, location as station, (date_part('epoch', expires)*1000)::bigint as expires FROM requests LEFT JOIN login ON (requests.character_id = login.character_id) WHERE expires > now() - interval '14 day'`
       );
 
       if (!result.rowCount) {
@@ -91,7 +91,16 @@ const getRequests = {
       return { success: 0, message: 'Failed to authenticate. Make sure you are logged in and have the correct permissions.' };
     }
 
-    return getAllRequests();
+    const requests = await getAllRequests();
+
+    return requests.filter((request) => {
+
+      if (!request.corp_only) {
+        return true;
+      }
+
+      return request.corp_id === auth.corp_id;
+    });
   },
 };
 
