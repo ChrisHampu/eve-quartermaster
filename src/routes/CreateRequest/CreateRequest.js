@@ -340,7 +340,7 @@ class CreateRequest extends Component {
                 <label className="form-control-label" htmlFor="create-request-title">Request Title/Description</label>
                 <input onChange={() => { this.onValidateTitle(); }} ref="title" type="text" className={cx("form-control", { "form-control-danger": this.state.contractTitleValid === false, "form-control-success": this.state.contractTitleValid === true })} id="create-request-title" placeholder="" />
               </fieldset>
-              <fieldset className={cx("form-group", s.fieldset_has_dropdown, { "has-danger": this.state.contractTitleValid === false, "has-success": this.state.contractStationValid === true })}>
+              <fieldset className={cx("form-group", s.fieldset_has_dropdown, { "has-danger": this.state.contractStationValid === false, "has-success": this.state.contractStationValid === true })}>
                 <label className="form-control-label" htmlFor="create-request-title">Station</label>
                 <input onChange={() => { this.onValidateStation(); }} ref="station" type="text" className={cx("form-control", { "form-control-danger": this.state.contractStationValid === false, "form-control-success": this.state.contractStationValid === true })} id="create-request-title" placeholder="" />
                 {
