@@ -351,28 +351,28 @@ class ViewContracts extends Component {
               <h4>Contracts</h4>
               <div className={s.contract_count}>Showing { this.state.contracts.length } contracts</div>
               <div className="row">
-                <div className={cx(s.contract_container, "col-md-12")}>
+                <div className={cx(s.contract_container, "col-md-12 col-sm-12")}>
                   <div className={cx("row", s.contract_header)}>
-                    <div className="col-md-2" onClick={() => this.toggleSetSortBy('title')}>
+                    <div className="col-md-2 col-sm-2 col-xs-2" onClick={() => this.toggleSetSortBy('title')}>
                       Title
                       <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.title.ascending && this.state.sortBy === 'title', "fa-sort-desc": !this.state.sortByParams.title.ascending && this.state.sortBy === 'title' })}></i>
                     </div>
-                    <div className="col-md-2">
+                    <div className="col-md-2 col-sm-2 col-xs-2">
                       Status
                     </div>
-                    <div className="col-md-2" onClick={() => this.toggleSetSortBy('type')}>
+                    <div className="col-md-2 col-sm-2 col-xs-2" onClick={() => this.toggleSetSortBy('type')}>
                       Type
                       <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.type.ascending && this.state.sortBy === 'type', "fa-sort-desc": !this.state.sortByParams.type.ascending && this.state.sortBy === 'type' })}></i>
                     </div>
-                    <div className="col-md-2" onClick={() => this.toggleSetSortBy('price')}>
+                    <div className="col-md-2 col-sm-2 col-xs-2" onClick={() => this.toggleSetSortBy('price')}>
                       Price
                       <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.price.ascending && this.state.sortBy === 'price', "fa-sort-desc": !this.state.sortByParams.price.ascending && this.state.sortBy === 'price' })}></i>
                     </div>
-                    <div className="col-md-2" onClick={() => this.toggleSetSortBy('location')}>
+                    <div className="col-md-2 col-sm-2 col-xs-2" onClick={() => this.toggleSetSortBy('location')}>
                       Location
                       <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.location.ascending && this.state.sortBy === 'location', "fa-sort-desc": !this.state.sortByParams.location.ascending && this.state.sortBy === 'location' })}></i>
                     </div>
-                    <div className="col-md-2" onClick={() => this.toggleSetSortBy('expires')}>
+                    <div className="col-md-2 col-sm-2 col-xs-2" onClick={() => this.toggleSetSortBy('expires')}>
                       Expires
                       <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.expires.ascending && this.state.sortBy === 'expires', "fa-sort-desc": !this.state.sortByParams.expires.ascending && this.state.sortBy === 'expires' })}></i>
                     </div>
@@ -381,12 +381,12 @@ class ViewContracts extends Component {
                   { this.state.contracts.map((contract) => {
                     return (
                       <li key={contract.id} className={this.state.activeContract === contract ? cx("row", s.contract_list_active) : cx("row")} onClick={() => { this.toggleActiveContract(contract); }}>
-                        <div className="col-md-2">{contract.title || "[Multiple Items]"}</div>
-                        <div className="col-md-2">{contract.status}</div>
-                        <div className="col-md-2">{this.prettyContractType(contract)}</div>
-                        <div className="col-md-2">{contract.price.toLocaleString()} ISK</div>
-                        <div className="col-md-2">{contract.stationName}</div>
-                        <div className="col-md-2">{this.prettyExpireTime(contract)}</div>
+                        <div className="col-md-2 col-sm-2 col-xs-2">{contract.title || "[Multiple Items]"}</div>
+                        <div className="col-md-2 col-sm-2 col-xs-2">{contract.status}</div>
+                        <div className="col-md-2 col-sm-2 col-xs-2">{this.prettyContractType(contract)}</div>
+                        <div className="col-md-2 col-sm-2 col-xs-2">{contract.price.toLocaleString()} ISK</div>
+                        <div className="col-md-2 col-sm-2 col-xs-2">{contract.stationName}</div>
+                        <div className="col-md-2 col-sm-2 col-xs-2">{this.prettyExpireTime(contract)}</div>
                       </li>
                     );
                   })}
@@ -399,14 +399,14 @@ class ViewContracts extends Component {
                         <div className={s.contract_item_list}>
                           <h5>Contract Items</h5>
                           <div className={cx("row", s.contract_item_header)}>
-                            <div className="col-md-4">Quantity</div>
-                            <div className="col-md-8">Name</div>
+                            <div className="col-md-4 col-sm-4 col-xs-4">Quantity</div>
+                            <div className="col-md-8 col-sm-8 col-xs-8">Name</div>
                           </div>
                           <div className={cx("row", s.contract_items)}>
                           {
                             this.state.activeContract.items.length > 0 ?
                               this.state.activeContract.items.map((item) => {
-                                return <div key={item.id} className="row col-md-12"><div className="col-md-3"><span>{item.quantity}</span></div><div className="col-md-9">{item.typeName}</div></div>;
+                                return <div key={item.id} className="row col-md-12 col-sm-12 col-xs-12"><div className="col-md-3 col-sm-3 col-xs-3"><span>{item.quantity}</span></div><div className="col-md-9 col-sm-9 col-xs-9">{item.typeName}</div></div>;
                               })
                               :
                               <div>Failed to fetch items or none available</div>

@@ -81,7 +81,7 @@
     }
 
     .mobile_nav {
-        margin-top: 1rem;
+        margin-top: 0.5rem;
         display: block;
 
         a {
@@ -225,7 +225,7 @@
     }
 }
 
-@media screen and (max-width: $screen-sm-min) {
+@media screen and (max-width: $screen-md-min) {
 
     .logo_container {
         

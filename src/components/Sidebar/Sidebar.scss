@@ -34,6 +34,12 @@
 	width: $sidebar-width;
 }
 
+@media screen and (max-width: $screen-md-min) {
+	.root {
+		display: none;
+	}
+}
+
 .container {
 	padding-left: 15px;
 }

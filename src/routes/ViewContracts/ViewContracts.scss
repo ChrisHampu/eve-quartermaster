@@ -146,6 +146,12 @@
       }
     }
   }
+  
+  @media screen and (max-width: $screen-md-min) {
+    .contract_item_container {
+      width: 200px !important;
+    }
+  }
 }
 
 .sidebar_header {
