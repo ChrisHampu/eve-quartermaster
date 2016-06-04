@@ -67,11 +67,19 @@
     }
   }
 
+  @media screen and (max-width: $screen-md-min) {
+
+    .request_search {
+      float: none;
+    }
+  }
+
   .request_count {
     padding-bottom: 0.75rem;
   }
 
   .request_container {
+    min-width: 800px;
     //display: inline-block;
   }
 
@@ -103,7 +111,7 @@
   .request_list {
     list-style-type: none;
     margin: 0;
-    padding: 0 1rem;
+    padding: 0;
 
     .request_list_active {
       background: $purple-highlight-lighter;

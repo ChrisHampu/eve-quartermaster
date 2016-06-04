@@ -61,7 +61,15 @@
     }
   }
 
+  @media screen and (max-width: $screen-md-min) {
+
+    .contract_search {
+      float: none;
+    }
+  }
+
   .contract_container {
+    min-width: 800px;
     display: inline-block;
   }
 
@@ -146,7 +154,7 @@
       }
     }
   }
-  
+
   @media screen and (max-width: $screen-md-min) {
     .contract_item_container {
       width: 200px !important;

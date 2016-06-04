@@ -213,8 +213,9 @@ class ViewRequests extends Component {
             <div>
               <h4>Contract Requests</h4>
               <div className={s.request_count}>Showing { this.state.requests.length } requests</div>
-              <div className={cx("row", s.request_container)}>
-                <div className="col-md-12 col-sm-12 col-xs-12">
+              <div className="row">
+              <div className={cx(s.request_container, "col-md-12 col-sm-12 col-xs-12")}>
+
                   <div className={cx("row", s.request_header)}>
                     <div className="col-md-2 col-sm-2 col-xs-2">
                       Title
@@ -223,7 +224,7 @@ class ViewRequests extends Component {
                       Issuer
                     </div>
                     <div className="col-md-1 col-sm-1 col-xs-1">
-                      Fulfilled
+                      Status
                     </div>
                     <div className="col-md-3 col-sm-3 col-xs-3">
                       Location
@@ -235,8 +236,8 @@ class ViewRequests extends Component {
                       Actions
                     </div>
                   </div>
-                  <div className="row">
-                    <ul className={cx("col-md-12 col-sm-12", s.request_list)}>
+
+                    <ul className={cx(s.request_list)}>
                     {
                       this.state.requests.map((request, i) => {
                         return (
@@ -278,8 +279,8 @@ class ViewRequests extends Component {
                       </div>
                     : false
                   }
-                </div>
-                </div>
+                
+              </div>
               </div>
             </div>
             :
