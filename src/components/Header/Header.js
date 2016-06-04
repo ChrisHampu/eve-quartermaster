@@ -227,17 +227,37 @@ class Header extends Component {
             </Link>
           </div>
         </div>
-        <div onClick={(ev) => { this.onNavMenuHandler(ev); }}className={cx(s.mobile_menu, this.state.showMobileMenu ? s.mobile_menu_visible : {})}>
+        <div className={cx(s.mobile_menu, this.state.showMobileMenu ? s.mobile_menu_visible : {})}>
           <div className={s.logo_text}>
             EVE Quartermaster
           </div>
-          <div className={s.user_info}>
+          <div className={s.user_info} onMouseLeave={(ev) => { ev.stopPropagation(); this.closeNotificationDrawer(); }} onClick={(ev) => { ev.stopPropagation(); this.toggleNotificationDrawer(); }}>
             <div className={s.user_image}>
               <img src={`https://image.eveonline.com/Character/${this.context.getUser().id}_64.jpg`} />
             </div>
             <div className={s.user_name}>
               {this.context.getUser().name}
             </div>
+            <div className={this.countUnreadNotifications() > 0 ? cx(s.notification_counter, s.has_notifications) : s.notification_counter}>
+              {this.countUnreadNotifications()}
+            </div>
+            <div className={cx(s.notification_drawer, s.list, this.state.showDrawer ? s.show : {})}>
+              {
+                this.state.notifications.length > 0 ?
+                  this.state.notifications.map((alert, i) => {
+
+                    return (<div className={cx(s.notification, alert.viewed === false ? s.unread : {})} key={i}>
+                      <div className={s.status}>
+                        <div className={s.marker} />
+                      </div>
+                      <div className={s.text}>{alert.text} {this.prettyTime(alert)}</div>
+                    </div>);
+                  })
+                :
+                <span>No new notifications.</span>
+              }
+            </div>
+            <div className={cx(s.notification_tail, this.state.showDrawer ? s.show : {})}></div>
           </div>
           <Navigation path={this.props.path} className={s.mobile_nav} />
         </div>
