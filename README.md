@@ -46,6 +46,13 @@ Notable features of this application include:
   * Run 'npm start' to run in development mode
   * Run 'npm start -- --release' to run in production mode
 
+## TODO
+* Complete all the various "TODO's" littered in the code
+* Add a maximum number of requests per member (configurable) to avoid spam
+* Proper support for a contract request to be made for a variable number of contracts with those items (bulk request)
+* Add support for user roles for management of the app/contracts and privileges
+* And anything else upon request
+
 ## Contributors
 
 ### Contributors on GitHub
