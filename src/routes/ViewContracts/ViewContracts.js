@@ -263,7 +263,8 @@ class ViewContracts extends Component {
     var h;
     var m;
     var sec;
-    const expiry = Date.parse(contract.dateExpired + ' UTC'); // eslint-disable-line prefer-template
+    // const expiry = Date.parse(contract.dateExpired + ' UTC'); // eslint-disable-line prefer-template
+    const expiry = Date.parse(contract.dateExpired); // eslint-disable-line prefer-template
 
     if (new Date(Date.now()) > expiry) {
       return 'Expired';
