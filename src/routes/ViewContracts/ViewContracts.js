@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Sidebar from '../../components/Sidebar';
 import s from './ViewContracts.scss';
@@ -32,10 +32,6 @@ import fuzzy from 'fuzzy';
 
 class ViewContracts extends Component {
 
-  static propTypes = {
-    contracts: PropTypes.array.isRequired,
-  };
-
   constructor(props) {
     super(props);
 
@@ -43,7 +39,8 @@ class ViewContracts extends Component {
     this.toggleSetSortBy = this.toggleSetSortBy.bind(this);
 
     this.state = {
-      contracts: this.props.contracts,
+      initialContracts: null,
+      contracts: [],
       activeContract: null,
       searchText: '',
       showStatus: {
@@ -96,6 +93,27 @@ class ViewContracts extends Component {
   }
 
   componentWillMount() {
+
+  }
+
+  async componentDidMount() {
+
+    let data = null;
+
+    const response = await fetch(`/graphql?query={contracts{contractList{id,issuerID,issuerCorpID,assigneeID,stationName,startStationID,endStationID,type,status,
+                                 title,forCorp,public,dateIssued,dateExpired,dateAccepted,numDays,dateCompleted,price,reward,collateral,buyout,volume}}}`);
+
+    const json = await response.json();
+
+    data = json.data;
+
+    let contractList = [];
+
+    if (data && data.contracts) {
+      contractList = data.contracts.contractList || [];
+    }
+
+    this.state.initialContracts = contractList;
 
     this.updateContracts();
   }
@@ -237,7 +255,7 @@ class ViewContracts extends Component {
 
   updateContracts() {
 
-    let contracts = this.props.contracts.filter((contract) => this.filterPredicate(contract));
+    let contracts = this.state.initialContracts.filter((contract) => this.filterPredicate(contract));
 
     if (contracts.length > 0) {
 
@@ -347,81 +365,89 @@ class ViewContracts extends Component {
             <input type="search" placeholder="Search contracts" className={cx("form-control")} onChange={(ev) => { this.onSearchChange(ev); }} />
             <span className="form-control-feedback"><i className="fa fa-search"></i></span>
           </div>
-          { this.state.contracts.length > 0 ?
+          {
+            this.state.initialContracts ?
             <div>
-              <h4>Contracts</h4>
-              <div className={s.contract_count}>Showing { this.state.contracts.length } contracts</div>
-              <div className="row">
-                <div className={cx(s.contract_container, "col-md-12 col-sm-12")}>
-                  <div className={cx("row", s.contract_header)}>
-                    <div className="col-md-2 col-sm-2 col-xs-2" onClick={() => this.toggleSetSortBy('title')}>
-                      Title
-                      <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.title.ascending && this.state.sortBy === 'title', "fa-sort-desc": !this.state.sortByParams.title.ascending && this.state.sortBy === 'title' })}></i>
-                    </div>
-                    <div className="col-md-2 col-sm-2 col-xs-2">
-                      Status
-                    </div>
-                    <div className="col-md-2 col-sm-2 col-xs-2" onClick={() => this.toggleSetSortBy('type')}>
-                      Type
-                      <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.type.ascending && this.state.sortBy === 'type', "fa-sort-desc": !this.state.sortByParams.type.ascending && this.state.sortBy === 'type' })}></i>
-                    </div>
-                    <div className="col-md-2 col-sm-2 col-xs-2" onClick={() => this.toggleSetSortBy('price')}>
-                      Price
-                      <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.price.ascending && this.state.sortBy === 'price', "fa-sort-desc": !this.state.sortByParams.price.ascending && this.state.sortBy === 'price' })}></i>
-                    </div>
-                    <div className="col-md-2 col-sm-2 col-xs-2" onClick={() => this.toggleSetSortBy('location')}>
-                      Location
-                      <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.location.ascending && this.state.sortBy === 'location', "fa-sort-desc": !this.state.sortByParams.location.ascending && this.state.sortBy === 'location' })}></i>
-                    </div>
-                    <div className="col-md-2 col-sm-2 col-xs-2" onClick={() => this.toggleSetSortBy('expires')}>
-                      Expires
-                      <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.expires.ascending && this.state.sortBy === 'expires', "fa-sort-desc": !this.state.sortByParams.expires.ascending && this.state.sortBy === 'expires' })}></i>
-                    </div>
-                  </div>
-                  <ul className={cx(s.contract_list)}>
-                  { this.state.contracts.map((contract) => {
-                    return (
-                      <li key={contract.id} className={this.state.activeContract === contract ? cx("row", s.contract_list_active) : cx("row")} onClick={() => { this.toggleActiveContract(contract); }}>
-                        <div className="col-md-2 col-sm-2 col-xs-2">{contract.title || "[Multiple Items]"}</div>
-                        <div className="col-md-2 col-sm-2 col-xs-2">{contract.status}</div>
-                        <div className="col-md-2 col-sm-2 col-xs-2">{this.prettyContractType(contract)}</div>
-                        <div className="col-md-2 col-sm-2 col-xs-2">{contract.price.toLocaleString()} ISK</div>
-                        <div className="col-md-2 col-sm-2 col-xs-2">{contract.stationName}</div>
-                        <div className="col-md-2 col-sm-2 col-xs-2">{this.prettyExpireTime(contract)}</div>
-                      </li>
-                    );
-                  })}
-                  </ul>
-                </div>
-                <div style={this.state.activeContract === null ? {} : { transform: 'translateX(0%)' }} className={s.contract_item_container}>
-                  { this.state.activeContract !== null ?
-                      <div>
-                      { this.state.activeContract.items !== undefined ?
-                        <div className={s.contract_item_list}>
-                          <h5>Contract Items</h5>
-                          <div className={cx("row", s.contract_item_header)}>
-                            <div className="col-md-4 col-sm-4 col-xs-4">Quantity</div>
-                            <div className="col-md-8 col-sm-8 col-xs-8">Name</div>
-                          </div>
-                          <div className={cx("row", s.contract_items)}>
-                          {
-                            this.state.activeContract.items.length > 0 ?
-                              this.state.activeContract.items.map((item) => {
-                                return <div key={item.id} className="row col-md-12 col-sm-12 col-xs-12"><div className="col-md-3 col-sm-3 col-xs-3"><span>{item.quantity}</span></div><div className="col-md-9 col-sm-9 col-xs-9">{item.typeName}</div></div>;
-                              })
-                              :
-                              <div>Failed to fetch items or none available</div>
-                          }
-                          </div>
-                        </div> : <div><div className={s.contract_item_list}><h5>Contract Items</h5><div>Loading items..</div></div></div>
-                      }
+            {
+              this.state.contracts.length > 0 ?
+              <div>
+                <h4>Contracts</h4>
+                <div className={s.contract_count}>Showing { this.state.contracts.length } contracts</div>
+                <div className="row">
+                  <div className={cx(s.contract_container, "col-md-12 col-sm-12")}>
+                    <div className={cx("row", s.contract_header)}>
+                      <div className="col-md-2 col-sm-2 col-xs-2" onClick={() => this.toggleSetSortBy('title')}>
+                        Title
+                        <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.title.ascending && this.state.sortBy === 'title', "fa-sort-desc": !this.state.sortByParams.title.ascending && this.state.sortBy === 'title' })}></i>
                       </div>
-                    : false
-                  }
+                      <div className="col-md-2 col-sm-2 col-xs-2">
+                        Status
+                      </div>
+                      <div className="col-md-2 col-sm-2 col-xs-2" onClick={() => this.toggleSetSortBy('type')}>
+                        Type
+                        <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.type.ascending && this.state.sortBy === 'type', "fa-sort-desc": !this.state.sortByParams.type.ascending && this.state.sortBy === 'type' })}></i>
+                      </div>
+                      <div className="col-md-2 col-sm-2 col-xs-2" onClick={() => this.toggleSetSortBy('price')}>
+                        Price
+                        <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.price.ascending && this.state.sortBy === 'price', "fa-sort-desc": !this.state.sortByParams.price.ascending && this.state.sortBy === 'price' })}></i>
+                      </div>
+                      <div className="col-md-2 col-sm-2 col-xs-2" onClick={() => this.toggleSetSortBy('location')}>
+                        Location
+                        <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.location.ascending && this.state.sortBy === 'location', "fa-sort-desc": !this.state.sortByParams.location.ascending && this.state.sortBy === 'location' })}></i>
+                      </div>
+                      <div className="col-md-2 col-sm-2 col-xs-2" onClick={() => this.toggleSetSortBy('expires')}>
+                        Expires
+                        <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.expires.ascending && this.state.sortBy === 'expires', "fa-sort-desc": !this.state.sortByParams.expires.ascending && this.state.sortBy === 'expires' })}></i>
+                      </div>
+                    </div>
+                    <ul className={cx(s.contract_list)}>
+                    { this.state.contracts.map((contract) => {
+                      return (
+                        <li key={contract.id} className={this.state.activeContract === contract ? cx("row", s.contract_list_active) : cx("row")} onClick={() => { this.toggleActiveContract(contract); }}>
+                          <div className="col-md-2 col-sm-2 col-xs-2">{contract.title || "[Multiple Items]"}</div>
+                          <div className="col-md-2 col-sm-2 col-xs-2">{contract.status}</div>
+                          <div className="col-md-2 col-sm-2 col-xs-2">{this.prettyContractType(contract)}</div>
+                          <div className="col-md-2 col-sm-2 col-xs-2">{contract.price.toLocaleString()} ISK</div>
+                          <div className="col-md-2 col-sm-2 col-xs-2">{contract.stationName}</div>
+                          <div className="col-md-2 col-sm-2 col-xs-2">{this.prettyExpireTime(contract)}</div>
+                        </li>
+                      );
+                    })}
+                    </ul>
+                  </div>
+                  <div style={this.state.activeContract === null ? {} : { transform: 'translateX(0%)' }} className={s.contract_item_container}>
+                    { this.state.activeContract !== null ?
+                        <div>
+                        { this.state.activeContract.items !== undefined ?
+                          <div className={s.contract_item_list}>
+                            <h5>Contract Items</h5>
+                            <div className={cx("row", s.contract_item_header)}>
+                              <div className="col-md-4 col-sm-4 col-xs-4">Quantity</div>
+                              <div className="col-md-8 col-sm-8 col-xs-8">Name</div>
+                            </div>
+                            <div className={cx("row", s.contract_items)}>
+                            {
+                              this.state.activeContract.items.length > 0 ?
+                                this.state.activeContract.items.map((item) => {
+                                  return <div key={item.id} className="row col-md-12 col-sm-12 col-xs-12"><div className="col-md-3 col-sm-3 col-xs-3"><span>{item.quantity}</span></div><div className="col-md-9 col-sm-9 col-xs-9">{item.typeName}</div></div>;
+                                })
+                                :
+                                <div>Failed to fetch items or none available</div>
+                            }
+                            </div>
+                          </div> : <div><div className={s.contract_item_list}><h5>Contract Items</h5><div>Loading items..</div></div></div>
+                        }
+                        </div>
+                      : false
+                    }
+                  </div>
                 </div>
               </div>
+              : <h4>No contracts match criteria</h4>
+            }
             </div>
-            : <h4>No contracts match criteria</h4>
+            :
+            <h4>Loading contracts</h4>
           }
         </div>
       </div>

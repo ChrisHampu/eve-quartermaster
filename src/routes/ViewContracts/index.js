@@ -24,27 +24,10 @@
 
 import React from 'react';
 import ViewContracts from './ViewContracts';
-import fetch from '../../core/fetch';
 
 export const path = '/';
 export const action = async (state) => {
 
-  let data = null;
-
-  const response = await fetch(`/graphql?query={contracts{contractList{id,issuerID,issuerCorpID,assigneeID,stationName,startStationID,endStationID,type,status,
-                               title,forCorp,public,dateIssued,dateExpired,dateAccepted,numDays,dateCompleted,price,reward,collateral,buyout,volume}}}`,
-                               { cookies: [state.context.getSession()] });
-
-  const json = await response.json();
-
-  data = json.data;
-
-  let contractList = [];
-
-  if (data && data.contracts) {
-    contractList = data.contracts.contractList || [];
-  }
-
   state.context.onSetTitle('EVE Quartermaster');
-  return <ViewContracts contracts={contractList} />;
+  return <ViewContracts />;
 };

@@ -78,12 +78,12 @@ const sessionDB = sequelizeDB.define('session', { // eslint-disable-line no-unus
 
 server.use(session({
   secret: auth.session.secret,
-  name: 'EVEContractsSess',
+  name: 'EVEQMSession',
   store: new (connectSessionSequelize(session.Store))({ // eslint-disable-line new-cap
     db: sequelizeDB,
     table: 'session',
   }),
-  resave: false,
+  resave: true,
 }));
 
 //
