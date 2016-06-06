@@ -160,6 +160,7 @@ const contracts = {
     const auth = await verifySession(session);
 
     if (!auth.authenticated) {
+      console.log("Error loading contracts: User not authenticated.");
       return { contractList: [] };
     }
 

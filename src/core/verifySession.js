@@ -39,18 +39,22 @@ async function verifySession(session) {
 
       if (eve.corp_only === 'true') {
         if (res.corporation.id !== eve.corp_id) {
+          console.log(`Session verification error: User corporation (${res.corporation.id} is incorrect (${eve.corp_id}`);
           return { authenticated: false };
         }
       } else {
         if (res.alliance !== eve.alliance_id) {
+          console.log(`Session verification error: User alliance (${res.alliance} is incorrect (${eve.alliance_id}`);
           return { authenticated: false };
         }
       }
     } catch (err) {
+      console.log(`Session verification error: ${err}`);
       return { authenticated: false };
     }
 
   } catch (err) {
+    console.log(`Session verification error: ${err}`);
     return { authenticated: false };
   }
 
