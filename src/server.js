@@ -36,7 +36,7 @@ import passport from './core/passport';
 import schema from './data/schema';
 import Router from './routes';
 import assets from './assets';
-import { port, auth, analytics, databaseUrl } from './config';
+import { port, auth, analytics, databaseUrl, eve } from './config';
 import verifySession from './core/verifySession';
 import sequelize from 'sequelize';
 import connectSessionSequelize from 'connect-session-sequelize';
@@ -248,4 +248,6 @@ server.listen(port, () => {
   console.log(`The server is running at http://localhost:${port}/`);
   console.log(`Using SSO callback url ${auth.eve.callback}`);
   console.log(`Environment is ${process.env.NODE_ENV || 'debug'}`);
+  console.log(`Corporation ID set to ${eve.corp_id} and alliance ID set to ${eve.alliance_id}`);
+  console.log(`Alliance access is ${eve.corp_only === 'true' ? 'disabled' : 'enabled'}`);
 });
