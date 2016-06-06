@@ -20,8 +20,8 @@ CREATE TABLE IF NOT EXISTS session
   sid character varying NOT NULL,
   expires date,
   data text,
-  createdAt date,
-  updatedAt date,
+  "createdAt" date,
+  "updatedAt" date,
   CONSTRAINT session_pkey PRIMARY KEY (sid)
 )
 WITH (
