@@ -22,17 +22,21 @@
  * SOFTWARE.
  */
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Sidebar from '../../components/Sidebar';
 import s from './CreateRequest.scss';
 import cx from 'classnames';
 import { itemNames } from '../../constants/itemNames';
 import { stationNames } from '../../constants/stationNames';
-import fetch, { fetchLocal } from '../../core/fetch';
+import fetch from '../../core/fetch';
 import fuzzy from 'fuzzy';
 
 class CreateRequest extends Component {
+
+  static contextTypes = {
+    getSession: PropTypes.func
+  }
 
   constructor(props) {
     super(props);
@@ -136,17 +140,11 @@ class CreateRequest extends Component {
     let result = null;
 
     try {
-      if (fetchLocal === undefined) {
-        const response = await fetch(graphString, { credentials: 'same-origin' });
+        const response = await fetch(graphString, { credentials: 'same-origin', headers: { "Authorization": this.context.getSession() } });
 
         const json = await response.json();
 
         result = json.data.createRequest;
-      } else {
-        const json = await fetchLocal(graphString, { cookies: [this.state.context.getSession()] });
-
-        result = json.data.createRequest;
-      }
     } catch (err) { // eslint-disable-line object-curly-spacing
 
       this.setState({

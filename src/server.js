@@ -86,6 +86,8 @@ server.use(session({
     table: 'session',
   }),
   resave: true,
+  saveUninitialized: true,
+  cookie: { secure: false }
 }));
 
 //
@@ -130,6 +132,7 @@ server.get('/callback', (req, res, next) => {
         }
 
         req.session.jwt = jwt.sign(user, auth.jwt.secret); // eslint-disable-line no-param-reassign
+        req.session.save();
 
         res.redirect('/');
       });
@@ -159,6 +162,12 @@ server.get('/logout', (req, res) => {
 
 server.use('/graphql', (req, res, next) => {
 
+  const auth = req.get("Authorization");
+
+  if (auth) {
+    req.session.jwt = req.session.jwt || auth;
+  }
+
   expressGraphQL(request => ({
     schema,
     graphiql: process.env.NODE_ENV !== 'production',
@@ -178,10 +187,14 @@ server.get('*', async (req, res, next) => {
     let statusCode = 200;
 
     const template = require('./views/index.jade');
-    const data = { title: '', description: '', css: '', body: '', entry: assets.main.js };
+    const data = { title: '', description: '', css: '', body: '', entry: assets.main.js, token: '' };
 
     if (process.env.NODE_ENV === 'production') {
       data.trackingId = analytics.google.trackingId;
+    }
+
+    if (req.session.jwt) {
+      data.token = req.session.jwt;
     }
 
     const css = [];
@@ -192,7 +205,7 @@ server.get('*', async (req, res, next) => {
       onPageNotFound: () => (statusCode = 404),
       getLocation: () => req.path,
       getUser: () => req.user || null,
-      getSession: () => req.headers.cookie || null,
+      getSession: () => req.session.jwt || null,
     };
 
     let newPath = req.path;

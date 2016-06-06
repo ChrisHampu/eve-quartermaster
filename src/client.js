@@ -33,6 +33,7 @@ import fetch from './core/fetch';
 let cssContainer = document.getElementById('css');
 const appContainer = document.getElementById('app');
 let user = null;
+
 const context = {
   insertCss: styles => styles._insertCss(),
   onSetTitle: value => (document.title = value),
@@ -54,7 +55,7 @@ const context = {
   },
   getLocation: () => window.location.pathname,
   getUser: () => user,
-  getSession: () => null
+  getSession: () => window.token || null
 };
 
 // Google Analytics tracking. Don't send 'pageview' event after the first
@@ -106,7 +107,7 @@ function run() {
     if (user === null) {
 
       const query = `/graphql?query={user{authenticated,id,name,corp_id,corp_name,alliance}}`;
-      const response = await fetch(query);
+      const response = await fetch(query, { headers: { "Authorization": window.token }});
       const { data } = await response.json();
 
       if (!data.user.authenticated) {

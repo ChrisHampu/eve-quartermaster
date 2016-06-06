@@ -33,7 +33,8 @@ import { shipNames } from '../../constants/shipNames.js';
 class ViewRequests extends Component {
 
   static contextTypes = {
-    getUser: PropTypes.func
+    getUser: PropTypes.func,
+    getSession: PropTypes.func
   }
 
   static propTypes = {
@@ -177,7 +178,7 @@ class ViewRequests extends Component {
     try {
        if (fetch !== undefined) {
 
-        await fetch(graphString);
+        await fetch(graphString, { headers: { "Authorization": this.context.getSession() }});
       }
     } catch (e) { // eslint-disable-line no-empty
     }
