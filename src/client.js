@@ -107,7 +107,7 @@ function run() {
     if (user === null) {
 
       const query = `/graphql?query={user{authenticated,id,name,corp_id,corp_name,alliance}}`;
-      const response = await fetch(query, { headers: { "Authorization": window.token }});
+      const response = await fetch(query, { headers: { Authorization: window.token } });
       const { data } = await response.json();
 
       if (!data.user.authenticated) {

@@ -140,7 +140,7 @@ class CreateRequest extends Component {
     let result = null;
 
     try {
-        const response = await fetch(graphString, { credentials: 'same-origin', headers: { "Authorization": this.context.getSession() } });
+        const response = await fetch(graphString, { credentials: 'same-origin', headers: { Authorization: this.context.getSession() } });
 
         const json = await response.json();
 

@@ -58,7 +58,7 @@ class Header extends Component {
     try {
       if (fetch !== undefined) {
         const response = await fetch(`/graphql?query={notifications{viewed,text,time,id}}`, // eslint-disable-line object-curly-spacing
-                     { credentials: 'same-origin', headers: { "Authorization": this.context.getSession() } });
+                     { credentials: 'same-origin', headers: { Authorization: this.context.getSession() } });
 
         const json = await response.json();
 
@@ -100,7 +100,7 @@ class Header extends Component {
       // TODO: Change graphQL interface to accept a list?
       for (var id of unread) {
         fetch(`/graphql?query={viewNotification(id:${id})}`, // eslint-disable-line object-curly-spacing
-                     { credentials: 'same-origin', headers: { "Authorization": this.context.getSession() } });
+                     { credentials: 'same-origin', headers: { Authorization: this.context.getSession() } });
       }
 
       setTimeout(() => {

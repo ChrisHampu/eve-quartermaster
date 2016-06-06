@@ -162,10 +162,11 @@ server.get('/logout', (req, res) => {
 
 server.use('/graphql', (req, res, next) => {
 
-  const auth = req.get("Authorization");
+  const sess = req.session;
+  const token = req.get("Authorization");
 
-  if (auth) {
-    req.session.jwt = req.session.jwt || auth;
+  if (token) {
+    sess.jwt = req.session.jwt || token;
   }
 
   expressGraphQL(request => ({
@@ -173,7 +174,7 @@ server.use('/graphql', (req, res, next) => {
     graphiql: process.env.NODE_ENV !== 'production',
     rootValue: { request: request }, // eslint-disable-line object-shorthand
     pretty: process.env.NODE_ENV !== 'production',
-    context: req.session,
+    context: sess,
   }))(req, res, next);
 });
 

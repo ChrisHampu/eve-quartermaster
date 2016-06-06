@@ -178,7 +178,7 @@ class ViewRequests extends Component {
     try {
        if (fetch !== undefined) {
 
-        await fetch(graphString, { headers: { "Authorization": this.context.getSession() }});
+        await fetch(graphString, { headers: { Authorization: this.context.getSession() } });
       }
     } catch (e) { // eslint-disable-line no-empty
     }

@@ -30,7 +30,7 @@ export const path = '/requests';
 export const action = async (state) => {
 
   const response = await fetch(`/graphql?query={requests{id,title,status,character_name,contract_count,expires,station,items{name,count}}}`,
-                            { headers: { "Authorization": state.context.getSession() }});
+                            { headers: { Authorization: state.context.getSession() } });
 
   const json = await response.json();
 

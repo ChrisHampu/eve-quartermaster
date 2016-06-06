@@ -105,7 +105,7 @@ class ViewContracts extends Component {
     let data = null;
 
     const response = await fetch(`/graphql?query={contracts{contractList{id,issuerID,issuerCorpID,assigneeID,stationName,startStationID,endStationID,type,status,
-                                 title,forCorp,public,dateIssued,dateExpired,dateAccepted,numDays,dateCompleted,price,reward,collateral,buyout,volume}}}`, { headers: { "Authorization": this.context.getSession() }});
+                                 title,forCorp,public,dateIssued,dateExpired,dateAccepted,numDays,dateCompleted,price,reward,collateral,buyout,volume}}}`, { headers: { Authorization: this.context.getSession() } });
 
     const json = await response.json();
 
@@ -143,7 +143,7 @@ class ViewContracts extends Component {
     try {
 
       const response = await fetch(`/graphql?query={contractItems(id:${contract.id})
-                                 {itemList{id,quantity,typeID,typeName}}}`, { headers: { "Authorization": this.context.getSession() }}); // eslint-disable-line object-curly-spacing
+                                 {itemList{id,quantity,typeID,typeName}}}`, { headers: { Authorization: this.context.getSession() } }); // eslint-disable-line object-curly-spacing
 
       const json = await response.json();
 
