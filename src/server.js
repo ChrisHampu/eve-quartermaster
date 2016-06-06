@@ -70,6 +70,8 @@ const sessionDB = sequelizeDB.define('session', { // eslint-disable-line no-unus
   },
   expires: sequelize.DATE,
   data: sequelize.TEXT,
+  createdAt: sequelize.DATE,
+  updatedAt: sequelize.DATE
 },
 {
   tableName: 'session',
