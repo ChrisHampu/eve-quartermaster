@@ -61,7 +61,7 @@ server.use(bodyParser.json());
 //
 // Session management
 // -----------------------------------------------------------------------------
-const sequelizeDB = new sequelize(databaseUrl, { logging: false }); // eslint-disable-line new-cap
+const sequelizeDB = new sequelize(databaseUrl, { logging: true }); // eslint-disable-line new-cap
 
 const sessionDB = sequelizeDB.define('session', { // eslint-disable-line no-unused-vars
   sid: {
