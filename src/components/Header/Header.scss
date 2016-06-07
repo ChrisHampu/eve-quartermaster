@@ -130,10 +130,12 @@
     color: $text-white;
     font-size: 1.4rem;
     margin: 0 auto;
+    cursor: default;
 }
 
 .logo_text_short {
     display: none;
+    cursor: default;
 }
 
 .mobile_menu_toggle {

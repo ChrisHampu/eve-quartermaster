@@ -36,7 +36,7 @@ import passport from './core/passport';
 import schema from './data/schema';
 import Router from './routes';
 import assets from './assets';
-import { port, auth, analytics, databaseUrl, eve } from './config';
+import { port, auth, analytics, databaseUrl, eve, host } from './config';
 import verifySession from './core/verifySession';
 import sequelize from 'sequelize';
 import connectSessionSequelize from 'connect-session-sequelize';
@@ -85,7 +85,7 @@ server.use(session({
     db: sequelizeDB,
     table: 'session',
   }),
-  resave: true,
+  resave: false,
   saveUninitialized: true,
   cookie: { secure: false }
 }));
@@ -129,12 +129,27 @@ server.get('/callback', (req, res, next) => {
           res.send(template({
             message: info.message,
           }));
+
+        } else {
+
+          try {
+
+            req.session.jwt = jwt.sign(user, auth.jwt.secret); // eslint-disable-line no-param-reassign
+            req.session.save();
+
+            // Instead of performing a redirect, create a fake request to the root path and render that page
+            serverRenderingHandler({ // eslint-disable-line no-use-before-define
+              path: '/',
+              query: {},
+              session: req.session,
+              isAuthenticated: () => req.isAuthenticated // Also need to fake the functions being used in the rendering handler
+            }, res, next);
+
+          } catch (_err) {
+
+            next(_err);
+          }
         }
-
-        req.session.jwt = jwt.sign(user, auth.jwt.secret); // eslint-disable-line no-param-reassign
-        req.session.save();
-
-        res.redirect('/');
       });
     }
 
@@ -155,6 +170,7 @@ server.get('/unauthorized', (req, res) => {
 
 server.get('/logout', (req, res) => {
 
+  req.session.jwt = null; // eslint-disable-line no-param-reassign
   req.logout();
 
   res.redirect('/');
@@ -182,11 +198,10 @@ server.use('/graphql', (req, res, next) => {
   }))(req, res, next);
 });
 
-
 //
 // Register server-side rendering middleware
 // -----------------------------------------------------------------------------
-server.get('*', async (req, res, next) => {
+async function serverRenderingHandler(req, res, next) {
   try {
 
     let statusCode = 200;
@@ -215,14 +230,19 @@ server.get('*', async (req, res, next) => {
 
     let newPath = req.path;
 
-    if (!req.isAuthenticated()) {
+    if (!req.isAuthenticated() && !req.session.jwt) {
+
       newPath = '/unauthorized';
     } else {
 
       const authed = await verifySession(req.session);
 
       if (!authed.authenticated) {
+
         newPath = '/unauthorized';
+      } else {
+
+       req.user = req.user || authed; // eslint-disable-line no-param-reassign
       }
     }
 
@@ -238,7 +258,9 @@ server.get('*', async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-});
+}
+
+server.get('*', serverRenderingHandler);
 
 //
 // Error handling
@@ -263,7 +285,7 @@ server.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
 // -----------------------------------------------------------------------------
 server.listen(port, () => {
   /* eslint-disable no-console */
-  console.log(`The server is running at http://localhost:${port}/`);
+  console.log(`The server is running at ${host}`);
   console.log(`Using SSO callback url ${auth.eve.callback}`);
   console.log(`Environment is ${process.env.NODE_ENV || 'debug'}`);
   console.log(`Corporation ID set to ${eve.corp_id} and alliance ID set to ${eve.alliance_id}`);
