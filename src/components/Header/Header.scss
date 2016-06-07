@@ -72,6 +72,7 @@
     .logo_text {
         text-align: center;
         margin: 1rem 0;
+        cursor: default;
     }
 
     .user_info {
@@ -284,16 +285,37 @@
         img {
             border-radius: 50%;
             margin-right: 0.5rem;
-            max-width: 48px;
-            max-height: 48px;
+            width: 48px;
+            height: 48px;
             display: inline-block;
         }
     }
 
-    .user_name {
+    .user_name_block {
         display: inline-block;
         vertical-align: middle;
+        max-width: 135px;
+
+        > div {
+            text-align: inherit;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user_name {
+            font-size: 1.05rem;
+        }
+
+        .user_corp {
+            //position: absolute;
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            bottom: 0.25rem;
+        }
     }
+
+
 
     .notification_counter {
         vertical-align: middle;

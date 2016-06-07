@@ -193,8 +193,13 @@ class Header extends Component {
             <div className={s.user_image}>
               <img src={`https://image.eveonline.com/Character/${this.context.getUser().id}_64.jpg`} />
             </div>
-            <div className={s.user_name}>
-              {this.context.getUser().name}
+            <div className={s.user_name_block}>
+              <div className={s.user_name}>
+                {this.context.getUser().name}
+              </div>
+              <div className={s.user_corp}>
+                {this.context.getUser().corp_name}
+              </div>
             </div>
             <div className={this.countUnreadNotifications() > 0 ? cx(s.notification_counter, s.has_notifications) : s.notification_counter}>
               {this.countUnreadNotifications()}
@@ -236,8 +241,13 @@ class Header extends Component {
             <div className={s.user_image}>
               <img src={`https://image.eveonline.com/Character/${this.context.getUser().id}_64.jpg`} />
             </div>
-            <div className={s.user_name}>
-              {this.context.getUser().name}
+            <div className={s.user_name_block}>
+              <div className={s.user_name}>
+                {this.context.getUser().name}
+              </div>
+              <div className={s.user_corp}>
+                {this.context.getUser().corp_name}
+              </div>
             </div>
             <div className={this.countUnreadNotifications() > 0 ? cx(s.notification_counter, s.has_notifications) : s.notification_counter}>
               {this.countUnreadNotifications()}
