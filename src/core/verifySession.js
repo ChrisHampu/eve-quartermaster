@@ -35,8 +35,7 @@ async function verifySession(session) {
 
     try {
 
-      /* const res = await fetchCharacter(user.id);
-
+      const res = await fetchCharacter(user.id);
 
       if (eve.corp_only === 'true') {
         if (res.corporation.id !== eve.corp_id) {
@@ -49,7 +48,6 @@ async function verifySession(session) {
           return { authenticated: false };
         }
       }
-      */
     } catch (err) {
       console.log(`Session verification error: ${err}`);
       return { authenticated: false };
