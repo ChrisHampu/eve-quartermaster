@@ -110,8 +110,11 @@ function run() {
       const response = await fetch(query, { headers: { Authorization: window.token } });
       const { data } = await response.json();
 
+      console.log(`Auth token: ${window.token}`);
+
       if (!data.user.authenticated) {
         currentState.path = '/unauthorized';
+        console.log("User not authenticated");
       } else {
         user = data.user;
       }
