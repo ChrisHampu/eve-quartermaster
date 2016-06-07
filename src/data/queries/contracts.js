@@ -220,6 +220,7 @@ const contracts = {
 
         console.log("Finished fetching contracts. Time taken:");
         console.timeEnd('fetch_contracts');
+        console.log(`${contractList.length} contracts loaded`);
 
         checkFulfilledRequests(contractList);
 
