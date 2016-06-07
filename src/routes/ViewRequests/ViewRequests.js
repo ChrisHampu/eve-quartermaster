@@ -244,7 +244,7 @@ class ViewRequests extends Component {
                       <li key={i} className={this.state.activeRequest === request ? cx("row", s.request_list_active) : cx("row")} onClick={() => { this.toggleActiveRequest(request); }}>
                         <div className="col-md-2 col-sm-2 col-xs-2">{request.title}</div>
                         <div className="col-md-2 col-sm-2 col-xs-2">{request.character_name}</div>
-                        <div className="col-md-1 col-sm-1 col-xs-1">{request.status}</div>
+                        <div className="col-md-1 col-sm-1 col-xs-1">{request.status === 'full' ? 'Done' : 'Incomplete'}</div>
                         <div className="col-md-3 col-sm-3 col-xs-3">{request.station}</div>
                         <div className="col-md-2 col-sm-2 col-xs-2">{this.prettyExpireTime(request)}</div>
                         <div className="col-md-2 col-sm-2 col-xs-2">{this.getRequestActions(request)}</div>
