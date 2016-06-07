@@ -116,6 +116,9 @@ function run() {
         currentState.path = '/unauthorized';
         console.log("User not authenticated");
       } else {
+        if (currentState.path === '/callback') {
+          currentState.path = '/';
+        }
         user = data.user;
       }
     }
