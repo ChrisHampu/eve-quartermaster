@@ -145,13 +145,6 @@ async function checkFulfilledRequests(contracts) {
   console.timeEnd('request_fulfillment');
 }
 
-function filterCorporation(contracts, session) { // eslint-disable-line no-unused-vars
-
-  return contracts.filter((contract) => {
-    return process.env.NODE_ENV === 'development' || contract.public || (contract.forCorp === '1' && parseInt(contract.issuerCorpID) === session.passport.user.corp_id);
-  });
-}
-
 const contracts = {
 
   type: ContractListType,
@@ -222,19 +215,20 @@ const contracts = {
         console.timeEnd('fetch_contracts');
         console.log(`${contractList.length} contracts loaded`);
 
+        // This function will run asynchronously
         checkFulfilledRequests(contractList);
 
-        return { contractList: filterCorporation(contractList, session) };
+        return { contractList: contractList };
       });
 
       if (contractList.length) {
-        return { contractList: filterCorporation(contractList, session) };
+        return { contractList: contractList };
       }
 
       return lastFetchTask;
     }
 
-    return { contractList: filterCorporation(contractList, session) };
+    return { contractList: contractList };
   },
 };
 
