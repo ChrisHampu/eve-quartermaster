@@ -169,6 +169,10 @@ server.use('/graphql', (req, res, next) => {
     sess.jwt = req.session.jwt || token;
   }
 
+  console.log(req.ip);
+  console.log(req.originalUrl);
+  console.log(sess.jwt);
+
   expressGraphQL(request => ({
     schema,
     graphiql: process.env.NODE_ENV !== 'production',
