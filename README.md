@@ -52,6 +52,7 @@ Notable features of this application include:
 * Proper support for a contract request to be made for a variable number of contracts with those items (bulk request)
 * Add support for user roles for management of the app/contracts and privileges
 * And anything else upon request
+* Pagination for contract/request pages. Especially for larger corporations/alliances
 
 ## Contributors
 
@@ -61,9 +62,8 @@ Notable features of this application include:
 ### Core Third party libraries
 * ReactJS
 * GraphQL
-* Babel
+* Babel/Webpack
 * Express
-* Webpack
 * Passport
 
 ## License 
