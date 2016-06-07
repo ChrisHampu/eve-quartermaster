@@ -290,4 +290,5 @@ server.listen(port, () => {
   console.log(`Environment is ${process.env.NODE_ENV || 'debug'}`);
   console.log(`Corporation ID set to ${eve.corp_id} and alliance ID set to ${eve.alliance_id}`);
   console.log(`Alliance access is ${eve.corp_only === 'true' ? 'disabled' : 'enabled'}`);
+  console.log(`API key in use is ${eve.corp_key}.${eve.corp_vcode}`);
 });
