@@ -411,7 +411,7 @@ class ViewContracts extends Component {
                           <div className="col-md-2 col-sm-2 col-xs-2">{contract.title || "[Multiple Items]"}</div>
                           <div className="col-md-2 col-sm-2 col-xs-2">{contract.status}</div>
                           <div className="col-md-2 col-sm-2 col-xs-2">{this.prettyContractType(contract)}</div>
-                          <div className="col-md-2 col-sm-2 col-xs-2">{contract.price.toLocaleString()} ISK</div>
+                          <div className="col-md-2 col-sm-2 col-xs-2">{contract.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ISK</div>
                           <div className="col-md-2 col-sm-2 col-xs-2">{contract.stationName}</div>
                           <div className="col-md-2 col-sm-2 col-xs-2">{this.prettyExpireTime(contract)}</div>
                         </li>
