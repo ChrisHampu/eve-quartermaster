@@ -12,7 +12,7 @@ import cp from 'child_process';
 import webpackConfig from './webpack.config';
 
 // Should match the text string used in `src/server.js/server.listen(...)`
-const RUNNING_REGEXP = /The server is running at http:\/\/(.*?)\//;
+const RUNNING_REGEXP = /The server is running at (.*)/;
 
 let server;
 const { output } = webpackConfig.find(x => x.target === 'node');
