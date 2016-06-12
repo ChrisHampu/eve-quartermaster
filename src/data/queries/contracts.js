@@ -231,6 +231,9 @@ async function getAllContracts() {
 	return lastFetchTask;
 }
 
+// Initiate at server start
+getAllContracts();
+
 const contracts = {
 
 	type: ContractListType,
