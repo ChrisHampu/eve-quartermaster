@@ -47,6 +47,9 @@ class ViewContracts extends Component {
       contracts: [],
       activeContract: null,
       searchText: '',
+      groupSimilar: true,
+      ignoreUntitled: false,
+      showExpired: false,
       showStatus: {
         Outstanding: true,
         Deleted: false,
@@ -65,7 +68,7 @@ class ViewContracts extends Component {
         Loan: false,
         Auction: false,
       },
-      sortBy: 'title',
+      sortBy: 'expires',
       sortByParams: {
         title: {
           ascending: true,
@@ -161,6 +164,27 @@ class ViewContracts extends Component {
     });
   }
 
+  toggleShowExpired() {
+
+    this.setState({ showExpired: !this.state.showExpired }, () => {
+      this.updateContracts();
+    });
+  }
+
+  toggleGroupSimilar() {
+
+    this.setState({ groupSimilar: !this.state.groupSimilar }, () => {
+      this.updateContracts();
+    });
+  }
+
+  toggleIgnoreUntitled() {
+
+    this.setState({ ignoreUntitled: !this.state.ignoreUntitled }, () => {
+      this.updateContracts();
+    });
+  }
+
   toggleSetSortBy(sort) {
 
     if (this.state.sortBy === sort) {
@@ -209,6 +233,18 @@ class ViewContracts extends Component {
 
     if (contract === null) {
       return false;
+    }
+
+    if (this.state.ignoreUntitled) {
+      if (!contract.title) {
+        return false;
+      }
+    }
+
+    if (!this.state.showExpired) {
+      if (Date.parse(contract.dateExpired) < Date.now()) {
+        return false;
+      }
     }
 
     return this.state.showStatus[contract.status] === true &&
@@ -262,6 +298,35 @@ class ViewContracts extends Component {
     let contracts = this.state.initialContracts.filter((contract) => this.filterPredicate(contract));
 
     if (contracts.length > 0) {
+
+      if (this.state.groupSimilar) {
+
+        const groupedContracts = [];
+
+        const similar = (c1, c2) => c1.title && c2.title && c1.title === c2.title && c1.price === c2.price;
+
+        for (const contract of contracts) {
+
+          contract.count = 1;
+
+          const idx = groupedContracts.findIndex((el) => similar(contract, el));
+
+          if (idx !== -1) {
+            groupedContracts[idx].count++;
+          } else {
+            groupedContracts.push(contract);
+          }
+        }
+
+        contracts = groupedContracts;
+
+      } else {
+
+        for (const contract of contracts) {
+
+          contract.count = 1;
+        }
+      }
 
       if (this.state.searchText.length > 0) {
         contracts = fuzzy.filter(this.state.searchText, contracts, {
@@ -327,6 +392,35 @@ class ViewContracts extends Component {
       <div className={s.root}>
         <Sidebar>
           <div className={s.sidebar_header}>
+            Options
+          </div>
+          <ul role="navigation" className={cx(s.nav_container, 'nav')}>
+            <li className="nav-item">
+              <div className="checkbox">
+                <label className={s.nav_label} >
+                  <input type="checkbox" readOnly="true" checked={this.state.showExpired} onClick={() => { this.toggleShowExpired(); }} />
+                  Show Expired
+                </label>
+              </div>
+            </li>
+            <li className="nav-item">
+              <div className="checkbox">
+                <label className={s.nav_label}>
+                  <input type="checkbox" readOnly="true" checked={this.state.groupSimilar} onClick={() => { this.toggleGroupSimilar(); }} />
+                  Group Similar
+                </label>
+              </div>
+            </li>
+            <li className="nav-item">
+              <div className="checkbox">
+                <label className={s.nav_label}>
+                  <input type="checkbox" readOnly="true" checked={this.state.ignoreUntitled} onClick={() => { this.toggleIgnoreUntitled(); }} />
+                  Ignore Untitled
+                </label>
+              </div>
+            </li>
+          </ul>
+          <div className={s.sidebar_header}>
             Status
           </div>
           <ul role="navigation" className={cx(s.nav_container, 'nav')}>
@@ -376,7 +470,7 @@ class ViewContracts extends Component {
               this.state.contracts.length > 0 ?
               <div>
                 <h4>Contracts</h4>
-                <div className={s.contract_count}>Showing { this.state.contracts.length } contracts</div>
+                <div className={s.contract_count}>Showing { this.state.contracts.length } results</div>
                 <div className="row">
                   <div className={cx(s.contract_container, "col-md-12 col-sm-12")}>
                     <div className={cx("row", s.contract_header)}>
@@ -408,7 +502,7 @@ class ViewContracts extends Component {
                     { this.state.contracts.map((contract) => {
                       return (
                         <li key={contract.id} className={this.state.activeContract === contract ? cx("row", s.contract_list_active) : cx("row")} onClick={() => { this.toggleActiveContract(contract); }}>
-                          <div className="col-md-2 col-sm-2 col-xs-2">{contract.title || "[Multiple Items]"}</div>
+                          <div className="col-md-2 col-sm-2 col-xs-2">{contract.count && contract.count > 1 ? (`[${contract.count}x] ${contract.title || "[Multiple Items]"}`) : (contract.title || "[Multiple Items]")}</div>
                           <div className="col-md-2 col-sm-2 col-xs-2">{contract.status}</div>
                           <div className="col-md-2 col-sm-2 col-xs-2">{this.prettyContractType(contract)}</div>
                           <div className="col-md-2 col-sm-2 col-xs-2">{contract.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ISK</div>
