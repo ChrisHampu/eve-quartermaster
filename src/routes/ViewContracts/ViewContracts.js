@@ -474,14 +474,14 @@ class ViewContracts extends Component {
                 <div className="row">
                   <div className={cx(s.contract_container, "col-md-12 col-sm-12")}>
                     <div className={cx("row", s.contract_header)}>
-                      <div className="col-md-2 col-sm-2 col-xs-2" onClick={() => this.toggleSetSortBy('title')}>
+                      <div className="col-md-3 col-sm-3 col-xs-3" onClick={() => this.toggleSetSortBy('title')}>
                         Title
                         <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.title.ascending && this.state.sortBy === 'title', "fa-sort-desc": !this.state.sortByParams.title.ascending && this.state.sortBy === 'title' })}></i>
                       </div>
-                      <div className="col-md-2 col-sm-2 col-xs-2">
+                      <div className="col-md-1 col-sm-1 col-xs-1">
                         Status
                       </div>
-                      <div className="col-md-2 col-sm-2 col-xs-2" onClick={() => this.toggleSetSortBy('type')}>
+                      <div className="col-md-1 col-sm-1 col-xs-1" onClick={() => this.toggleSetSortBy('type')}>
                         Type
                         <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.type.ascending && this.state.sortBy === 'type', "fa-sort-desc": !this.state.sortByParams.type.ascending && this.state.sortBy === 'type' })}></i>
                       </div>
@@ -489,7 +489,7 @@ class ViewContracts extends Component {
                         Price
                         <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.price.ascending && this.state.sortBy === 'price', "fa-sort-desc": !this.state.sortByParams.price.ascending && this.state.sortBy === 'price' })}></i>
                       </div>
-                      <div className="col-md-2 col-sm-2 col-xs-2" onClick={() => this.toggleSetSortBy('location')}>
+                      <div className="col-md-3 col-sm-3 col-xs-3" onClick={() => this.toggleSetSortBy('location')}>
                         Location
                         <i className={cx("fa", { "fa-sort-asc": this.state.sortByParams.location.ascending && this.state.sortBy === 'location', "fa-sort-desc": !this.state.sortByParams.location.ascending && this.state.sortBy === 'location' })}></i>
                       </div>
@@ -502,11 +502,11 @@ class ViewContracts extends Component {
                     { this.state.contracts.map((contract) => {
                       return (
                         <li key={contract.id} className={this.state.activeContract === contract ? cx("row", s.contract_list_active) : cx("row")} onClick={() => { this.toggleActiveContract(contract); }}>
-                          <div className="col-md-2 col-sm-2 col-xs-2">{contract.count && contract.count > 1 ? (`[${contract.count}x] ${contract.title || "[Multiple Items]"}`) : (contract.title || "[Multiple Items]")}</div>
-                          <div className="col-md-2 col-sm-2 col-xs-2">{contract.status}</div>
-                          <div className="col-md-2 col-sm-2 col-xs-2">{this.prettyContractType(contract)}</div>
+                          <div className="col-md-3 col-sm-3 col-xs-3">{contract.count && contract.count > 1 ? (`[${contract.count}x] ${contract.title || "[Multiple Items]"}`) : (contract.title || "[Multiple Items]")}</div>
+                          <div className="col-md-1 col-sm-1 col-xs-1">{contract.status}</div>
+                          <div className="col-md-1 col-sm-1 col-xs-1">{this.prettyContractType(contract)}</div>
                           <div className="col-md-2 col-sm-2 col-xs-2">{contract.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ISK</div>
-                          <div className="col-md-2 col-sm-2 col-xs-2">{contract.stationName}</div>
+                          <div className="col-md-3 col-sm-3 col-xs-3">{contract.stationName}</div>
                           <div className="col-md-2 col-sm-2 col-xs-2">{this.prettyExpireTime(contract)}</div>
                         </li>
                       );
