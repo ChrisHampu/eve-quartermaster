@@ -112,7 +112,7 @@ function run() {
 
       if (!data.user.authenticated) {
         currentState.path = '/unauthorized';
-        
+
       } else {
         if (currentState.path === '/callback') {
           currentState.path = '/';
