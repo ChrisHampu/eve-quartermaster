@@ -209,7 +209,8 @@ async function getAllContracts() {
 
 		// Schedule an auto fetch. This is to keep contracts up-to-date as much as possible in memory,
 		// rather than being loaded on-demand when user opens the page.
-		autoFetchTimer = setTimeout(getAllContracts, nextFetch.getTime() - Date.now() + 1000);
+		const next = nextFetch - new Date(Date.now()).getUTCMilliseconds() + 1000;
+		autoFetchTimer = setTimeout(getAllContracts, next);
 
 		console.log("Finished fetching contracts. Time taken:");
 		console.timeEnd('fetch_contracts');
