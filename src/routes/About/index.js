@@ -22,29 +22,12 @@
  * SOFTWARE.
  */
 
-import React, { Component, PropTypes } from 'react';
-import cx from 'classnames';
-import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import s from './Navigation.scss';
-import Link from '../Link';
+import React from 'react';
+import About from './About';
 
-class Navigation extends Component {
+export const path = '/about';
+export const action = async (state) => {
 
-  static propTypes = {
-    className: PropTypes.string,
-    path: PropTypes.string
-  };
-
-  render() {
-    return (
-      <nav role="navigation" className={cx(s.nav_container, 'nav', 'nav-inline', this.props.className)}>
-        <Link className={cx('nav-link', s.nav_link)} activeClass={s.nav_link_active} to="/" path={this.props.path}>View Contracts</Link>
-        <Link className={cx('nav-link', s.nav_link)} activeClass={s.nav_link_active} to="/requests" path={this.props.path}>View Requests</Link>
-        <Link className={cx('nav-link', s.nav_link)} activeClass={s.nav_link_active} to="/create" path={this.props.path}>Create Request</Link>
-        <Link className={cx('nav-link', s.nav_link)} activeClass={s.nav_link_active} to="/about" path={this.props.path}>About</Link>
-      </nav>
-    );
-  }
-}
-
-export default withStyles(s)(Navigation);
+  state.context.onSetTitle('About EVE Quartermaster');
+  return <About />;
+};

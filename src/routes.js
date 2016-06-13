@@ -34,6 +34,7 @@ const routes = [
   require('./routes/ViewContracts'),
   require('./routes/ViewRequests'),
   require('./routes/CreateRequest'),
+  require('./routes/About')
 ];
 
 const router = new Router(on => {
