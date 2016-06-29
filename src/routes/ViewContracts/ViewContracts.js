@@ -386,6 +386,12 @@ class ViewContracts extends Component {
     }
   }
 
+  openContractIngame(id) {
+
+    fetch(`/graphql?query={contractUI(id:${id})}`, // eslint-disable-line object-curly-spacing
+                     { credentials: 'same-origin', headers: { Authorization: this.context.getSession() } });
+  }
+
   render() {
 
     return (
@@ -518,6 +524,10 @@ class ViewContracts extends Component {
                         <div>
                         { this.state.activeContract.items !== undefined ?
                           <div className={s.contract_item_list}>
+                            <h5>Actions</h5>
+                            <div className={cx("row", s.contract_item_buttons)}>
+                              <div className={cx(s.show_ingame, "btn")} onClick={() => { this.openContractIngame(this.state.activeContract.id); }}>Show Ingame</div>
+                            </div>
                             <h5>Contract Items</h5>
                             <div className={cx("row", s.contract_item_header)}>
                               <div className="col-md-4 col-sm-4 col-xs-4">Quantity</div>
@@ -533,7 +543,19 @@ class ViewContracts extends Component {
                                 <div>Failed to fetch items or none available</div>
                             }
                             </div>
-                          </div> : <div><div className={s.contract_item_list}><h5>Contract Items</h5><div>Loading items..</div></div></div>
+                          </div> :
+                            <div>
+                              <div className={s.contract_item_list}>
+                                <h5>Actions</h5>
+                                <div className={cx("row", s.contract_item_buttons)}>
+                                  <div className={cx(s.show_ingame, "btn")} onClick={() => { this.openContractIngame(this.state.activeContract.id); }}>Show Ingame</div>
+                                </div>
+                                <h5>Contract Items</h5>
+                                <div className={cx("row", s.contract_items)}>
+                                  <div>Loading items..</div>
+                                </div>
+                              </div>
+                            </div>
                         }
                         </div>
                       : false

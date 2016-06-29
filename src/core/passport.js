@@ -23,12 +23,13 @@
  */
 
 import passport from 'passport';
-import EveOnlineStrategy from 'passport-eveonline';
+import EveOnlineStrategy from './passport-eveonline';
 import db from './db';
 import { auth as config, eve } from '../config';
 import fetch from './fetch';
 
 passport.serializeUser((user, done) => {
+
   done(null, user);
 });
 
@@ -88,6 +89,8 @@ passport.deserializeUser(async (obj, done) => {
     user.alliance = data.character.alliance;
     user.name = data.character.name;
     user.expires = obj.expires;
+    user.access_token = obj.access_token;
+    user.refresh_token = obj.refresh_token;
 
     done(null, user);
 
@@ -147,6 +150,8 @@ passport.use(new EveOnlineStrategy({
       user.alliance = data.character.alliance;
       user.name = data.character.name;
       user.expires = charInfo.ExpiresOn;
+      user.access_token = charInfo.access_token;
+      user.refresh_token = charInfo.refresh_token;
 
       // TODO: Verify token?
 
@@ -181,6 +186,8 @@ passport.use(new EveOnlineStrategy({
       user.alliance = data.character.alliance;
       user.name = data.character.name;
       user.expires = charInfo.ExpiresOn;
+      user.access_token = charInfo.access_token;
+      user.refresh_token = charInfo.refresh_token;
 
       await query(`
           INSERT INTO login (character_id, character_name, corp_id, corp_name, alliance_id, token_expire) VALUES ($1,

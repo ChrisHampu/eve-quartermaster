@@ -31,6 +31,7 @@
         if (options.verifyURL == null) {
           options.verifyURL = constants.defaultVerifyURL;
         }
+        options.scope = 'remoteClientUI';
         this._verifyURL = options.verifyURL;
         EveOnlineStrategy.__super__.constructor.call(this, options, this._verifyOAuth2);
         this._oauth2.useAuthorizationHeaderforGET(true);
@@ -46,6 +47,9 @@
       };
 
       EveOnlineStrategy.prototype._verifyOAuth2 = function(accessToken, refreshToken, characterInformation, done) {
+
+        characterInformation.access_token = accessToken;
+        characterInformation.refresh_token = refreshToken;
         return this._verifyCallback(characterInformation, done);
       };
 

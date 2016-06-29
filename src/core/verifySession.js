@@ -23,6 +23,7 @@
  */
 
 import jwt from 'jsonwebtoken';
+import fetch from './fetch';
 import { fetchCharacter } from '../data/queries/character.js'; // eslint-disable-line no-unused-vars
 import { auth, eve } from '../config'; // eslint-disable-line no-unused-vars
 
@@ -31,7 +32,25 @@ async function verifySession(session) {
   let user = {};
 
   try {
+
     user = jwt.verify(session.jwt, auth.jwt.secret);
+
+    if (Date.now() > Date.parse(user.expires)) {
+
+      const authorization = `${auth.eve.id}:${auth.eve.secret}`;
+      const payload = { grant_type: 'refresh_token', refresh_token: user.refresh_token };
+
+      const resp = await fetch(`https://login.eveonline.com/oauth/token`,
+        { headers: { 'Content-Type': 'application/json', Authorization: `Basic ${new Buffer(authorization).toString('base64')}` }, method: 'POST', payload: JSON.stringify(payload) });
+
+      const text = await resp.json();
+
+      user.access_token = text.access_token;
+      user.expires = new Date(Date.now() + text.expires_in * 1000).toUTCString();
+
+      session.jwt = jwt.sign(user, auth.jwt.secret); // eslint-disable-line no-param-reassign
+      session.save();
+    }
 
     try {
 
@@ -58,7 +77,7 @@ async function verifySession(session) {
     return { authenticated: false };
   }
 
-  return { authenticated: true, alliance: user.alliance, corp_id: user.corp_id, corp_name: user.corp_name, id: user.id, name: user.name };
+  return { authenticated: true, access_token: user.access_token, alliance: user.alliance, corp_id: user.corp_id, corp_name: user.corp_name, id: user.id, name: user.name };
 }
 
 export default verifySession;

@@ -101,11 +101,12 @@ server.get('/auth',
   passport.authenticate('eveonline', {
     successRedirect: '/',
     failureRedirect: '/unauthorized',
+    scope: 'remoteClientUI'
   })
 );
 
 server.get('/callback', (req, res, next) => {
-  passport.authenticate('eveonline', (err, user, info) => {
+  passport.authenticate('eveonline', { scope: "remoteClientUI" }, (err, user, info) => {
     if (err) {
       return next(err);
     }

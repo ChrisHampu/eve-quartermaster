@@ -23,39 +23,62 @@
  */
 
 import {
-  GraphQLSchema as Schema,
-  GraphQLObjectType as ObjectType,
+  GraphQLInt as IntType,
+  GraphQLNonNull as NonNull,
+  GraphQLBoolean as BooleanType,
 } from 'graphql';
 
-import alliances from './queries/alliances';
-import character from './queries/character';
-import contracts from './queries/contracts';
-import user from './queries/user';
-import contractItems from './queries/contract_items';
-import createRequest from './queries/create_request';
-import deleteRequest from './queries/delete_request';
-import requests from './queries/requests';
-import notifications from './queries/notifications';
-import viewNotification from './queries/view_notification';
-import contractUI from './queries/contract_ui';
+import fetch from '../../core/fetch';
+import verifySession from '../../core/verifySession';
 
-const schema = new Schema({
-  query: new ObjectType({
-    name: 'Query',
-    fields: {
-      alliances,
-      character,
-      contracts,
-      user,
-      contractItems,
-      createRequest,
-      deleteRequest,
-      requests,
-      notifications,
-      viewNotification,
-      contractUI
-    },
-  }),
-});
+const openContract = {
+  type: BooleanType,
+  args: {
+    id: { type: new NonNull(IntType) }
+  },
+  async resolve(_, { id }, session) {
 
-export default schema;
+    const auth = await verifySession(session);
+
+    if (!auth.authenticated) {
+      return false;
+    }
+
+    console.log("test");
+
+    try {
+
+      const payload = { contractID: id };
+
+      const resp = await fetch(`https://crest-tq.eveonline.com/characters/${auth.id}/ui/openwindow/contract/`,
+        { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${auth.access_token}` }, method: 'POST', payload: JSON.stringify(payload) });
+
+      if (resp.body.length === 0) {
+
+        console.log("true");
+        return true;
+      }
+
+      const text = await resp.json();
+
+      console.log(text);
+
+      console.log("test2");
+
+      if (text.exceptionType) {
+        console.log(text.message);
+        return false;
+      }
+    } catch (e) {
+
+      console.log(e);
+      return false;
+    }
+
+    console.log("test3");
+
+    return true;
+  }
+};
+
+export default openContract;

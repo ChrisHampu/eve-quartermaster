@@ -101,6 +101,29 @@
       height: inherit;
       position: relative;
 
+      .contract_item_buttons {
+
+        padding: 0.5rem 0 0.5rem 0.5rem;
+        margin: 0;
+          
+        div {
+          display: inline-block;
+          margin-right: 0.5rem;
+          padding: 0.2rem;
+        }
+
+        .show_ingame {
+          background-color: $dark-cyan;
+
+          &:hover {
+            background-color: color($dark-cyan lightness(+10%));
+          }
+          &:active {
+            background-color: color($dark-cyan lightness(-5%));
+          }
+        }
+      }
+
       .contract_item_header {
 
         text-align: center;
