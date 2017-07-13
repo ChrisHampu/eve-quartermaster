@@ -14,9 +14,6 @@ Notable features of this application include:
 * Importing/exporting EFT fits to and from contract requests
 * Sorting contracts by location, price, status, and name
 
-#### Screenshot
-![Screenshot software](http://url/screenshot-software.png "screenshot software")
-
 ## Usage
 
 ### Requirements
@@ -46,18 +43,8 @@ Notable features of this application include:
   * Run 'npm start' to run in development mode
   * Run 'npm start -- --release' to run in production mode
 
-## TODO
-* Complete all the various "TODO's" littered in the code
-* Add a maximum number of requests per member (configurable) to avoid spam
-* Proper support for a contract request to be made for a variable number of contracts with those items (bulk request)
-* Add support for user roles for management of the app/contracts and privileges
-* And anything else upon request
-* Pagination for contract/request pages. Especially for larger corporations/alliances
-
-## Contributors
-
-### Contributors on GitHub
-* [Contributors](https://github.com/username/sw-name/graphs/contributors)
+### Contributors
+* Christopher Hampu
 
 ### Core Third party libraries
 * ReactJS
@@ -68,6 +55,3 @@ Notable features of this application include:
 
 ## License 
 * MIT
-
-## Contact
-#### Developer/Company
